@@ -6,6 +6,7 @@ together and merges the hits.
 """
 from __future__ import annotations
 
+import re
 import time
 from typing import Any
 
@@ -58,6 +59,7 @@ RESOURCE_SECTIONS: list[tuple[str, str, str]] = [
     ("housing", "Scholarships & savings (housing residents)", "Only for residents of affordable or assisted housing."),
     ("colleges", "Colleges & universities", "Free and discounted college classes."),
     ("aid", "Training & public aid", "No-cost training programs and public funding for tuition."),
+    ("coaching", "Career coaching & mentors", "Free coaching, resume help and volunteer mentors for your job search."),
     ("local", "Free local programs", "Neighborhood classes, labs and one-on-one help."),
 ]
 
@@ -70,6 +72,8 @@ def _resource_section(r: dict) -> str:
     category = r.get("category") or ""
     if category == "Only for affordable or assisted housing":
         return "housing"
+    if category == "Career coaching and mentors" or tags & {"career-coaching", "mentorship"}:
+        return "coaching"
     if "childcare" in tags:
         return "childcare"
     if "transit" in tags:
@@ -158,14 +162,31 @@ INTENT_WORDS: dict[str, tuple[str, ...]] = {
     "device": ("laptop", "computer", "device", "computadora", "laptop", "電腦", "kompyuter", "máy tính"),
     "internet": ("internet", "wifi", "wi-fi", "網路", "mạng"),
     "scholarship": ("scholarship", "beca", "獎學金", "iskolar", "học bổng"),
+    "career-coaching": ("resume", "résumé", "coach", "career advice", "job search", "interview",
+                        "currículum", "curriculum", "entrevista", "履歷", "簡歷", "面試", "panayam",
+                        "sơ yếu", "phỏng vấn"),
+    "mentorship": ("mentor", "mentoría", "mentoria", "導師", "người hướng dẫn"),
 }
 EVENING_WORDS = ("evening", "night", "noche", "nocturn", "晚上", "夜", "gabi", "buổi tối", "tối")
 
 
+_CJK = re.compile(r"[　-鿿]")
+
+
+def _hit(word: str, low: str) -> bool:
+    """CJK words match as substrings (no spaces between words). Other words need a word boundary,
+    so "bus" doesn't fire on Spanish "busco"; short words also allow a plural ("kids", "buses")."""
+    if _CJK.search(word):
+        return word in low
+    if len(word) <= 3:
+        return re.search(rf"\b{re.escape(word)}(?:s|es)?\b", low) is not None
+    return re.search(rf"\b{re.escape(word)}", low) is not None
+
+
 def intents(q: str) -> tuple[list[str], bool]:
     low = (q or "").lower()
-    tags = [tag for tag, words in INTENT_WORDS.items() if any(w in low for w in words)]
-    return tags, any(w in low for w in EVENING_WORDS)
+    tags = [tag for tag, words in INTENT_WORDS.items() if any(_hit(w, low) for w in words)]
+    return tags, any(_hit(w, low) for w in EVENING_WORDS)
 
 
 def search_bodies(q: str, size: int = 12) -> tuple[dict, dict]:

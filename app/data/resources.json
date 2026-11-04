@@ -1,518 +1,552 @@
 [
- {
-  "id": "sf-housing-authority-family-self-sufficiency",
-  "category": "Only for affordable or assisted housing",
-  "program": "SF Housing Authority Family Self-Sufficiency",
-  "provides": "Savings account that can be used for education, job training or transportation",
-  "who": "Public housing residents and Section 8 voucher holders",
-  "status": "Confirm",
-  "status_note": "Details from a 2022 plan. Confirm openings; there may be a waitlist.",
-  "source_url": "https://sfha.org/files/documents/CA001_SFHA%20FSS%20Action%20Plan_2022-10-31.pdf",
-  "tags": [
-   "savings",
-   "training",
-   "transit"
-  ],
-  "housing_only": true,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "nahma-scholarship",
-  "category": "Only for affordable or assisted housing",
-  "program": "NAHMA scholarship",
-  "provides": "$3,500 in 2026; trade and technical programs qualify",
-  "who": "Residents of member properties, excluding graduate students",
-  "status": "Closed for 2026",
-  "status_note": "2026 deadline passed. Check the next cycle.",
-  "source_url": "https://www.nahma.org/news/seeking-applications-from-all-50-states-in-2026/",
-  "tags": [
-   "scholarship",
-   "tuition"
-  ],
-  "housing_only": true,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "bridge-resident-scholarships",
-  "category": "Only for affordable or assisted housing",
-  "program": "BRIDGE resident scholarships",
-  "provides": "Education funding, including vocational training",
-  "who": "BRIDGE Housing residents",
-  "status": "Confirm",
-  "status_note": "Latest information found is from 2024. Confirm the current cycle.",
-  "source_url": "https://bridgehousing.com/?p=807771",
-  "tags": [
-   "scholarship",
-   "tuition"
-  ],
-  "housing_only": true,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "midpen-scholarships",
-  "category": "Only for affordable or assisted housing",
-  "program": "MidPen scholarships",
-  "provides": "$1,000 to $5,000 for tuition, books, supplies and equipment",
-  "who": "MidPen residents",
-  "status": "Confirm",
-  "status_note": "Latest information found is from 2025. Confirm the current cycle.",
-  "source_url": "https://www.midpen-housing.org/news-and-happenings/media-center/midpen-housing-invests-in-residents-futures-with-scholarship-awards/",
-  "tags": [
-   "scholarship",
-   "tuition",
-   "device"
-  ],
-  "housing_only": true,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "techsf",
-  "category": "Training and education",
-  "program": "TechSF",
-  "provides": "No-cost tech training, coaching and job placement help",
-  "who": "Bay Area residents who meet program requirements, including work authorization",
-  "status": "Available",
-  "status_note": "Listed as available",
-  "source_url": "https://jvs.org/programs/techsf/",
-  "tags": [
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "other-city-job-training",
-  "category": "Training and education",
-  "program": "Other City job training",
-  "provides": "Healthcare, hospitality and other training, mostly no-cost",
-  "who": "Varies by program",
-  "status": "Confirm",
-  "status_note": "Listed as available. Confirm cost and eligibility.",
-  "source_url": "https://sf.gov/find-job-training-and-support-industry",
-  "tags": [
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "per-scholas",
-  "category": "Training and education",
-  "program": "Per Scholas",
-  "provides": "No-cost, full-time IT training",
-  "who": "Bay Area residents who meet income requirements",
-  "status": "Available",
-  "status_note": "Next start is February 22, 2027. Apply by February 8.",
-  "source_url": "https://perscholas.org/locations/san-francisco-bay/",
-  "tags": [
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "free-city-college",
-  "category": "Training and education",
-  "program": "Free City College",
-  "provides": "Waives $46 per unit, or provides a $46-per-unit grant to students who also receive the California College Promise Grant",
-  "who": "San Francisco and California residents or AB 540 students, with some exceptions",
-  "status": "Available",
-  "status_note": "Active",
-  "source_url": "https://www.ccsf.edu/paying-college/financial-aid-office/free-city-grant",
-  "tags": [
-   "tuition",
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "federal-voucher-through-the-city",
-  "category": "Training and education",
-  "program": "Federal voucher through the City",
-  "provides": "Up to $6,000 for tuition and materials",
-  "who": "Eligible jobless or underemployed adults, and dislocated workers",
-  "status": "Confirm",
-  "status_note": "Based on a 2023 policy. Confirm current funding and rules.",
-  "source_url": "https://www.sf.gov/sites/default/files/2023-09/WDD%2023-15%20Individual%20Training%20Account%20%28ITA%29.pdf",
-  "tags": [
-   "tuition",
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "cal-grant-c",
-  "category": "Training and education",
-  "program": "Cal Grant C",
-  "provides": "Aid for eligible career programs, now including some 8- to 15-week programs",
-  "who": "Depends on the program and financial aid application",
-  "status": "Closed for 2026",
-  "status_note": "The September 2 deadline for 2026-27 has passed. Ask about future cycles.",
-  "source_url": "https://www.cccco.edu/About-Us/News-and-Media/Press-Releases/2026-financial-aid-crucial-deadline",
-  "tags": [
-   "tuition"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "workforce-pell",
-  "category": "Training and education",
-  "program": "Workforce Pell",
-  "provides": "Federal aid for short programs",
-  "who": "Students in approved programs",
-  "status": "Not yet available",
-  "status_note": "California's rollout is expected to begin in 2027.",
-  "source_url": "https://edsource.org/updates/when-will-workforce-pell-program-launch-in-california-heres-what-we-know",
-  "tags": [
-   "tuition"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "department-of-rehabilitation",
-  "category": "Training and education",
-  "program": "Department of Rehabilitation",
-  "provides": "Can pay for tuition, books, transportation and assistive technology",
-  "who": "Clients with an approved employment plan",
-  "status": "Available",
-  "status_note": "Available to eligible clients",
-  "source_url": "https://www.disabilityrightsca.org/node/507",
-  "tags": [
-   "tuition",
-   "transit",
-   "device",
-   "disability"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "san-francisco-child-care-support",
-  "category": "Costs that make training harder",
-  "program": "San Francisco child care support",
-  "provides": "Free tuition up to 110% of area median income, with credits up to 200%",
-  "who": "Families with eligible young children, based on income",
-  "status": "Available",
-  "status_note": "Available. Check program rules.",
-  "source_url": "https://www.sf.gov/eligibility-for-free-or-low-cost-preschool-and-child-care",
-  "tags": [
-   "childcare"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "clipper-start",
-  "category": "Costs that make training harder",
-  "program": "Clipper START",
-  "provides": "50% transit discount",
-  "who": "Adults 19 to 64 at or below 200% of the federal poverty level",
-  "status": "Available",
-  "status_note": "Available. Muni Lifeline moves to it on January 1, 2027. Apply by December 1 to get a card in time.",
-  "source_url": "https://www.sfmta.com/lifeline",
-  "tags": [
-   "transit"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "free-muni",
-  "category": "Costs that make training harder",
-  "program": "Free Muni",
-  "provides": "Free rides",
-  "who": "Seniors and people with a disability within the income limit, riders 18 and under, and people experiencing homelessness",
-  "status": "Available",
-  "status_note": "Listed as available",
-  "source_url": "https://www.sfmta.com/blog/free-and-discounted-fare-programs-make-your-muni-ride-more-affordable",
-  "tags": [
-   "transit",
-   "older-adults",
-   "disability",
-   "youth"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "fiber-to-housing",
-  "category": "Costs that make training harder",
-  "program": "Fiber to Housing",
-  "provides": "Free home internet",
-  "who": "Residents at connected properties",
-  "status": "Available",
-  "status_note": "Support is currently limited to voicemail.",
-  "source_url": "https://www.sf.gov/fiber-housing-program",
-  "tags": [
-   "internet"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "city-college-noncredit-classes",
-  "category": "Colleges and universities",
-  "program": "City College noncredit classes",
-  "provides": "Free college prep, certificate and ESL classes at locations across San Francisco",
-  "who": "California residents 18 and older; youth with required permissions. B-1/B-2 visa holders are excluded.",
-  "status": "Available",
-  "status_note": "Listed as available. Confirm current computer classes.",
-  "source_url": "https://1degree.org/opp/take-free-noncredit-community-college-classes",
-  "tags": [
-   "training",
-   "digital-basics"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "city-college-older-adults-program",
-  "category": "Colleges and universities",
-  "program": "City College Older Adults Program",
-  "provides": "Free noncredit classes, including computers, at more than 30 locations",
-  "who": "Designed for people 55 and older, but anyone may attend",
-  "status": "Available",
-  "status_note": "Listed as available",
-  "source_url": "https://ccsf.edu/older-adults-department",
-  "tags": [
-   "digital-basics",
-   "older-adults",
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "sf-state-free-and-discounted-courses",
-  "category": "Colleges and universities",
-  "program": "SF State free and discounted courses",
-  "provides": "One free course and one 50% off in eligible programs, such as Open University and some certificates",
-  "who": "People laid off from their most recent position, with proof of eligibility",
-  "status": "Confirm",
-  "status_note": "Launched in summer 2023. Confirm whether it is still active.",
-  "source_url": "https://news.sfsu.edu/news/sf-state-offers-free-and-discounted-courses-people-impacted-mass-layoffs",
-  "tags": [
-   "tuition",
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "sf-state-caljobs-funded-training",
-  "category": "Colleges and universities",
-  "program": "SF State CalJOBS-funded training",
-  "provides": "SF State is an eligible training provider, so public workforce funds may pay for listed programs, including GIS and E-Learning Design",
-  "who": "Must qualify through the public workforce system",
-  "status": "Confirm",
-  "status_note": "Confirm eligible programs and funding.",
-  "source_url": "https://cpage.sfsu.edu/about/caljobs",
-  "tags": [
-   "tuition",
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "stanford-code-in-place",
-  "category": "Colleges and universities",
-  "program": "Stanford Code in Place",
-  "provides": "Free, online introductory coding course",
-  "who": "Confirm requirements on the program site",
-  "status": "Confirm",
-  "status_note": "Next session date not confirmed.",
-  "source_url": "https://codeinplace.stanford.edu/",
-  "tags": [
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "sf-public-library-online-courses",
-  "category": "Free local programs",
-  "program": "SF Public Library online courses",
-  "provides": "Free LinkedIn Learning access, including software topics; Udemy also listed in 2021",
-  "who": "Library cardholders",
-  "status": "Confirm",
-  "status_note": "Confirm the current course platforms.",
-  "source_url": "https://sfpl.org/events/2021/07/30/demonstration-linkedin-learning-and-udemy",
-  "tags": [
-   "training",
-   "digital-basics"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "the-bridge-at-main-library",
-  "category": "Free local programs",
-  "program": "The Bridge at Main Library",
-  "provides": "Computer classes and one-on-one technology help; appointments in English, Cantonese and Spanish",
-  "who": "Adults new to technology or refreshing skills",
-  "status": "Available",
-  "status_note": "No fee stated for technology help. Limited to one appointment per week.",
-  "source_url": "https://sfpl.org/locations/main-library/bridge-main-5th-floor",
-  "tags": [
-   "digital-basics"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "tech-exchange-classes",
-  "category": "Free local programs",
-  "program": "Tech Exchange classes",
-  "provides": "Four-week beginner series; participants who finish can receive a device. Also offers refurbished computers and tech support.",
-  "who": "Adults; space is limited at library sessions",
-  "status": "Confirm",
-  "status_note": "Confirm the next series and any device terms.",
-  "source_url": "https://sfpl.org/events/2026/04/30/tutorial-tech-exchange-digital-literacy-classes",
-  "tags": [
-   "digital-basics",
-   "device"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "dev-mission-tech-support-and-programs",
-  "category": "Free local programs",
-  "program": "Dev/Mission tech support and programs",
-  "provides": "Free tech programs, digital skills training, tech support and device setup help",
-  "who": "Varies by program; career programs may have age limits",
-  "status": "Available",
-  "status_note": "Listed by the City. Confirm the current schedule.",
-  "source_url": "https://sf.gov/information/digital-equity",
-  "tags": [
-   "digital-basics",
-   "training",
-   "device"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "dev-mission-pre-apprenticeship",
-  "category": "Free local programs",
-  "program": "Dev/Mission pre-apprenticeship",
-  "provides": "12-week, 240-hour tech curriculum with hardware, mentorship and job readiness support",
-  "who": "Young adults ages 16 to 24; confirm requirements",
-  "status": "Confirm",
-  "status_note": "Source is from 2025. Confirm cost, stipend and next cohort.",
-  "source_url": "https://www.dir.ca.gov/DAS/e-News/2025/Dev-Missions-Pre-Apprenticeship-Program-Opens-Doors-to-Tech-Careers.html",
-  "tags": [
-   "training",
-   "youth",
-   "device"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "sf-connected",
-  "category": "Free local programs",
-  "program": "SF Connected",
-  "provides": "Free digital literacy classes, tech support and help with affordable internet",
-  "who": "Older adults and adults with disabilities",
-  "status": "Available",
-  "status_note": "Listed as available",
-  "source_url": "https://sf.gov/information/digital-equity",
-  "tags": [
-   "digital-basics",
-   "internet",
-   "older-adults",
-   "disability"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "five-keys-schools-and-programs",
-  "category": "Free local programs",
-  "program": "Five Keys Schools and Programs",
-  "provides": "Free adult education and skill-building programs",
-  "who": "Varies by program",
-  "status": "Available",
-  "status_note": "Listed as available",
-  "source_url": "https://sf.gov/information/digital-equity",
-  "tags": [
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "felton-tech-squad",
-  "category": "Free local programs",
-  "program": "Felton Tech Squad",
-  "provides": "One-on-one training, online classes, tech support and internet access",
-  "who": "Older adults and people with disabilities",
-  "status": "Confirm",
-  "status_note": "Cost not listed. Confirm directly.",
-  "source_url": "https://sf.gov/information/digital-equity",
-  "tags": [
-   "digital-basics",
-   "internet",
-   "older-adults",
-   "disability"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "community-living-campaign",
-  "category": "Free local programs",
-  "program": "Community Living Campaign",
-  "provides": "Tech classes, help desks, and internet and device support",
-  "who": "Older adults and people with disabilities",
-  "status": "Confirm",
-  "status_note": "Cost not listed. Confirm directly.",
-  "source_url": "https://sf.gov/information/digital-equity",
-  "tags": [
-   "digital-basics",
-   "internet",
-   "device",
-   "older-adults",
-   "disability"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "st-anthony-s-tenderloin-tech-lab",
-  "category": "Free local programs",
-  "program": "St. Anthony's Tenderloin Tech Lab",
-  "provides": "Computer access and digital skills support",
-  "who": "Confirm directly",
-  "status": "Confirm",
-  "status_note": "Cost not listed. Confirm directly.",
-  "source_url": "https://sf.gov/information/digital-equity",
-  "tags": [
-   "digital-basics",
-   "device"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- },
- {
-  "id": "goodwill-training-and-career-services",
-  "category": "Free local programs",
-  "program": "Goodwill training and career services",
-  "provides": "Training programs and career services",
-  "who": "Varies by program",
-  "status": "Confirm",
-  "status_note": "Cost not listed. Confirm directly.",
-  "source_url": "https://sf.gov/information/digital-equity",
-  "tags": [
-   "training"
-  ],
-  "housing_only": false,
-  "as_of": "2026-11-03"
- }
+  {
+    "id": "sf-housing-authority-family-self-sufficiency",
+    "category": "Only for affordable or assisted housing",
+    "program": "SF Housing Authority Family Self-Sufficiency",
+    "provides": "Savings account that can be used for education, job training or transportation",
+    "who": "Public housing residents and Section 8 voucher holders",
+    "status": "Confirm",
+    "status_note": "Details from a 2022 plan. Confirm openings; there may be a waitlist.",
+    "source_url": "https://sfha.org/files/documents/CA001_SFHA%20FSS%20Action%20Plan_2022-10-31.pdf",
+    "tags": [
+      "savings",
+      "training",
+      "transit"
+    ],
+    "housing_only": true,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "nahma-scholarship",
+    "category": "Only for affordable or assisted housing",
+    "program": "NAHMA scholarship",
+    "provides": "$3,500 in 2026; trade and technical programs qualify",
+    "who": "Residents of member properties, excluding graduate students",
+    "status": "Closed for 2026",
+    "status_note": "2026 deadline passed. Check the next cycle.",
+    "source_url": "https://www.nahma.org/news/seeking-applications-from-all-50-states-in-2026/",
+    "tags": [
+      "scholarship",
+      "tuition"
+    ],
+    "housing_only": true,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "bridge-resident-scholarships",
+    "category": "Only for affordable or assisted housing",
+    "program": "BRIDGE resident scholarships",
+    "provides": "Education funding, including vocational training",
+    "who": "BRIDGE Housing residents",
+    "status": "Confirm",
+    "status_note": "Latest information found is from 2024. Confirm the current cycle.",
+    "source_url": "https://bridgehousing.com/?p=807771",
+    "tags": [
+      "scholarship",
+      "tuition"
+    ],
+    "housing_only": true,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "midpen-scholarships",
+    "category": "Only for affordable or assisted housing",
+    "program": "MidPen scholarships",
+    "provides": "$1,000 to $5,000 for tuition, books, supplies and equipment",
+    "who": "MidPen residents",
+    "status": "Confirm",
+    "status_note": "Latest information found is from 2025. Confirm the current cycle.",
+    "source_url": "https://www.midpen-housing.org/news-and-happenings/media-center/midpen-housing-invests-in-residents-futures-with-scholarship-awards/",
+    "tags": [
+      "scholarship",
+      "tuition",
+      "device"
+    ],
+    "housing_only": true,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "techsf",
+    "category": "Training and education",
+    "program": "TechSF",
+    "provides": "No-cost tech training, coaching and job placement help",
+    "who": "Bay Area residents who meet program requirements, including work authorization",
+    "status": "Available",
+    "status_note": "Listed as available",
+    "source_url": "https://jvs.org/programs/techsf/",
+    "tags": [
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "other-city-job-training",
+    "category": "Training and education",
+    "program": "Other City job training",
+    "provides": "Healthcare, hospitality and other training, mostly no-cost",
+    "who": "Varies by program",
+    "status": "Confirm",
+    "status_note": "Listed as available. Confirm cost and eligibility.",
+    "source_url": "https://sf.gov/find-job-training-and-support-industry",
+    "tags": [
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "per-scholas",
+    "category": "Training and education",
+    "program": "Per Scholas",
+    "provides": "No-cost, full-time IT training",
+    "who": "Bay Area residents who meet income requirements",
+    "status": "Available",
+    "status_note": "Next start is February 22, 2027. Apply by February 8.",
+    "source_url": "https://perscholas.org/locations/san-francisco-bay/",
+    "tags": [
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "free-city-college",
+    "category": "Training and education",
+    "program": "Free City College",
+    "provides": "Waives $46 per unit, or provides a $46-per-unit grant to students who also receive the California College Promise Grant",
+    "who": "San Francisco and California residents or AB 540 students, with some exceptions",
+    "status": "Available",
+    "status_note": "Active",
+    "source_url": "https://www.ccsf.edu/paying-college/financial-aid-office/free-city-grant",
+    "tags": [
+      "tuition",
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "federal-voucher-through-the-city",
+    "category": "Training and education",
+    "program": "Federal voucher through the City",
+    "provides": "Up to $6,000 for tuition and materials",
+    "who": "Eligible jobless or underemployed adults, and dislocated workers",
+    "status": "Confirm",
+    "status_note": "Based on a 2023 policy. Confirm current funding and rules.",
+    "source_url": "https://www.sf.gov/sites/default/files/2023-09/WDD%2023-15%20Individual%20Training%20Account%20%28ITA%29.pdf",
+    "tags": [
+      "tuition",
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "cal-grant-c",
+    "category": "Training and education",
+    "program": "Cal Grant C",
+    "provides": "Aid for eligible career programs, now including some 8- to 15-week programs",
+    "who": "Depends on the program and financial aid application",
+    "status": "Closed for 2026",
+    "status_note": "The September 2 deadline for 2026-27 has passed. Ask about future cycles.",
+    "source_url": "https://www.cccco.edu/About-Us/News-and-Media/Press-Releases/2026-financial-aid-crucial-deadline",
+    "tags": [
+      "tuition"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "workforce-pell",
+    "category": "Training and education",
+    "program": "Workforce Pell",
+    "provides": "Federal aid for short programs",
+    "who": "Students in approved programs",
+    "status": "Not yet available",
+    "status_note": "California's rollout is expected to begin in 2027.",
+    "source_url": "https://edsource.org/updates/when-will-workforce-pell-program-launch-in-california-heres-what-we-know",
+    "tags": [
+      "tuition"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "department-of-rehabilitation",
+    "category": "Training and education",
+    "program": "Department of Rehabilitation",
+    "provides": "Can pay for tuition, books, transportation and assistive technology",
+    "who": "Clients with an approved employment plan",
+    "status": "Available",
+    "status_note": "Available to eligible clients",
+    "source_url": "https://www.disabilityrightsca.org/node/507",
+    "tags": [
+      "tuition",
+      "transit",
+      "device",
+      "disability"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "san-francisco-child-care-support",
+    "category": "Costs that make training harder",
+    "program": "San Francisco child care support",
+    "provides": "Free tuition up to 110% of area median income, with credits up to 200%",
+    "who": "Families with eligible young children, based on income",
+    "status": "Available",
+    "status_note": "Available. Check program rules.",
+    "source_url": "https://www.sf.gov/eligibility-for-free-or-low-cost-preschool-and-child-care",
+    "tags": [
+      "childcare"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "clipper-start",
+    "category": "Costs that make training harder",
+    "program": "Clipper START",
+    "provides": "50% transit discount",
+    "who": "Adults 19 to 64 at or below 200% of the federal poverty level",
+    "status": "Available",
+    "status_note": "Available. Muni Lifeline moves to it on January 1, 2027. Apply by December 1 to get a card in time.",
+    "source_url": "https://www.sfmta.com/lifeline",
+    "tags": [
+      "transit"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "free-muni",
+    "category": "Costs that make training harder",
+    "program": "Free Muni",
+    "provides": "Free rides",
+    "who": "Seniors and people with a disability within the income limit, riders 18 and under, and people experiencing homelessness",
+    "status": "Available",
+    "status_note": "Listed as available",
+    "source_url": "https://www.sfmta.com/blog/free-and-discounted-fare-programs-make-your-muni-ride-more-affordable",
+    "tags": [
+      "transit",
+      "older-adults",
+      "disability",
+      "youth"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "fiber-to-housing",
+    "category": "Costs that make training harder",
+    "program": "Fiber to Housing",
+    "provides": "Free home internet",
+    "who": "Residents at connected properties",
+    "status": "Available",
+    "status_note": "Support is currently limited to voicemail.",
+    "source_url": "https://www.sf.gov/fiber-housing-program",
+    "tags": [
+      "internet"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "city-college-noncredit-classes",
+    "category": "Colleges and universities",
+    "program": "City College noncredit classes",
+    "provides": "Free college prep, certificate and ESL classes at locations across San Francisco",
+    "who": "California residents 18 and older; youth with required permissions. B-1/B-2 visa holders are excluded.",
+    "status": "Available",
+    "status_note": "Listed as available. Confirm current computer classes.",
+    "source_url": "https://1degree.org/opp/take-free-noncredit-community-college-classes",
+    "tags": [
+      "training",
+      "digital-basics"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "city-college-older-adults-program",
+    "category": "Colleges and universities",
+    "program": "City College Older Adults Program",
+    "provides": "Free noncredit classes, including computers, at more than 30 locations",
+    "who": "Designed for people 55 and older, but anyone may attend",
+    "status": "Available",
+    "status_note": "Listed as available",
+    "source_url": "https://ccsf.edu/older-adults-department",
+    "tags": [
+      "digital-basics",
+      "older-adults",
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "sf-state-free-and-discounted-courses",
+    "category": "Colleges and universities",
+    "program": "SF State free and discounted courses",
+    "provides": "One free course and one 50% off in eligible programs, such as Open University and some certificates",
+    "who": "People laid off from their most recent position, with proof of eligibility",
+    "status": "Confirm",
+    "status_note": "Launched in summer 2023. Confirm whether it is still active.",
+    "source_url": "https://news.sfsu.edu/news/sf-state-offers-free-and-discounted-courses-people-impacted-mass-layoffs",
+    "tags": [
+      "tuition",
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "sf-state-caljobs-funded-training",
+    "category": "Colleges and universities",
+    "program": "SF State CalJOBS-funded training",
+    "provides": "SF State is an eligible training provider, so public workforce funds may pay for listed programs, including GIS and E-Learning Design",
+    "who": "Must qualify through the public workforce system",
+    "status": "Confirm",
+    "status_note": "Confirm eligible programs and funding.",
+    "source_url": "https://cpage.sfsu.edu/about/caljobs",
+    "tags": [
+      "tuition",
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "stanford-code-in-place",
+    "category": "Colleges and universities",
+    "program": "Stanford Code in Place",
+    "provides": "Free, online introductory coding course",
+    "who": "Confirm requirements on the program site",
+    "status": "Confirm",
+    "status_note": "Next session date not confirmed.",
+    "source_url": "https://codeinplace.stanford.edu/",
+    "tags": [
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "sf-public-library-online-courses",
+    "category": "Free local programs",
+    "program": "SF Public Library online courses",
+    "provides": "Free LinkedIn Learning access, including software topics; Udemy also listed in 2021",
+    "who": "Library cardholders",
+    "status": "Confirm",
+    "status_note": "Confirm the current course platforms.",
+    "source_url": "https://sfpl.org/events/2021/07/30/demonstration-linkedin-learning-and-udemy",
+    "tags": [
+      "training",
+      "digital-basics"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "the-bridge-at-main-library",
+    "category": "Free local programs",
+    "program": "The Bridge at Main Library",
+    "provides": "Computer classes and one-on-one technology help; appointments in English, Cantonese and Spanish",
+    "who": "Adults new to technology or refreshing skills",
+    "status": "Available",
+    "status_note": "No fee stated for technology help. Limited to one appointment per week.",
+    "source_url": "https://sfpl.org/locations/main-library/bridge-main-5th-floor",
+    "tags": [
+      "digital-basics"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "tech-exchange-classes",
+    "category": "Free local programs",
+    "program": "Tech Exchange classes",
+    "provides": "Four-week beginner series; participants who finish can receive a device. Also offers refurbished computers and tech support.",
+    "who": "Adults; space is limited at library sessions",
+    "status": "Confirm",
+    "status_note": "Confirm the next series and any device terms.",
+    "source_url": "https://sfpl.org/events/2026/04/30/tutorial-tech-exchange-digital-literacy-classes",
+    "tags": [
+      "digital-basics",
+      "device"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "dev-mission-tech-support-and-programs",
+    "category": "Free local programs",
+    "program": "Dev/Mission tech support and programs",
+    "provides": "Free tech programs, digital skills training, tech support and device setup help",
+    "who": "Varies by program; career programs may have age limits",
+    "status": "Available",
+    "status_note": "Listed by the City. Confirm the current schedule.",
+    "source_url": "https://sf.gov/information/digital-equity",
+    "tags": [
+      "digital-basics",
+      "training",
+      "device"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "dev-mission-pre-apprenticeship",
+    "category": "Free local programs",
+    "program": "Dev/Mission pre-apprenticeship",
+    "provides": "12-week, 240-hour tech curriculum with hardware, mentorship and job readiness support",
+    "who": "Young adults ages 16 to 24; confirm requirements",
+    "status": "Confirm",
+    "status_note": "Source is from 2025. Confirm cost, stipend and next cohort.",
+    "source_url": "https://www.dir.ca.gov/DAS/e-News/2025/Dev-Missions-Pre-Apprenticeship-Program-Opens-Doors-to-Tech-Careers.html",
+    "tags": [
+      "training",
+      "youth",
+      "device"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "sf-connected",
+    "category": "Free local programs",
+    "program": "SF Connected",
+    "provides": "Free digital literacy classes, tech support and help with affordable internet",
+    "who": "Older adults and adults with disabilities",
+    "status": "Available",
+    "status_note": "Listed as available",
+    "source_url": "https://sf.gov/information/digital-equity",
+    "tags": [
+      "digital-basics",
+      "internet",
+      "older-adults",
+      "disability"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "five-keys-schools-and-programs",
+    "category": "Free local programs",
+    "program": "Five Keys Schools and Programs",
+    "provides": "Free adult education and skill-building programs",
+    "who": "Varies by program",
+    "status": "Available",
+    "status_note": "Listed as available",
+    "source_url": "https://sf.gov/information/digital-equity",
+    "tags": [
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "felton-tech-squad",
+    "category": "Free local programs",
+    "program": "Felton Tech Squad",
+    "provides": "One-on-one training, online classes, tech support and internet access",
+    "who": "Older adults and people with disabilities",
+    "status": "Confirm",
+    "status_note": "Cost not listed. Confirm directly.",
+    "source_url": "https://sf.gov/information/digital-equity",
+    "tags": [
+      "digital-basics",
+      "internet",
+      "older-adults",
+      "disability"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "community-living-campaign",
+    "category": "Free local programs",
+    "program": "Community Living Campaign",
+    "provides": "Tech classes, help desks, and internet and device support",
+    "who": "Older adults and people with disabilities",
+    "status": "Confirm",
+    "status_note": "Cost not listed. Confirm directly.",
+    "source_url": "https://sf.gov/information/digital-equity",
+    "tags": [
+      "digital-basics",
+      "internet",
+      "device",
+      "older-adults",
+      "disability"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "st-anthony-s-tenderloin-tech-lab",
+    "category": "Free local programs",
+    "program": "St. Anthony's Tenderloin Tech Lab",
+    "provides": "Computer access and digital skills support",
+    "who": "Confirm directly",
+    "status": "Confirm",
+    "status_note": "Cost not listed. Confirm directly.",
+    "source_url": "https://sf.gov/information/digital-equity",
+    "tags": [
+      "digital-basics",
+      "device"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "goodwill-training-and-career-services",
+    "category": "Free local programs",
+    "program": "Goodwill training and career services",
+    "provides": "Training programs and career services",
+    "who": "Varies by program",
+    "status": "Confirm",
+    "status_note": "Cost not listed. Confirm directly.",
+    "source_url": "https://sf.gov/information/digital-equity",
+    "tags": [
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "sfpl-career-coaching",
+    "category": "Career coaching and mentors",
+    "program": "SF Public Library career coaching",
+    "provides": "Free half-hour career coaching with a coach at the Main Library: job search, career change, resume feedback and a plan to stay on track. Bring a copy of your resume.",
+    "who": "Adults. In person, by appointment up to 15 days ahead; limit 2 appointments per person.",
+    "status": "Confirm",
+    "status_note": "Listed event from May 6, 2026; check SFPL events for upcoming career coaching sessions",
+    "source_url": "https://sfpl.org/events/2026/05/06/workshop-career-coaching",
+    "tags": [
+      "career-coaching",
+      "job-readiness",
+      "training"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  },
+  {
+    "id": "adplist-mentors",
+    "category": "Career coaching and mentors",
+    "program": "ADPList free mentors",
+    "provides": "Free 1:1 online sessions with volunteer mentors in design, product and engineering: career changes, job searches, interviews and portfolios.",
+    "who": "Anyone looking for career guidance; browse mentors and book online.",
+    "status": "Available",
+    "status_note": "Free online mentorship marketplace; mentors are volunteers, sessions booked online",
+    "source_url": "https://adplist.org/explore",
+    "tags": [
+      "mentorship",
+      "career-coaching",
+      "job-readiness"
+    ],
+    "housing_only": false,
+    "as_of": "2026-11-03"
+  }
 ]

@@ -30,11 +30,19 @@ TAG_LABELS = {
     "older-adults": "older adults",
     "disability": "disability support",
     "youth": "young adults",
+    "career-coaching": "career coaching",
+    "mentorship": "mentors",
+    "job-readiness": "job search help",
 }
 
 # Child care is the barrier that most often ends training, so it outranks everything else.
 TAG_WEIGHTS = {"childcare": 1.2, "device": 0.5, "transit": 0.5, "savings": 0.4, "internet": 0.3,
-               "digital-basics": 0.25, "training": 0.1}
+               "career-coaching": 0.3, "digital-basics": 0.25, "training": 0.1}
+
+# Coaching and mentor resources: a resident whose goal is a job always sees exactly one of these.
+COACHING_TAGS = ("career-coaching", "mentorship")
+JOB_WORDS = ("job", "career", "work", "employ", "hire", "position", "trabajo", "empleo", "carrera",
+             "工作", "職", "就業", "trabaho", "hanapbuhay", "việc làm", "công việc", "nghề")
 AUDIENCE_TAGS = ("older-adults", "disability", "youth")
 
 # Housing programs whose residents can use the SF Housing Authority FSS account.
@@ -84,7 +92,35 @@ def wanted_tags(profile: dict, housing_type: str | None = None) -> list[str]:
     tags.append("training")
     if housing_type in FSS_HOUSING_TYPES:
         tags.append("savings")
+    if seeks_job(profile):
+        tags.append("career-coaching")
     return list(dict.fromkeys(tags))
+
+
+def seeks_job(profile: dict) -> bool:
+    """True when the resident's goal is employment (any pilot language)."""
+    if profile.get("career_tracks"):
+        return True
+    text = " ".join(str(profile.get(k) or "") for k in ("goal", "search_query")).lower()
+    return any(w in text for w in JOB_WORDS)
+
+
+def is_coaching(doc: dict) -> bool:
+    return bool(set(doc.get("tags") or []) & set(COACHING_TAGS))
+
+
+def coaching_query(profile: dict) -> dict:
+    """Best single coaching/mentor resource for this resident's goal (open ones only)."""
+    goal = profile.get("search_query") or profile.get("goal") or "job search"
+    return {
+        "size": 1,
+        "_source": {"excludes": ["text"]},
+        "query": {"bool": {
+            "must": [{"semantic": {"field": "text", "query": f"career coaching and mentors for: {goal}"}}],
+            "filter": [{"terms": {"tags": list(COACHING_TAGS)}}],
+            "must_not": [{"term": {"status": CLOSED}}],
+        }},
+    }
 
 
 def build_query(profile: dict, housing_type: str | None = None, k: int = 6,
@@ -152,13 +188,34 @@ def relevant_resources(profile: dict, housing_type: str | None = None, k: int = 
     """Semantic + tag-boosted search over the resources index. Raises on Elastic failure."""
     body = build_query(profile, housing_type, k, include_closed)
     tags = wanted_tags(profile, housing_type)
+    es = _es()
     t0 = time.perf_counter()
-    res = _es().search(index=INDEX_RESOURCES, **body)
-    took = int((time.perf_counter() - t0) * 1000)
-    docs = []
-    for h in res["hits"]["hits"]:
+    res = es.search(index=INDEX_RESOURCES, **body)
+
+    def as_doc(h: dict) -> dict:
         d = dict(h["_source"])
         d["_score"] = h.get("_score")
         d["_why"] = _why(d, tags)
+        return d
+
+    docs: list[dict] = []
+    coaching_seen = False
+    for h in res["hits"]["hits"]:
+        d = as_doc(h)
+        if is_coaching(d):
+            if coaching_seen:  # at most one coaching/mentor item
+                continue
+            coaching_seen = True
         docs.append(d)
-    return {"resources": docs, "query": body, "took_ms": took, "source": SOURCE_LABEL}
+    out: dict[str, Any] = {"query": body}
+    if seeks_job(profile) and not coaching_seen and k > 0:
+        cq = coaching_query(profile)
+        extra = [as_doc(h) for h in es.search(index=INDEX_RESOURCES, **cq)["hits"]["hits"]]
+        extra = [d for d in extra if is_coaching(d)]
+        if extra:
+            if len(docs) >= k:
+                docs = docs[: k - 1]
+            docs.append(extra[0])
+            out["coaching_query"] = cq
+    took = int((time.perf_counter() - t0) * 1000)
+    return {"resources": docs, **out, "took_ms": took, "source": SOURCE_LABEL}

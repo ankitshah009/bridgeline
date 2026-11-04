@@ -42,7 +42,7 @@ Open the top match.
 
 **0:40 Who pays**
 "Tuition is covered by the free program. Our grant covers the rest: child care, a Muni pass, a laptop. It pays the providers directly, so her cost is **$0**."
-Point to the yellow **Check first** notes: "Last dollar means last. Before our grant pays for child care, she's routed to San Francisco's free child care support, and to Clipper START for half-price transit. Those come from 32 local programs we researched, indexed in Elastic."
+Point to the yellow **Check first** notes: "Last dollar means last. Before our grant pays for child care, she's routed to San Francisco's free child care support, and to Clipper START for half-price transit. Those come from 34 local programs we researched, indexed in Elastic."
 Point to the **Benefits Shield**: "No cash ever reaches her, so the grant is designed not to raise her rent under HUD's income rule. Before every award, a navigator confirms that with the operator."
 
 **0:55 The navigator (navigator tab)**
@@ -72,4 +72,4 @@ Click **Enrolled**: "The first payment goes to the provider, not to her."
 
 ## Sponsor fit
 - **Mistral:** multilingual intake (EN/ES/繁中/Filipino/Tiếng Việt), `mistral-embed` for semantic search inside Elastic (inference endpoint), drafted plans in the resident's language.
-- **Elastic:** `semantic_text` + Mistral inference endpoint, hybrid ranking with filters, geo distance from home to training, aggregations for the impact page, plus SF open data (DataSF MOHCD portfolio, 850 buildings) and a 32-program free-help directory indexed alongside (4 indices: programs, applications, sf-housing, resources).
+- **Elastic:** `semantic_text` + Mistral inference endpoint, hybrid ranking with filters, geo distance from home to training, aggregations for the impact page, plus SF open data (DataSF MOHCD portfolio, 850 buildings) and a 34-program free-help directory indexed alongside (4 indices: programs, applications, sf-housing, resources).

@@ -24,6 +24,7 @@ const TOPICS: { id: string; label: string; words: string[] }[] = [
   { id: "digital-basics", label: "Digital basics", words: ["digital-basics", "basics", "beginner", "digital literacy"] },
   { id: "tech", label: "IT & tech careers", words: ["it support", "help desk", "network", "data", "tech"] },
   { id: "scholarship", label: "Scholarships", words: ["scholarship", "tuition", "savings"] },
+  { id: "career-coaching", label: "Coaching & mentors", words: ["mentorship", "mentor", "coaching", "resume"] },
 ];
 
 function matchesTopic(item: Item, topicId: string | null): boolean {

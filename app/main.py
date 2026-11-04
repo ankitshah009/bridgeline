@@ -1,12 +1,13 @@
 """Bridgeline HTTP API and page server."""
 from __future__ import annotations
 
+import os
 import secrets
 import time
 from datetime import datetime, timezone
 
 from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from app import ai, config, rules
@@ -86,26 +87,17 @@ def _bad(msg: str, status: int = 400):
 
 # ---------- pages ----------
 
-def _page(name: str):
-    path = config.WEB_DIR / name
-    if path.exists():
-        return FileResponse(path)
-    return HTMLResponse(f"<p>{name} is not built yet.</p>", status_code=404)
+# The UI is the Next.js app in frontend/. This port only serves /api, so page URLs opened
+# here redirect to the UI instead of returning a bare 404.
+UI_URL = os.getenv("BRIDGELINE_UI_URL", "http://localhost:3000").rstrip("/")
 
 
 @app.get("/", include_in_schema=False)
-def resident_page():
-    return _page("index.html")
-
-
+@app.get("/directory", include_in_schema=False)
 @app.get("/navigator", include_in_schema=False)
-def navigator_page():
-    return _page("navigator.html")
-
-
 @app.get("/impact", include_in_schema=False)
-def impact_page():
-    return _page("impact.html")
+def ui_redirect(request: Request):
+    return RedirectResponse(f"{UI_URL}{request.url.path}", status_code=307)
 
 
 # ---------- API ----------

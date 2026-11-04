@@ -54,6 +54,31 @@ def test_resource_grouping_rules():
     assert sec({"category": "Colleges and universities", "tags": ["tuition"]}) == "colleges"
     assert sec({"category": "Training and education", "tags": ["training"]}) == "aid"
     assert sec({"category": "Free local programs", "tags": ["training", "digital-basics"]}) == "local"
+    assert sec({"category": "Career coaching and mentors", "tags": ["career-coaching"]}) == "coaching"
+    assert sec({"category": "Free local programs", "tags": ["mentorship"]}) == "coaching"
+
+
+def test_coaching_section_after_aid_with_both_items():
+    d = directory.directory()
+    ids = [s["id"] for s in d["sections"]]
+    assert ids.index("coaching") == ids.index("aid") + 1
+    coaching = next(s for s in d["sections"] if s["id"] == "coaching")
+    assert coaching["title"] == "Career coaching & mentors"
+    assert [i["id"] for i in coaching["items"]] == ["adplist-mentors", "sfpl-career-coaching"]  # Available first
+    assert d["counts"]["resources"] == 34
+
+
+def test_coaching_intents():
+    assert directory.intents("free resume help")[0] == ["career-coaching"]
+    assert directory.intents("busco un mentor")[0] == ["mentorship"]
+    assert directory.intents("ayuda con mi currículum y entrevista")[0] == ["career-coaching"]
+
+
+def test_intents_use_word_boundaries():
+    assert directory.intents("busco trabajo")[0] == []  # "bus" must not fire inside "busco"
+    assert directory.intents("free buses and kids care")[0] == ["childcare", "transit"]
+    assert directory.intents("我需要托兒")[0] == ["childcare"]  # CJK still substring-matched
+    assert directory.intents("cuidado de niños gratis")[0] == ["childcare"]
 
 
 def test_directory_endpoint(client):

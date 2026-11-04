@@ -13,7 +13,7 @@ SPANISH = {
 
 def test_snapshot_rows_are_complete():
     rows = resources.load_resources()
-    assert len(rows) == 32
+    assert len(rows) == 34  # 32 researched rows + SFPL career coaching + ADPList mentors
     ids = [r["id"] for r in rows]
     assert len(ids) == len(set(ids))
     allowed = {"Available", "Confirm", "Closed for 2026", "Not yet available"}
@@ -70,6 +70,70 @@ def test_relevant_resources_adds_why(monkeypatch):
     assert out["resources"][0]["_why"].startswith("Helps with child care")
     assert "confirm" in out["resources"][1]["_why"]
     assert out["query"]["size"] == 2
+
+
+def test_coaching_rows_present():
+    rows = {r["id"]: r for r in resources.load_resources()}
+    sfpl, adp = rows["sfpl-career-coaching"], rows["adplist-mentors"]
+    assert sfpl["status"] == "Confirm" and "May 6, 2026" in sfpl["status_note"]
+    assert sfpl["source_url"] == "https://sfpl.org/events/2026/05/06/workshop-career-coaching"
+    assert adp["status"] == "Available" and adp["source_url"] == "https://adplist.org/explore"
+    assert resources.is_coaching(sfpl) and resources.is_coaching(adp)
+    assert not sfpl["housing_only"] and not adp["housing_only"]
+
+
+def test_seeks_job_multilingual():
+    assert resources.seeks_job(SPANISH)
+    assert resources.seeks_job({"goal": "Quiero un trabajo en computadoras"})
+    assert resources.seeks_job({"goal": "找一份電腦工作"})
+    assert not resources.seeks_job({"goal": "Learn to video call my grandkids"})
+    assert "career-coaching" in resources.wanted_tags(SPANISH, "LIHTC")
+
+
+class SeqES:
+    """Returns a different response per search call."""
+
+    def __init__(self, *responses):
+        self.responses, self.calls = list(responses), []
+
+    def search(self, **kw):
+        self.calls.append(kw)
+        return {"hits": {"hits": self.responses.pop(0)}}
+
+
+def _h(id_, tags, score=1.0, status="Available"):
+    return {"_score": score, "_source": {"id": id_, "program": id_, "tags": tags, "status": status}}
+
+
+def test_job_seeker_gets_exactly_one_coaching_item_via_fallback(monkeypatch):
+    main = [_h("childcare", ["childcare"], 1.4), _h("clipper", ["transit"], 1.2), _h("tx", ["device"], 1.1)]
+    fake = SeqES(main, [_h("adplist-mentors", ["mentorship", "career-coaching"], 0.9)])
+    monkeypatch.setattr(resources, "_es", lambda: fake)
+    out = resources.relevant_resources(SPANISH, "LIHTC", k=3)
+    ids = [d["id"] for d in out["resources"]]
+    assert ids == ["childcare", "clipper", "adplist-mentors"]  # replaces the last slot, keeps k
+    assert len(fake.calls) == 2
+    assert fake.calls[1]["query"]["bool"]["filter"] == [{"terms": {"tags": ["career-coaching", "mentorship"]}}]
+    assert out["resources"][-1]["_why"].startswith("Helps with career coaching")
+    assert "coaching_query" in out
+
+
+def test_job_seeker_coaching_deduped_and_no_extra_call(monkeypatch):
+    main = [_h("sfpl-career-coaching", ["career-coaching"], 1.3), _h("childcare", ["childcare"], 1.2),
+            _h("adplist-mentors", ["mentorship", "career-coaching"], 1.1)]
+    fake = SeqES(main)
+    monkeypatch.setattr(resources, "_es", lambda: fake)
+    out = resources.relevant_resources(SPANISH, "LIHTC", k=3)
+    assert [d["id"] for d in out["resources"]] == ["sfpl-career-coaching", "childcare"]
+    assert len(fake.calls) == 1
+
+
+def test_non_job_goal_gets_no_forced_coaching(monkeypatch):
+    fake = SeqES([_h("childcare", ["childcare"])])
+    monkeypatch.setattr(resources, "_es", lambda: fake)
+    out = resources.relevant_resources({"goal": "Learn to video call family", "needs_childcare": True}, k=3)
+    assert [d["id"] for d in out["resources"]] == ["childcare"]
+    assert len(fake.calls) == 1
 
 
 def test_waterfall_checks_first_keeps_amounts():
