@@ -1,5 +1,7 @@
 # Bridgeline: 90-second demo
 
+**Live site:** https://bridgeline-sf.vercel.app (same Mistral + Elastic Cloud backend as local; applications made on either show up on both).
+
 **One line:** A text-message link that takes a resident of San Francisco affordable housing from "I want a better job" to a funded seat in tech training, with $0 out of pocket and no risk to their rent.
 
 ## Setup (before going on stage)

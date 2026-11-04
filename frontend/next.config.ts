@@ -11,7 +11,10 @@ const nextConfig: NextConfig = {
       },
     },
   },
+  // Local dev proxies /api to FastAPI. On Vercel, vercel.json routes /api to the backend service
+  // before requests reach Next.js, so no proxy is needed there.
   async rewrites() {
+    if (process.env.VERCEL) return [];
     return [{ source: "/api/:path*", destination: `${API}/api/:path*` }];
   },
 };

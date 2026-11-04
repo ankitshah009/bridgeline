@@ -4,6 +4,8 @@
 
 Built at the Mistral AI x Elastic "Make SF Better" hack night, November 3, 2026.
 
+**Live:** https://bridgeline-sf.vercel.app · [Directory](https://bridgeline-sf.vercel.app/directory) · [Navigator](https://bridgeline-sf.vercel.app/navigator) · [Impact](https://bridgeline-sf.vercel.app/impact)
+
 ## The problem
 
 San Francisco's best tech training is already free: Per Scholas, TechSF and Free City College. A parent working days still can't attend, because 12 to 16 weeks of classes means paying for child care, transit and a laptop. Cash help can raise the household's rent, since assisted rents are set by income (HUD, 24 CFR 5.609). DataSF lists **570 affordable rental buildings with 31,981 income-restricted homes**, all aggregated live in Elasticsearch.
@@ -216,6 +218,8 @@ uv run uvicorn app.main:app --port 8010
 cd frontend && npm install && echo 'HOMEBASE_API_URL=http://127.0.0.1:8010' > .env.local && npx next dev -p 3000
 ```
 Tests: `uv run pytest -n auto`.
+
+**Deploy (Vercel Services):** `vercel.json` ships the Next.js frontend and the FastAPI backend as one project; `/api/*` goes to FastAPI, everything else to Next.js. Set `MISTRAL_API_KEY`, `ES_URL`, `ES_API_KEY` as Vercel environment variables, then `vercel deploy --prod`. On Vercel the startup DataSF refresh and the public source re-check endpoint are off (`BRIDGELINE_AUTOREFRESH=0`, `BRIDGELINE_DISABLE_SOURCE_VERIFY=1`); run `scripts/verify_sources.py` from a trusted machine instead.
 
 ## What's live, and what isn't yet
 

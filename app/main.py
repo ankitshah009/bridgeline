@@ -357,6 +357,10 @@ def sources_status():
 def sources_verify():
     from app import freshness
 
+    # On the public deployment, re-checks would let anyone spend Mistral quota; run them from the CLI.
+    if os.getenv("VERCEL") or os.getenv("BRIDGELINE_DISABLE_SOURCE_VERIFY") == "1":
+        return JSONResponse({"error": "Source re-checks run from the CLI on this deployment (scripts/verify_sources.py)",
+                             "stage": "policy"}, status_code=403)
     if not freshness.start_background():
         return JSONResponse({"error": "A source check is already running", "running": True}, status_code=409)
     return {"started": True, "running": True}

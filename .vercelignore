@@ -1,0 +1,16 @@
+# Never upload secrets or local environments
+.env
+.env.*
+!.env.example
+frontend/.env*
+.venv
+**/__pycache__
+.pytest_cache
+
+# Build output and dependencies are rebuilt on Vercel
+frontend/node_modules
+frontend/.next
+
+# Not needed in production
+tests
+web
