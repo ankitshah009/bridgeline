@@ -3,6 +3,7 @@
 import type { TFn } from "./i18n";
 import { DistBadge, ErrorCard, PAYER, PAY_KEYS, PayBar, PayLegend, Thinking, TIER_LABEL, money, type Any } from "./helpers";
 import { payLabels } from "./MatchStep";
+import { LiveBadge } from "@/components/directory/LiveCheck";
 
 export type DetailState = { loading: boolean; error: unknown; detail: Any };
 
@@ -54,6 +55,7 @@ function Resources({ resources }: { resources: Any[] }) {
             <div className="row" style={{ gap: 6 }}>
               <StatusPill status={x.status} />
               {x.category && <span className="badge">{x.category}</span>}
+              <LiveBadge check={x.live_check} />
             </div>
             <div className="res-name">{x.program}</div>
             {x.provides && <div className="small">{x.provides}</div>}

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usd } from "@/lib/api";
+import { LiveBadge } from "./LiveCheck";
 import { Item, Kind, LANG_LABEL, LEVEL_LABEL, SCHEDULE_LABEL, itemKind, itemTitle, programCost } from "./types";
 
 type OpenFn = (item: Item, kind: Kind) => void;
@@ -127,6 +128,7 @@ export function ProgramCard({ item, onOpen }: { item: Item; onOpen: OpenFn }) {
         {item.illustrative ? <span className="badge badge-ink">Illustrative</span> : null}
         {item._score != null && item.kind ? <span className="badge badge-blue">match</span> : null}
       </div>
+      <LiveBadge check={item.live_check} />
       <OpenButton item={item} kind="program" onOpen={onOpen} />
       {item.provider ? <div className="dir-provider">{item.provider}</div> : null}
       <div className="dir-chips">
@@ -167,6 +169,7 @@ export function ResourceCard({ item, onOpen }: { item: Item; onOpen: OpenFn }) {
         <span className={`badge dir-status dir-status-${tone}`}>{item.status ?? "Confirm"}</span>
         {item.housing_only ? <span className="badge badge-purple">For affordable-housing residents</span> : null}
       </div>
+      <LiveBadge check={item.live_check} />
       {item.category ? <div className="kicker dir-cat">{item.category}</div> : null}
       <OpenButton item={item} kind="resource" onOpen={onOpen} />
       {item.provides ? <p className="dir-provides">{item.provides}</p> : null}

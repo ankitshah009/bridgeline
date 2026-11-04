@@ -44,15 +44,32 @@ def _mistral():
     return _client
 
 
+RATE_LIMIT_BACKOFF_S = (1.0, 2.0, 4.0)  # total wait at most 7 s before giving up
+
+
+def _is_rate_limited(exc: Exception) -> bool:
+    text = str(exc)[:400]
+    return "429" in text or "rate limit" in text.lower() or "rate_limited" in text
+
+
 def _complete(**kwargs):
-    """One retry on dropped connections (seen as SSL EOF); never on timeouts or API errors."""
-    try:
-        return _mistral().chat.complete(**kwargs)
-    except Exception as exc:
-        name = type(exc).__name__ + str(exc)[:200]
-        if any(s in name for s in ("ConnectError", "SSL", "RemoteProtocolError", "ReadError")):
+    """Retry dropped connections once and rate limits (429) with backoff; never timeouts or other API errors."""
+    import time
+
+    waits = list(RATE_LIMIT_BACKOFF_S)
+    reconnected = False
+    while True:
+        try:
             return _mistral().chat.complete(**kwargs)
-        raise
+        except Exception as exc:
+            name = type(exc).__name__ + str(exc)[:200]
+            if not reconnected and any(s in name for s in ("ConnectError", "SSL", "RemoteProtocolError", "ReadError")):
+                reconnected = True
+                continue
+            if waits and _is_rate_limited(exc):
+                time.sleep(waits.pop(0))
+                continue
+            raise
 
 
 def _chat_json(system: str, user: str, temperature: float = 0.1, max_tokens: int = 900) -> dict:

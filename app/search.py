@@ -296,11 +296,19 @@ def update_application(app_id: str, patch: dict) -> dict:
 
 # ---------------------------------------------------------------- impact
 
-def impact_query() -> dict:
+IMPACT_SCOPES = ("all", "live")
+
+
+def impact_query(scope: str = "all") -> dict:
+    """Aggregation body for the impact page. scope="live" drops the simulated pilot cohort."""
     awarded = {"terms": {"status": AWARDED_STATUSES}}
-    return {
+    body: dict = {
         "size": 0,
         "track_total_hits": True,
+    }
+    if scope == "live":
+        body["query"] = {"bool": {"must_not": [{"term": {"simulated": True}}]}}
+    return body | {
         "aggs": {
             "by_status": {"terms": {"field": "status", "size": 20}},
             "by_tier": {"terms": {"field": "tier", "size": 10}},
@@ -329,9 +337,11 @@ def _buckets(aggs: dict, name: str) -> dict:
     return {b["key"]: b["doc_count"] for b in aggs.get(name, {}).get("buckets", [])}
 
 
-def impact_stats() -> dict:
+def impact_stats(scope: str = "all") -> dict:
+    if scope not in IMPACT_SCOPES:
+        raise ValueError(f"scope must be one of {IMPACT_SCOPES}")
     es = _require()
-    body = impact_query()
+    body = impact_query(scope)
     started = time.perf_counter()
     resp = _body(es.search(index=config.INDEX_APPLICATIONS, body=body))
     took_ms = int((time.perf_counter() - started) * 1000)
@@ -376,5 +386,6 @@ def impact_stats() -> dict:
         "simulated_count": simulated,
         "live_count": total - simulated,
         "took_ms": resp.get("took", took_ms),
+        "scope": scope,
         "query": body,
     }

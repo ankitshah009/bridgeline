@@ -281,3 +281,17 @@ button, input, textarea, select { font: inherit; color: inherit; }
 .band-navy .hbar .track { background: rgba(255,255,255,.12); }
 
 pre.code { background: #0b1030; color: #d7ddff; border-radius: var(--radius-sm); padding: 14px; font-size: .78rem; line-height: 1.45; overflow: auto; max-height: 360px; }
+
+/* ---------- Live source checks (components/directory/LiveCheck.tsx) ---------- */
+.live-badge { display: inline-flex; align-items: center; gap: 6px; align-self: flex-start; padding: 3px 10px; border-radius: 999px; font: 700 .72rem var(--font-ui); letter-spacing: .01em; border: 1px solid transparent; white-space: nowrap; }
+.live-badge .live-dot, .live-status .live-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.live-ok { background: var(--green-soft, #e3f6e9); color: #0e6b2c; border-color: #bfe6cb; }
+.live-flagged { background: var(--yellow-soft, #fff4cc); color: #7a5300; border-color: #f2d98a; }
+.live-broken { background: var(--red-soft, #fbe3e6); color: #9b1c2e; border-color: #f0b8c0; }
+.live-unverified { background: var(--cream-2, #f5eedf); color: var(--ink-2, #4a4f68); border-color: var(--line, #e7e0d0); }
+.live-ok .live-dot { box-shadow: 0 0 0 3px rgba(31,178,78,.18); }
+.live-status { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; margin-top: 12px; font: 600 .86rem var(--font-ui); color: var(--ink-2, #4a4f68); }
+.live-status .live-dot { color: #1fb24e; box-shadow: 0 0 0 3px rgba(31,178,78,.2); }
+.live-status strong { color: var(--ink, #15182c); }
+.live-recheck-link { background: none; border: 0; padding: 4px 2px; min-height: 32px; font: 600 .82rem var(--font-ui); color: var(--blue, #2f6bff); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.live-recheck-link:disabled { color: var(--ink-3, #6b7088); text-decoration: none; cursor: default; }

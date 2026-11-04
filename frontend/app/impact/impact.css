@@ -155,6 +155,72 @@
 .imp-updated {
   margin-left: auto;
 }
+
+/* Pilot model / Live only scope toggle */
+.imp-scope {
+  display: inline-flex;
+  padding: 4px;
+  gap: 4px;
+  border-radius: 999px;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 0 3px 0 var(--ink);
+}
+.imp-scope button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink-2);
+  font: 700 0.86rem var(--font-ui);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.imp-scope button small {
+  font-weight: 600;
+  opacity: 0.75;
+}
+.imp-scope button.on {
+  background: var(--ink);
+  color: #fff;
+}
+.imp-scope button:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 2px;
+}
+
+.imp-empty {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 22px 24px;
+}
+.imp-empty strong {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+}
+.imp-empty p {
+  margin: 6px 0 0;
+  color: var(--ink-2);
+}
+.imp-empty .live-dot {
+  margin-top: 8px;
+  flex: none;
+}
+
+.imp-fresh {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 14px 0 0;
+  font: 600 0.85rem var(--font-ui);
+  color: var(--ink-2);
+}
 .impact-page .badge {
   display: inline-flex;
   align-items: center;
@@ -733,6 +799,18 @@
   }
 }
 @media (max-width: 520px) {
+  .imp-scope {
+    width: 100%;
+  }
+  .imp-scope button {
+    flex: 1;
+    justify-content: center;
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+  .imp-scope button small {
+    display: none;
+  }
   .imp-kpis {
     grid-template-columns: 1fr 1fr;
   }

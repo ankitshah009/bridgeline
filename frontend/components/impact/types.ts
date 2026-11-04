@@ -22,7 +22,13 @@ export type Housing = {
   query?: unknown;
   took_ms?: number;
   ms?: number;
+  /** ISO time DataSF last updated the dataset (from its metadata). */
+  source_updated_at?: string | null;
+  /** ISO time the dataset was last loaded into Elasticsearch. */
+  synced_at?: string | null;
 };
+
+export type ImpactScope = "all" | "live";
 
 export type BudgetItem = { item: string; amount: number };
 
@@ -60,6 +66,7 @@ export type Impact = {
   simulated_count?: number;
   live_count?: number;
   took_ms?: number;
+  scope?: ImpactScope;
   query?: unknown;
   budget?: Budget;
   targets?: Targets;

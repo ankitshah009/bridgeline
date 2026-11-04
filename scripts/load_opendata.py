@@ -3,6 +3,9 @@
     uv run python scripts/load_opendata.py            # live from DataSF, snapshot fallback
     uv run python scripts/load_opendata.py --snapshot # use app/data/sf_mohcd_portfolio.json
     uv run python scripts/load_opendata.py --reset    # drop and recreate the index
+
+Every run also records DataSF's own "rows updated" time and our sync time in the
+`homebase-sync` index, which the impact page shows as data freshness.
 """
 from __future__ import annotations
 
@@ -12,8 +15,6 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
-from elasticsearch import helpers  # noqa: E402
 
 from app import opendata  # noqa: E402
 from app.search import es_client  # noqa: E402
@@ -30,35 +31,13 @@ def main() -> int:
         print("ES_URL / ES_API_KEY missing in .env", file=sys.stderr)
         return 1
 
-    rows: list[dict]
-    if args.snapshot:
-        rows = opendata.load_snapshot()
-        print(f"snapshot: {len(rows)} rows")
-    else:
-        try:
-            rows = opendata.fetch_portfolio()
-            opendata.SNAPSHOT.write_text(json.dumps(rows))
-            print(f"DataSF live: {len(rows)} rows (snapshot refreshed)")
-        except Exception as e:  # network trouble at the venue
-            rows = opendata.load_snapshot()
-            print(f"DataSF fetch failed ({e}); using snapshot: {len(rows)} rows")
-
-    idx = opendata.INDEX_HOUSING
-    if args.reset and es.indices.exists(index=idx):
-        es.indices.delete(index=idx)
-    if not es.indices.exists(index=idx):
-        es.indices.create(index=idx, mappings=opendata.MAPPING)
-
-    docs = [d for d in (opendata.normalize(r) for r in rows) if d]
-    ok, errors = helpers.bulk(
-        es,
-        ({"_index": idx, "_id": d["id"], "_source": d} for d in docs),
-        raise_on_error=False,
-    )
-    es.indices.refresh(index=idx)
-    print(f"indexed {ok} docs into {idx}; errors: {len(errors)}")
-    if errors:
-        print(json.dumps(errors[:3], indent=1)[:1500])
+    res = opendata.load_portfolio(es, use_snapshot=args.snapshot, reset=args.reset)
+    print(f"{res['origin']}: {res['rows']} rows; indexed {res['indexed']} into "
+          f"{opendata.INDEX_HOUSING}; errors: {len(res['errors'])}")
+    if res["errors"]:
+        print(json.dumps(res["errors"][:3], indent=1)[:1500])
+    sync = res["sync"]
+    print(f"sync: DataSF rows updated {sync['source_updated_at']}, synced {sync['synced_at']}")
 
     s = opendata.housing_stats()
     print(f"rental buildings {s['buildings']}, affordable units {s['affordable_units']}, "

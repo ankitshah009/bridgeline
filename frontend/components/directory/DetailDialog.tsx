@@ -4,12 +4,22 @@ import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { usd } from "@/lib/api";
 import { statusTone, TierArt } from "./Cards";
+import { LiveBadge, liveCheckDetail } from "./LiveCheck";
 import { Item, Kind, LANG_LABEL, LEVEL_LABEL, SCHEDULE_LABEL, itemTitle, programCost } from "./types";
 
 type Row = [string, React.ReactNode];
 
 function yesNo(v: unknown) {
   return v ? "Yes" : "No";
+}
+
+function liveRows(item: Item): Row[] {
+  const c = item.live_check;
+  if (!c) return [];
+  return [
+    ["Live check", <LiveBadge key="lc" check={c} />],
+    ["Live check notes", liveCheckDetail(c) || null],
+  ];
 }
 
 function rowsFor(item: Item, kind: Kind): Row[] {
@@ -33,6 +43,7 @@ function rowsFor(item: Item, kind: Kind): Row[] {
       ["Only for affordable housing", yesNo(item.housing_only)],
       ["Topics", Array.isArray(item.tags) ? item.tags.join(", ") : null],
       ["As of", item.as_of],
+      ...liveRows(item),
     ];
   }
   const cost = programCost(item);
@@ -52,6 +63,7 @@ function rowsFor(item: Item, kind: Kind): Row[] {
     ["Income-share or required loan", item.isa_or_required_loan ? "Yes (not grant-eligible)" : "No"],
     ["Published outcomes", item.published_outcomes == null ? "Not published; ask the provider" : JSON.stringify(item.published_outcomes)],
     ["Verify", item.verify_note],
+    ...liveRows(item),
   ];
 }
 

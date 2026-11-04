@@ -50,8 +50,8 @@ Her application is at the top with risk flags. "Mistral drafted this plan, and i
 Phone: the status flips to **Approved** live.
 Click **Enrolled**: "The first payment goes to the provider, not to her."
 
-**1:10 The proof (impact tab)**
-"Funders and operators see aggregates only, straight from Elasticsearch: the funnel, free and public dollars leveraged against grant dollars, and the 10-day decision time."
+**1:10 The proof (impact tab, opens on Live)**
+"This page counts only real applications, live from Elasticsearch. A minute ago it said no live applications. Now it shows her approved grant." Then flip the toggle to **Pilot model**: "Here is the pilot we are modelling, with the simulated cohort clearly labelled: the funnel, free and public dollars leveraged against grant dollars, and the 10-day decision time."
 "The pilot covers 1,000 units at about $18,000 per resident who finishes and gets hired or raises their pay. Randomized studies of sector-focused training found 11 to 40% higher earnings. That's the model we're funding: training plus support plus a navigator."
 
 **(If time) Directory tab**
@@ -61,6 +61,8 @@ Click **Enrolled**: "The first payment goes to the provider, not to her."
 "Bridgeline. Free training first, our grant for the rest, and $0 for the resident. Built tonight on Mistral and Elastic."
 
 ## If something breaks
+- Do **not** click "Re-check sources" on stage. It calls Mistral for every source and can hit the rate limit while you demo intake.
+- Mistral 429 (rate limit): the app retries for up to 7 s, then shows a red card. Wait a few seconds and tap again.
 - If Mistral or Elastic fails, the UI shows a red card naming the stage. Say so and retry; never fake a result.
 - If the network is slow, `load_opendata.py --snapshot` loads the committed DataSF snapshot.
 

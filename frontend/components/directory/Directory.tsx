@@ -6,6 +6,7 @@ import { ErrorCard, Thinking } from "@/components/ui";
 import { Carousel } from "./Carousel";
 import { DirectoryCard } from "./Cards";
 import { DetailDialog } from "./DetailDialog";
+import { SourcesStatus } from "./LiveCheck";
 import { DirectoryResponse, Item, Kind, SearchResponse, itemKind } from "./types";
 
 type KindFilter = "all" | Kind;
@@ -187,6 +188,7 @@ export default function Directory() {
                   )
                 : null}
           </div>
+          <SourcesStatus onDone={load} />
         </div>
         <svg className="dir-hero-art" viewBox="0 0 260 140" aria-hidden="true">
           <path d="M10 120 C 60 120, 70 60, 120 60 S 190 100, 250 30" fill="none" stroke="#15182c" strokeWidth="2.5" strokeDasharray="3 7" strokeLinecap="round" />

@@ -1,6 +1,7 @@
 """Bridgeline HTTP API and page server."""
 from __future__ import annotations
 
+import contextlib
 import os
 import secrets
 import time
@@ -33,6 +34,33 @@ def _opendata():
     from app import opendata
 
     return opendata
+
+
+def _opendata_auto_refresh() -> None:
+    """Keep DataSF data fresh: check once at startup in a daemon thread (never blocks or raises).
+
+    Skipped under pytest and when BRIDGELINE_AUTOREFRESH=0.
+    """
+    if os.getenv("BRIDGELINE_AUTOREFRESH", "1") == "0" or "PYTEST_CURRENT_TEST" in os.environ:
+        return
+    try:
+        _opendata().start_auto_refresh()
+    except Exception:  # freshness is best-effort; the API must still start
+        pass
+
+
+# Run the refresh at startup by wrapping the default lifespan (on_event is deprecated).
+_default_lifespan = app.router.lifespan_context
+
+
+@contextlib.asynccontextmanager
+async def _lifespan(application):
+    _opendata_auto_refresh()
+    async with _default_lifespan(application) as state:
+        yield state
+
+
+app.router.lifespan_context = _lifespan
 
 
 def _resources():
@@ -265,6 +293,7 @@ async def plan(request: Request):
         found = _resources().relevant_resources(
             profile, _housing_type(body.get("property_code"), building), k=4)
         out["resources"] = found["resources"]
+        _attach_live_checks(out["resources"])
     except Exception as exc:  # resources are additive; the plan stands without them
         out["resources"] = []
         out["resources_error"] = f"Elasticsearch failed: {type(exc).__name__}: {exc}"
@@ -279,6 +308,7 @@ async def resources_search(request: Request):
     t0 = time.perf_counter()
     found = _elastic(_resources().relevant_resources, profile, housing_type,
                      k=int(body.get("k") or 6), include_closed=bool(body.get("include_closed")))
+    _attach_live_checks(found["resources"])
     return {"resources": found["resources"], "query": found["query"], "source": found["source"],
             "housing_type": housing_type, "ms": _ms(t0)}
 
@@ -286,7 +316,9 @@ async def resources_search(request: Request):
 @app.get("/api/directory")
 def directory_browse():
     """Marketplace view: grant templates, programs by level, and free resources by need."""
-    return _directory().directory()
+    out = _directory().directory()
+    _attach_live_checks([it for s in out["sections"] if s.get("kind") != "tier" for it in s["items"]])
+    return out
 
 
 @app.get("/api/directory/search")
@@ -295,8 +327,39 @@ def directory_search(q: str = "", k: int = 12):
         return _bad("q is required")
     t0 = time.perf_counter()
     found = _elastic(_directory().search, q, k=max(1, min(k, 30)))
+    _attach_live_checks(found["results"])
     return {"results": found["results"], "intents": found.get("intents"), "query": found["query"],
             "took_ms": found["took_ms"], "ms": _ms(t0)}
+
+
+# ---------- live source checks ----------
+
+def _attach_live_checks(items: list[dict]) -> None:
+    """Additive: add `live_check` from the latest source-check run; silently skip on any failure."""
+    try:
+        from app import freshness
+
+        freshness.attach(items)
+    except Exception:
+        pass
+
+
+@app.get("/api/sources/status")
+def sources_status():
+    from app import freshness
+
+    t0 = time.perf_counter()
+    out = _elastic(freshness.status)
+    return out | {"ms": _ms(t0)}
+
+
+@app.post("/api/sources/verify")
+def sources_verify():
+    from app import freshness
+
+    if not freshness.start_background():
+        return JSONResponse({"error": "A source check is already running", "running": True}, status_code=409)
+    return {"started": True, "running": True}
 
 
 def assess_risk(profile: dict, program: dict, wf: dict, benefits: dict) -> tuple[str, list[str]]:
@@ -499,7 +562,13 @@ TARGETS = {
 
 
 @app.get("/api/impact")
-def impact():
+def impact(scope: str = "all"):
+    """scope=all (default): pilot model incl. the labelled simulated cohort. scope=live: live applications only."""
+    if scope not in ("all", "live"):
+        return _bad("scope must be 'all' or 'live'")
     t0 = time.perf_counter()
-    stats = _elastic(_search().impact_stats)
-    return {**stats, "budget": PILOT_BUDGET, "targets": TARGETS, "ms": _ms(t0)}
+    if scope == "live":
+        stats = _elastic(_search().impact_stats, scope="live")
+    else:
+        stats = _elastic(_search().impact_stats)
+    return {**stats, "scope": scope, "budget": PILOT_BUDGET, "targets": TARGETS, "ms": _ms(t0)}

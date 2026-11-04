@@ -7,16 +7,25 @@ app/data/sf_mohcd_portfolio.json so the demo does not depend on DataSF being up.
 from __future__ import annotations
 
 import json
+import logging
 import math
+import threading
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import httpx
 
 from app import config
 
+log = logging.getLogger("bridgeline.opendata")
+
 INDEX_HOUSING = "homebase-sf-housing"
+INDEX_SYNC = "homebase-sync"
+SYNC_ID = "sf-housing"
+REFRESH_AFTER = timedelta(hours=24)
 DATASET_ID = "pyxv-n29e"
 DATASET_URL = f"https://data.sf.gov/d/{DATASET_ID}"
+METADATA_URL = f"https://data.sf.gov/api/views/{DATASET_ID}.json"
 SNAPSHOT = config.DATA_DIR / "sf_mohcd_portfolio.json"
 SOURCE_LABEL = "DataSF · MOHCD Affordable Housing Portfolio (pyxv-n29e)"
 
@@ -123,6 +132,151 @@ def _es():
     return es
 
 
+# ---------- freshness: DataSF metadata + sync record ----------
+
+def _now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
+def _iso(dt: datetime) -> str:
+    return dt.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
+
+
+def _parse(ts: str | None) -> datetime | None:
+    if not ts:
+        return None
+    try:
+        return datetime.fromisoformat(ts.replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
+def fetch_metadata(timeout: float = 15.0) -> dict:
+    """When DataSF last updated the dataset's rows (Socrata view metadata)."""
+    r = httpx.get(METADATA_URL, timeout=timeout)
+    r.raise_for_status()
+    meta = r.json()
+    epoch = meta.get("rowsUpdatedAt") or meta.get("viewLastModified")
+    return {
+        "name": meta.get("name"),
+        "source_updated_at": _iso(datetime.fromtimestamp(int(epoch), timezone.utc)) if epoch else None,
+    }
+
+
+def write_sync(es, rows: int, source_updated_at: str | None, origin: str) -> dict:
+    """Record what was loaded and when, in a tiny `homebase-sync` index."""
+    doc = {
+        "dataset": DATASET_ID,
+        "source_updated_at": source_updated_at,
+        "synced_at": _iso(_now()),
+        "rows": rows,
+        "origin": origin,  # "datasf-live" or "snapshot"
+    }
+    if not es.indices.exists(index=INDEX_SYNC):
+        es.indices.create(index=INDEX_SYNC, mappings={"properties": {
+            "dataset": {"type": "keyword"}, "source_updated_at": {"type": "date"},
+            "synced_at": {"type": "date"}, "rows": {"type": "integer"}, "origin": {"type": "keyword"},
+        }})
+    es.index(index=INDEX_SYNC, id=SYNC_ID, document=doc, refresh=True)
+    return doc
+
+
+def read_sync(es=None) -> dict | None:
+    """The last sync record, or None if it doesn't exist or can't be read."""
+    try:
+        es = es or _es()
+        if not es.indices.exists(index=INDEX_SYNC):
+            return None
+        res = es.get(index=INDEX_SYNC, id=SYNC_ID)
+        return dict(res["_source"])
+    except Exception:  # missing doc, network, auth: freshness is informational only
+        return None
+
+
+def load_portfolio(es, *, use_snapshot: bool = False, reset: bool = False) -> dict:
+    """Fetch (live, else snapshot), index into Elasticsearch, and write the sync record."""
+    origin = "snapshot"
+    rows: list[dict]
+    if use_snapshot:
+        rows = load_snapshot()
+    else:
+        try:
+            rows = fetch_portfolio()
+            SNAPSHOT.write_text(json.dumps(rows))
+            origin = "datasf-live"
+        except Exception as e:  # network trouble at the venue
+            log.warning("DataSF fetch failed (%s); using snapshot", e)
+            rows = load_snapshot()
+    try:
+        source_updated_at = fetch_metadata()["source_updated_at"]
+    except Exception:
+        source_updated_at = None
+
+    from elasticsearch import helpers
+
+    if reset and es.indices.exists(index=INDEX_HOUSING):
+        es.indices.delete(index=INDEX_HOUSING)
+    if not es.indices.exists(index=INDEX_HOUSING):
+        es.indices.create(index=INDEX_HOUSING, mappings=MAPPING)
+    docs = [d for d in (normalize(r) for r in rows) if d]
+    ok, errors = helpers.bulk(
+        es, ({"_index": INDEX_HOUSING, "_id": d["id"], "_source": d} for d in docs),
+        raise_on_error=False,
+    )
+    es.indices.refresh(index=INDEX_HOUSING)
+    sync = write_sync(es, rows=ok, source_updated_at=source_updated_at, origin=origin)
+    return {"rows": len(rows), "indexed": ok, "errors": errors, "origin": origin, "sync": sync}
+
+
+def needs_refresh(sync: dict | None, source_updated_at: str | None, now: datetime | None = None) -> bool:
+    """Reload when never synced, when DataSF changed after our last sync, or after 24 h."""
+    if not sync:
+        return True
+    synced = _parse(sync.get("synced_at"))
+    if synced is None:
+        return True
+    source = _parse(source_updated_at)
+    if source is not None and source > synced:
+        return True
+    return (now or _now()) - synced > REFRESH_AFTER
+
+
+def auto_refresh() -> str:
+    """Check DataSF and reload if stale. Never raises; returns a one-line status."""
+    try:
+        from app.search import es_client
+
+        es = es_client()
+        if es is None:
+            return "opendata auto-refresh: skipped (Elasticsearch not configured)"
+        sync = read_sync(es)
+        try:
+            source_updated_at = fetch_metadata()["source_updated_at"]
+        except Exception as e:
+            source_updated_at = None
+            log.warning("DataSF metadata check failed: %s", e)
+        if not needs_refresh(sync, source_updated_at):
+            return (f"opendata auto-refresh: up to date (DataSF updated {source_updated_at}, "
+                    f"synced {sync.get('synced_at') if sync else None})")
+        res = load_portfolio(es)
+        return (f"opendata auto-refresh: reloaded {res['indexed']} rows from {res['origin']} "
+                f"(DataSF updated {res['sync']['source_updated_at']})")
+    except Exception as e:  # never break the API over a background refresh
+        return f"opendata auto-refresh: failed ({e.__class__.__name__}: {e})"
+
+
+def start_auto_refresh() -> threading.Thread:
+    """Run auto_refresh() once in a daemon thread so API startup never waits on DataSF."""
+    def run():
+        msg = auto_refresh()
+        log.warning(msg)
+        print(msg, flush=True)
+
+    t = threading.Thread(target=run, name="opendata-auto-refresh", daemon=True)
+    t.start()
+    return t
+
+
 def housing_query() -> dict:
     """Aggregation body for the city-wide context panel (rental buildings only)."""
     return {
@@ -149,11 +303,16 @@ def housing_query() -> dict:
 def housing_stats() -> dict:
     """City-wide affordable rental stock, computed by Elasticsearch aggregations."""
     body = housing_query()
-    res = _es().search(index=INDEX_HOUSING, **body)
+    es = _es()
+    res = es.search(index=INDEX_HOUSING, **body)
     a = res["aggregations"]
+    sync = read_sync(es) or {}
     return {
         "source": SOURCE_LABEL,
         "source_url": DATASET_URL,
+        "source_updated_at": sync.get("source_updated_at"),
+        "synced_at": sync.get("synced_at"),
+        "sync_origin": sync.get("origin"),
         "buildings": res["hits"]["total"]["value"],
         "units": int(a["units"]["value"]),
         "affordable_units": int(a["affordable_units"]["value"]),

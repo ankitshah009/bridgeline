@@ -217,9 +217,14 @@ cd frontend && npm install && echo 'HOMEBASE_API_URL=http://127.0.0.1:8010' > .e
 ```
 Tests: `uv run pytest -n auto`.
 
-## Honesty notes
+## What's live, and what isn't yet
 
-- The pilot cohort on the impact page is **simulated** and labelled that way. Applications made in the app are real records.
-- The demo properties are fictional. The DataSF buildings and the 34 researched resources are real; each resource links to its source and shows its status as of November 3, 2026.
-- Program facts come from public listings. Every card says to confirm details with the provider.
-- Benefits treatment is planning guidance, not legal advice.
+**Live now**
+- **Impact page defaults to Live.** It counts only real applications, aggregated straight from Elasticsearch, and updates every 5 seconds as residents apply and navigators approve. The pilot model, which adds a labelled simulated cohort of 48, is one toggle away (`/impact?scope=all`).
+- **DataSF housing data** is pulled from DataSF's API. The page shows when DataSF last updated the dataset and when it was synced into Elastic, and the API re-syncs on startup when DataSF has changed or the copy is over 24 hours old.
+- **Source checks.** `scripts/verify_sources.py` (or "Re-check sources" in the directory) fetches every program and resource link, and Mistral compares the page to our listing. Each card shows "Checked live", "Changed — staff review" or "Link issue". Staff review the flags; nothing is changed automatically.
+
+**Needs partners, not code**
+- Demo properties are fictional until housing operators sign on to confirm residence. The 570 DataSF buildings are real and searchable.
+- Outcomes (completion, placement, wage gains) need the pilot to run.
+- Benefits treatment is planning guidance, not legal advice. Counsel and each operator's compliance team sign off before launch.

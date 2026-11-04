@@ -1,9 +1,54 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { api, ApiError } from "@/lib/api";
 import { CountUp, Donut, HBar, Ring, SplitBar, StackBar, compactMoney, fmt, money, type PaySlice } from "./charts";
-import type { Budget, Health, Housing, Impact, Loaded } from "./types";
+import type { Budget, Health, Housing, Impact, ImpactScope, Loaded } from "./types";
+
+// Live (real applications only) is the default. The pilot model, which includes the labelled
+// simulated cohort, is opt-in via the toggle or /impact?scope=all.
+const SCOPE_EVENT = "bridgeline:impact-scope";
+function readScope(): ImpactScope {
+  return new URLSearchParams(window.location.search).get("scope") === "all" ? "all" : "live";
+}
+function subscribeScope(cb: () => void) {
+  window.addEventListener("popstate", cb);
+  window.addEventListener(SCOPE_EVENT, cb);
+  return () => {
+    window.removeEventListener("popstate", cb);
+    window.removeEventListener(SCOPE_EVENT, cb);
+  };
+}
+function setScope(next: ImpactScope) {
+  const url = new URL(window.location.href);
+  if (next === "all") url.searchParams.set("scope", "all");
+  else url.searchParams.delete("scope");
+  window.history.replaceState(window.history.state, "", url);
+  window.dispatchEvent(new Event(SCOPE_EVENT));
+}
+function useScope(): ImpactScope {
+  return useSyncExternalStore(subscribeScope, readScope, () => "live");
+}
+
+function timeAgo(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const t = Date.parse(iso);
+  if (Number.isNaN(t)) return null;
+  const s = Math.max(0, Math.round((Date.now() - t) / 1000));
+  if (s < 60) return "just now";
+  const m = Math.round(s / 60);
+  if (m < 60) return `${m} min ago`;
+  const h = Math.round(m / 60);
+  if (h < 48) return `${h} h ago`;
+  return `${Math.round(h / 24)} days ago`;
+}
+
+function shortDate(iso: string | null | undefined): string | null {
+  if (!iso) return null;
+  const t = Date.parse(iso);
+  if (Number.isNaN(t)) return null;
+  return new Date(t).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+}
 
 const REFRESH_MS = 5000;
 const AWARDED = ["approved", "enrolled", "completed", "placed"] as const;
@@ -20,14 +65,22 @@ function toErr(e: unknown): { message: string; stage: string } {
 const empty = <T,>(): Loaded<T> => ({ data: null, error: null, at: null });
 
 function useLive<T>(path: string, every: number | null) {
-  const [state, setState] = useState<Loaded<T>>(empty<T>());
+  // Keyed by path: switching scope never shows numbers from the other scope.
+  const [state, setState] = useState<Loaded<T> & { path: string }>({ ...empty<T>(), path });
+  // A slow response for a previous path (e.g. scope=all landing after scope=live) must not win.
+  const current = useRef(path);
+  useEffect(() => {
+    current.current = path;
+  }, [path]);
   const load = useCallback(async () => {
     try {
       const data = await api<T>(path);
-      setState({ data, error: null, at: Date.now() });
+      if (current.current !== path) return;
+      setState({ data, error: null, at: Date.now(), path });
     } catch (e) {
-      // keep last good data on screen, but show the failure
-      setState((s) => ({ ...s, error: toErr(e), at: Date.now() }));
+      if (current.current !== path) return;
+      // keep last good data on screen (same path only), but show the failure
+      setState((s) => (s.path === path ? { ...s, error: toErr(e), at: Date.now() } : { ...empty<T>(), error: toErr(e), at: Date.now(), path }));
     }
   }, [path]);
   useEffect(() => {
@@ -38,7 +91,7 @@ function useLive<T>(path: string, every: number | null) {
     }, every);
     return () => clearInterval(id);
   }, [load, every]);
-  return state;
+  return state.path === path ? state : empty<T>();
 }
 
 function ErrorCard({ error, context }: { error: { message: string; stage: string }; context: string }) {
@@ -89,6 +142,20 @@ function HealthPills({ h }: { h: Loaded<Health> }) {
   );
 }
 
+function Freshness({ updated, synced }: { updated?: string | null; synced?: string | null }) {
+  const u = shortDate(updated);
+  const s = timeAgo(synced);
+  if (!u && !s) return null;
+  return (
+    <p className="imp-fresh">
+      <i className="live-dot" />
+      {u ? <>DataSF updated {u}</> : null}
+      {u && s ? " · " : null}
+      {s ? <>synced to Elastic {s}</> : null}
+    </p>
+  );
+}
+
 function HousingContext({ s }: { s: Loaded<Housing> }) {
   if (!s.data && s.error) return <ErrorCard error={s.error} context="Couldn't load DataSF housing context from Elasticsearch" />;
   if (!s.data) return <Skeleton h={260} />;
@@ -121,6 +188,7 @@ function HousingContext({ s }: { s: Loaded<Housing> }) {
           </span>
         </div>
       </div>
+      <Freshness updated={d.source_updated_at} synced={d.synced_at} />
       <div className="imp-ctx-grid">
         <div className="card">
           <span className="kicker">Affordable homes by neighborhood · top 10</span>
@@ -490,12 +558,15 @@ function EsPanel({ impact, housing }: { impact: Loaded<Impact>; housing: Loaded<
 }
 
 export default function ImpactDashboard() {
+  const scope = useScope();
+  const live = scope === "live";
   const health = useLive<Health>("/api/health", REFRESH_MS);
-  const impact = useLive<Impact>("/api/impact", REFRESH_MS);
+  const impact = useLive<Impact>(live ? "/api/impact?scope=live" : "/api/impact", REFRESH_MS);
   const housing = useLive<Housing>("/api/opendata/housing", 60_000);
 
   // Briefly highlight KPIs that changed since the last refresh (e.g. a navigator approval).
-  const prev = useRef<Record<string, number> | null>(null);
+  // The baseline is per scope, so flipping the toggle never fires a false "approved" toast.
+  const prev = useRef<{ scope: ImpactScope; n: Record<string, number> } | null>(null);
   const [flash, setFlash] = useState<Set<string>>(new Set());
   const [toast, setToast] = useState<string | null>(null);
   useEffect(() => {
@@ -509,9 +580,10 @@ export default function ImpactDashboard() {
       placed: d.outcomes?.placed_or_raise ?? 0,
       live: d.live_count ?? 0,
     };
-    const before = prev.current;
-    prev.current = now;
-    if (!before) return;
+    const last = prev.current;
+    prev.current = { scope, n: now };
+    if (!last || last.scope !== scope) return;
+    const before = last.n;
     const changed = new Set(Object.keys(now).filter((k) => now[k] !== before[k]));
     if (!changed.size) return;
     setFlash(changed);
@@ -524,9 +596,10 @@ export default function ImpactDashboard() {
       clearTimeout(t1);
       clearTimeout(t2);
     };
-  }, [impact.data]);
+  }, [impact.data, scope]);
 
   const d = impact.data;
+  const liveEmpty = live && d != null && d.total === 0;
   const updated = impact.at ? new Date(impact.at).toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" }) : null;
 
   return (
@@ -566,9 +639,20 @@ export default function ImpactDashboard() {
         <div className="imp-wrap">
           <div className="imp-sec-title">
             <h2>Pilot scorecard</h2>
+            <div className="imp-scope" role="radiogroup" aria-label="Which applications to count">
+              <button type="button" role="radio" aria-checked={live} className={live ? "on" : ""} onClick={() => setScope("live")}>
+                <i className="live-dot" />
+                Live
+              </button>
+              <button type="button" role="radio" aria-checked={!live} className={!live ? "on" : ""} onClick={() => setScope("all")}>
+                Pilot model <small>(incl. simulated)</small>
+              </button>
+            </div>
             {d ? (
               <span className="imp-cohort">
-                <span className="badge badge-yellow">{fmt(d.simulated_count ?? 0)} simulated pilot cohort (illustrative)</span>
+                {live ? null : (
+                  <span className="badge badge-yellow">{fmt(d.simulated_count ?? 0)} simulated pilot cohort (illustrative)</span>
+                )}
                 <span className="badge badge-green">
                   <i className="live-dot" />
                   {fmt(d.live_count ?? 0)} live tonight
@@ -582,15 +666,26 @@ export default function ImpactDashboard() {
               <ErrorCard error={impact.error} context="Latest refresh failed. Showing the last good numbers." />
             </div>
           ) : null}
-          <Scorecard s={impact} flash={flash} />
+          {liveEmpty ? (
+            <div className="card imp-empty" role="status">
+              <i className="live-dot" />
+              <div>
+                <strong>No live applications yet.</strong>
+                <p>They appear here the moment a resident applies. This view counts real applications only, straight from Elasticsearch.</p>
+              </div>
+            </div>
+          ) : (
+            <Scorecard s={impact} flash={flash} />
+          )}
           <p className="imp-note">
-            Counts combine the simulated pilot cohort (illustrative, shown to model the pilot targets) with live applications submitted
-            tonight. Every number on this page is an Elasticsearch aggregation.
+            {live
+              ? "Live only: real applications submitted in the app, with the simulated pilot cohort filtered out in the Elasticsearch query. Every number on this page is an Elasticsearch aggregation."
+              : "Counts combine the simulated pilot cohort (illustrative, shown to model the pilot targets) with live applications submitted tonight. Every number on this page is an Elasticsearch aggregation."}
           </p>
         </div>
       </section>
 
-      {d ? (
+      {d && !liveEmpty ? (
         <>
           <section className="imp-block imp-tight">
             <div className="imp-wrap imp-grid2">

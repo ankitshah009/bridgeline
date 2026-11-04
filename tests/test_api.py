@@ -238,3 +238,62 @@ def test_draft_plan_asks_for_resident_language_headline_and_steps(monkeypatch):
     out = ai.draft_plan({"language": "es"}, {"name": "x"}, {"lines": []}, {"status": "protected"})
     assert "headline in Spanish" in seen["system"] and "steps in Spanish" in seen["system"]
     assert out["steps"] == ["Paso 1"] and out["steps_en"] == ["Step 1"]
+
+
+# ---------- Mistral rate-limit resilience ----------
+
+def test_complete_retries_rate_limit_then_succeeds(monkeypatch):
+    from app import ai
+
+    calls = {"n": 0}
+
+    class Chat:
+        def complete(self, **kw):
+            calls["n"] += 1
+            if calls["n"] < 3:
+                raise RuntimeError('API error occurred: Status 429. Body: {"message":"Rate limit exceeded"}')
+            return "ok"
+
+    class Client:
+        chat = Chat()
+
+    monkeypatch.setattr(ai, "_mistral", lambda: Client())
+    monkeypatch.setattr(ai, "RATE_LIMIT_BACKOFF_S", (0.0, 0.0, 0.0))
+    assert ai._complete(model="m", messages=[]) == "ok"
+    assert calls["n"] == 3
+
+
+def test_complete_gives_up_after_backoff_and_does_not_retry_other_errors(monkeypatch):
+    import pytest
+    from app import ai
+
+    calls = {"n": 0}
+
+    class Chat:
+        def complete(self, **kw):
+            calls["n"] += 1
+            raise RuntimeError("Status 429 rate_limited")
+
+    class Client:
+        chat = Chat()
+
+    monkeypatch.setattr(ai, "_mistral", lambda: Client())
+    monkeypatch.setattr(ai, "RATE_LIMIT_BACKOFF_S", (0.0, 0.0))
+    with pytest.raises(RuntimeError):
+        ai._complete(model="m", messages=[])
+    assert calls["n"] == 3  # first try + two backoff retries
+
+    calls["n"] = 0
+
+    class BadChat:
+        def complete(self, **kw):
+            calls["n"] += 1
+            raise ValueError("invalid request")
+
+    class BadClient:
+        chat = BadChat()
+
+    monkeypatch.setattr(ai, "_mistral", lambda: BadClient())
+    with pytest.raises(ValueError):
+        ai._complete(model="m", messages=[])
+    assert calls["n"] == 1
