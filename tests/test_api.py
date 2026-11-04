@@ -214,9 +214,10 @@ def test_plan_uses_building_housing_type_when_no_property(client):
 
 
 def test_intake_display_fallback_is_english_when_model_omits_it():
-    profile = ai._normalize_profile({"language": "es", "goal": "IT job", "availability": "evenings"}, "hola", None)
+    text = "Quiero un trabajo en TI, solo de noche"
+    profile = ai._normalize_profile({"language": "es", "goal": "IT job", "availability": "evenings"}, text, None)
     assert profile["display"]["goal"] == "IT job"
-    translated = ai._normalize_profile({"language": "es", "goal": "IT job", "display": {"goal": "Trabajo en TI"}}, "hola", None)
+    translated = ai._normalize_profile({"language": "es", "goal": "IT job", "display": {"goal": "Trabajo en TI"}}, text, None)
     assert translated["display"]["goal"] == "Trabajo en TI"
 
 

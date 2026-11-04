@@ -295,3 +295,7 @@ pre.code { background: #0b1030; color: #d7ddff; border-radius: var(--radius-sm);
 .live-status strong { color: var(--ink, #15182c); }
 .live-recheck-link { background: none; border: 0; padding: 4px 2px; min-height: 32px; font: 600 .82rem var(--font-ui); color: var(--blue, #2f6bff); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 .live-recheck-link:disabled { color: var(--ink-3, #6b7088); text-decoration: none; cursor: default; }
+
+/* A program that is listed but not running this term: muted, never the eye-catcher. */
+.badge-off { background: transparent; color: var(--ink-3); border: 1.5px dashed var(--line); }
+.not-running-note { color: var(--ink-3); font-size: .82rem; line-height: 1.45; margin-top: 6px; }

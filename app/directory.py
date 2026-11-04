@@ -100,9 +100,18 @@ def _load_resources() -> list[dict]:
     return resources.load_resources()
 
 
+def _catalog_availability(pid: str) -> dict:
+    """offered_now / availability_note from the catalog file, the source of truth for availability."""
+    from app import catalog
+
+    cat = catalog.get_program(pid or "") or {}
+    return {k: cat[k] for k in ("offered_now", "availability_note") if k in cat}
+
+
 def program_item(p: dict) -> dict:
     cost = float((p.get("tuition_usd") or 0) + (p.get("materials_usd") or 0) + (p.get("exam_fees_usd") or 0))
     item = {k: v for k, v in p.items() if k not in ("search_text",)}
+    item.update(_catalog_availability(p.get("id", "")))
     item.update({
         "kind": "program",
         "resident_cost_hint": cost,
@@ -132,8 +141,9 @@ def directory() -> dict[str, Any]:
     }]
     for level, title, subtitle in LEVEL_SECTIONS:
         items = [p for p in programs if p.get("level") == level]
-        # Free first, then lowest cost, then evenings/self-paced ahead of full-time day.
-        items.sort(key=lambda p: (not p["free"], p["resident_cost_hint"], p.get("illustrative", False), p["name"]))
+        # Running programs first; then free, then lowest cost; programs not running this term go last.
+        items.sort(key=lambda p: (p.get("offered_now") is False, not p["free"], p["resident_cost_hint"],
+                                  p.get("illustrative", False), p["name"]))
         if items:
             sections.append({"id": level, "kind": "program", "title": title, "subtitle": subtitle, "items": items})
 
@@ -235,6 +245,8 @@ def search(q: str, k: int = 12) -> dict[str, Any]:
         item["_score"] = h.get("_score") or 0.0
         item["_why"] = f"{item['schedule_label']} · " + ("Free tuition" if item["free"] else
                                                          f"${item['resident_cost_hint']:,.0f} before aid")
+        if item.get("offered_now") is False:
+            item["_why"] = "Not running this term · " + item["_why"]
         results.append(item)
     resource_results: list[dict] = []
     for h in responses[1]["hits"]["hits"]:
@@ -246,7 +258,7 @@ def search(q: str, k: int = 12) -> dict[str, Any]:
     # different indices aren't comparable once boosts apply), and the marketplace shows both kinds.
     fused: list[tuple[float, float, dict]] = []
     for ranked in (results, resource_results):
-        ranked.sort(key=lambda d: d["_score"], reverse=True)
+        ranked.sort(key=lambda d: (d.get("offered_now") is False, -d["_score"]))
         for rank, d in enumerate(ranked):
             d["_rank"] = rank + 1
             fused.append((1.0 / (RRF_K + rank + 1), d["_score"], d))

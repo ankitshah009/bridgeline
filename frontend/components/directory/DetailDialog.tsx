@@ -62,6 +62,8 @@ function rowsFor(item: Item, kind: Kind): Row[] {
     ["Stipend", item.stipend ? "Yes (benefits check needed)" : "No"],
     ["Income-share or required loan", item.isa_or_required_loan ? "Yes (not grant-eligible)" : "No"],
     ["Published outcomes", item.published_outcomes == null ? "Not published; ask the provider" : JSON.stringify(item.published_outcomes)],
+    ["Running this term", item.offered_now === false ? "No" : item.offered_now === "unknown" ? "Unknown; confirm with provider" : "Yes"],
+    ["Availability", item.offered_now === false ? item.availability_note : null],
     ["Verify", item.verify_note],
     ...liveRows(item),
   ];

@@ -172,3 +172,20 @@
 .resident .check-first-list { display: grid; gap: 6px; margin-top: 8px; }
 
 .resident .reset-link { color: var(--ink-3); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; min-height: 44px; display: inline-flex; align-items: center; }
+
+/* Mistral follow-up question when the story is too thin to plan from */
+.resident .followup { border-radius: var(--radius); background: var(--paper); border: 2px solid var(--ink); box-shadow: 0 6px 0 var(--ink); padding: 18px; scroll-margin-top: 80px; }
+.resident .followup-bubble { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px; }
+.resident .followup-q { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; line-height: 1.3; margin: 4px 0 6px; overflow-wrap: anywhere; }
+
+/* Honest answer when the goal is outside tech training */
+.resident .oos { border-color: var(--ink); box-shadow: 0 6px 0 var(--ink); scroll-margin-top: 80px; }
+.resident .oos-note { font-weight: 600; margin: 8px 0 0; overflow-wrap: anywhere; }
+.resident .oos-sub { font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); margin-top: 14px; }
+.resident .oos-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.resident .oos-actions .btn { min-height: 44px; }
+
+/* Long fit/schedule badges wrap inside program cards instead of widening the page at phone width */
+.resident .prog { min-width: 0; max-width: 100%; }
+.resident .prog .row, .resident .prog .facts { min-width: 0; }
+.resident .prog .row .badge, .resident .prog .facts .badge { white-space: normal; max-width: 100%; text-align: left; overflow-wrap: anywhere; }

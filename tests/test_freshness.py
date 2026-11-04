@@ -143,3 +143,64 @@ def test_check_model_is_separate_and_small_by_default():
     from app import config
     assert config.MISTRAL_CHECK_MODEL
     assert freshness.AI_CONCURRENCY == 1 and freshness.AI_MIN_SPACING_S >= 1.5
+
+
+def test_run_limits_to_ids(monkeypatch):
+    from app import freshness
+
+    seen = {}
+
+    async def fake_run_async(srcs=None, use_ai=True):
+        seen["ids"] = sorted(s["id"] for s in srcs)
+        return []
+
+    monkeypatch.setattr(freshness, "run_async", fake_run_async)
+    monkeypatch.setattr(freshness, "store", lambda docs: 0)
+    freshness.run(use_ai=False, ids=["free-muni", "ctn-digital-skills"])
+    assert seen["ids"] == ["ctn-digital-skills", "free-muni"]
+
+
+def test_empty_202_challenge_is_unverified():
+    from app import freshness
+
+    assert freshness.classify(202, False, None) == ("unverified", False)
+
+
+# ---------- relevance-focused page text ----------
+
+def test_focus_text_short_page_is_sent_whole():
+    assert freshness.focus_text("SF Connected free classes", ["SF Connected"]) == "SF Connected free classes"
+
+
+def test_focus_text_finds_listing_beyond_first_3000_chars():
+    nav = "Menu Home About News Events " * 200                       # ~5,600 chars of site chrome
+    body = "SF Connected offers free digital literacy classes for older adults. "
+    page = nav + body + "Footer links " * 400
+    out = freshness.focus_text(page, ["SF Connected", "digital literacy"])
+    assert "SF Connected offers free digital literacy classes" in out
+    assert len(out) <= freshness.MAX_TEXT
+    assert out.startswith("Menu Home")                                # short opening kept for context
+
+
+def test_focus_text_prefers_dense_window_over_nav_mention():
+    page = ("Goodwill " + "x " * 3000 + "Other filler text. " * 300 +
+            "Goodwill Job Training: free Goodwill career services and digital skills. " + "y " * 4000)
+    out = freshness.focus_text(page, ["Goodwill", "Job Training", "career services"])
+    assert "free Goodwill career services" in out
+    assert len(out) <= freshness.MAX_TEXT
+
+
+def test_focus_text_without_match_falls_back_to_start():
+    page = "Welcome " * 2000
+    out = freshness.focus_text(page, ["Nonexistent Program"])
+    assert out == page[: freshness.MAX_TEXT]
+
+
+def test_key_terms_use_name_provider_and_distinctive_words():
+    src = {"name": "Computer Technician / IT Support Certificate (evening)",
+           "listing": {"name": "Computer Technician / IT Support Certificate (evening)",
+                       "provider": "City College of San Francisco (Free City College)"}}
+    terms = [t.lower() for t in freshness.key_terms(src)]
+    assert "computer technician / it support certificate (evening)" in terms
+    assert "technician" in terms and "support" in terms
+    assert "francisco" not in terms and "college" not in terms           # generic words don't anchor the window

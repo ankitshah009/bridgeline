@@ -125,6 +125,7 @@ export function ProgramCard({ item, onOpen }: { item: Item; onOpen: OpenFn }) {
     <article className={`dir-card dir-program lvl-${level || "entry"}`}>
       <div className="dir-row">
         {level ? <span className={`badge dir-lvl lvl-badge-${level}`}>{LEVEL_LABEL[level] ?? level}</span> : null}
+        {item.offered_now === false ? <span className="badge badge-off">Not running this term</span> : null}
         {item.illustrative ? <span className="badge badge-ink">Illustrative</span> : null}
         {item._score != null && item.kind ? <span className="badge badge-blue">match</span> : null}
       </div>
@@ -151,7 +152,11 @@ export function ProgramCard({ item, onOpen }: { item: Item; onOpen: OpenFn }) {
         <div className="dir-langs small muted">{langs.map((l) => LANG_LABEL[l] ?? l.toUpperCase()).join(" · ")}</div>
       ) : null}
       {item._why ? <p className="dir-why small">{item._why}</p> : null}
-      {item.verify_note ? <p className="dir-verify">{item.verify_note}</p> : null}
+      {item.offered_now === false && item.availability_note ? (
+        <p className="not-running-note">{item.availability_note}</p>
+      ) : item.verify_note ? (
+        <p className="dir-verify">{item.verify_note}</p>
+      ) : null}
       <div className="dir-cta">
         <Link href="/?new=1" className="btn btn-primary btn-sm">
           Plan with this

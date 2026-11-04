@@ -172,6 +172,8 @@ def _fit(program: dict, profile: dict) -> tuple[dict, list[str]]:
     lang_fit = 1.0 if lang in [l.lower() for l in program.get("languages", [])] else 0.0
 
     reasons: list[str] = []
+    if program.get("offered_now") is False:
+        reasons.append("Not running this term")
     label = SCHEDULE_LABEL.get(schedule, schedule)
     if sched_fit >= 0.8:
         reasons.append(f"{label}: fits your schedule")
@@ -252,7 +254,8 @@ def search_programs(query: str, profile: dict, k: int = 6, include_unapproved: b
             "_took_ms": took_ms,
         })
         ranked.append(program)
-    ranked.sort(key=lambda p: p["_score"], reverse=True)
+    # Programs known not to be running this term go after every program that is.
+    ranked.sort(key=lambda p: (p.get("offered_now") is False, -p["_score"]))
     return ranked[:k]
 
 

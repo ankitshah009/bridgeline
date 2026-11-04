@@ -36,8 +36,16 @@ TAG_LABELS = {
 }
 
 # Child care is the barrier that most often ends training, so it outranks everything else.
-TAG_WEIGHTS = {"childcare": 1.2, "device": 0.5, "transit": 0.5, "savings": 0.4, "internet": 0.3,
-               "career-coaching": 0.3, "digital-basics": 0.25, "training": 0.1}
+# Audience programs (older adults, youth) are boosted only when the resident volunteered their age.
+TAG_WEIGHTS = {"childcare": 1.2, "older-adults": 1.0, "youth": 0.8, "device": 0.5, "transit": 0.5,
+               "savings": 0.4, "internet": 0.3, "career-coaching": 0.3, "digital-basics": 0.25, "training": 0.1}
+
+# Out-of-scope goals (healthcare, trades...): free City training that is not tech-only.
+GENERAL_TRAINING_IDS = ["other-city-job-training", "city-college-noncredit-classes", "five-keys-schools-and-programs",
+                        "goodwill-training-and-career-services", "federal-voucher-through-the-city", "free-city-college"]
+TECH_ONLY_IDS = ["techsf", "per-scholas", "stanford-code-in-place", "dev-mission-tech-support-and-programs",
+                 "dev-mission-pre-apprenticeship"]
+SUPPORT_TAGS = ("childcare", "transit")
 
 # Coaching and mentor resources: a resident whose goal is a job always sees exactly one of these.
 COACHING_TAGS = ("career-coaching", "mentorship")
@@ -92,14 +100,22 @@ def wanted_tags(profile: dict, housing_type: str | None = None) -> list[str]:
     tags.append("training")
     if housing_type in FSS_HOUSING_TYPES:
         tags.append("savings")
+    # Only when the resident volunteered their age; we never ask for it.
+    age = profile.get("age_group")
+    if age == "55_plus":
+        tags.append("older-adults")
+    elif age == "under_25":
+        tags.append("youth")
     if seeks_job(profile):
         tags.append("career-coaching")
     return list(dict.fromkeys(tags))
 
 
 def seeks_job(profile: dict) -> bool:
-    """True when the resident's goal is employment (any pilot language)."""
-    if profile.get("career_tracks"):
+    """True when the resident's goal is employment (any pilot language).
+
+    Learning digital basics alone (e.g. email and video calls) is not a job search."""
+    if [t for t in profile.get("career_tracks") or [] if str(t).lower() != "digital basics"]:
         return True
     text = " ".join(str(profile.get(k) or "") for k in ("goal", "search_query")).lower()
     return any(w in text for w in JOB_WORDS)
@@ -133,6 +149,8 @@ def build_query(profile: dict, housing_type: str | None = None, k: int = 6,
         "internet": "free home internet",
         "digital-basics": "beginner computer classes",
         "savings": "savings account for education",
+        "older-adults": "free computer classes and tech help for older adults and seniors",
+        "youth": "tech programs for young adults",
     }
     goal = profile.get("search_query") or profile.get("goal") or "tech job training"
     text = "; ".join([str(goal)] + [need_words[t] for t in tags if t in need_words])
@@ -153,11 +171,78 @@ def build_query(profile: dict, housing_type: str | None = None, k: int = 6,
     # Programs built for a specific audience (older adults, disability, youth) are demoted, not hidden,
     # because we never ask age or disability status.
     audience = [t for t in AUDIENCE_TAGS if t not in tags]
+    own = [t for t in AUDIENCE_TAGS if t in tags]  # audiences the resident told us they belong to
+    negative: dict = {"terms": {"tags": audience}}
+    if own:  # a resource that also serves the resident's own audience is never demoted
+        negative = {"bool": {"must": [negative], "must_not": [{"terms": {"tags": own}}]}}
     query = (
-        {"boosting": {"positive": positive, "negative": {"terms": {"tags": audience}}, "negative_boost": 0.4}}
+        {"boosting": {"positive": positive, "negative": negative, "negative_boost": 0.4}}
         if audience else positive
     )
     return {"size": k, "_source": {"excludes": ["text"]}, "query": query}
+
+
+def alternatives_query(profile: dict, housing_type: str | None = None, k: int = 4) -> dict:
+    """Free City training for a goal Bridgeline does not fund (healthcare, trades...)."""
+    goal = profile.get("search_query") or profile.get("goal") or "job training"
+    must_not: list[dict] = [{"term": {"status": CLOSED}}, {"terms": {"id": TECH_ONLY_IDS}}]
+    if housing_type not in FSS_HOUSING_TYPES:
+        must_not.append({"term": {"id": "sf-housing-authority-family-self-sufficiency"}})
+    return {
+        "size": k,
+        "_source": {"excludes": ["text"]},
+        "query": {"bool": {
+            "must": [{"semantic": {"field": "text", "query": f"free job training and classes for: {goal}"}}],
+            "filter": [{"terms": {"tags": ["training", "tuition", "career-coaching"]}}],
+            "should": [{"terms": {"id": GENERAL_TRAINING_IDS, "boost": 0.3}},
+                       {"term": {"status": {"value": "Available", "boost": 0.1}}}],
+            "must_not": must_not,
+        }},
+    }
+
+
+def supports_query(profile: dict, k: int = 2) -> dict | None:
+    """Child care and transit help, whatever the training goal. None when the resident needs neither."""
+    tags = [t for t in wanted_tags(profile) if t in SUPPORT_TAGS]
+    if not tags:
+        return None
+    return {
+        "size": k,
+        "_source": {"excludes": ["text"]},
+        "query": {"bool": {
+            "filter": [{"terms": {"tags": tags}}],
+            "should": [{"term": {"tags": {"value": "childcare", "boost": 2.0}}},
+                       {"term": {"status": {"value": "Available", "boost": 1.0}}}],
+            "must_not": [{"term": {"status": CLOSED}}],
+        }},
+    }
+
+
+def alternative_training(profile: dict, housing_type: str | None = None, k: int = 4) -> dict[str, Any]:
+    """Out-of-scope goals: free City training for the resident's own goal, plus child care / transit help.
+
+    Raises on Elastic failure."""
+    es = _es()
+    t0 = time.perf_counter()
+    body = alternatives_query(profile, housing_type, k)
+    alts = []
+    for h in es.search(index=INDEX_RESOURCES, **body)["hits"]["hits"]:
+        d = dict(h["_source"])
+        d["_score"] = h.get("_score")
+        status = {"Available": "open now", "Confirm": "confirm current openings"}.get(d.get("status"), "")
+        d["_why"] = " · ".join(p for p in ("Free training for your goal", status) if p)
+        alts.append(d)
+    supports = []
+    sq = supports_query(profile)
+    if sq:
+        tags = wanted_tags(profile, housing_type)
+        for h in es.search(index=INDEX_RESOURCES, **sq)["hits"]["hits"]:
+            d = dict(h["_source"])
+            d["_score"] = h.get("_score")
+            d["_why"] = _why(d, tags)
+            supports.append(d)
+    return {"alternatives": alts, "supports": supports, "query": body, "supports_query": sq,
+            "took_ms": int((time.perf_counter() - t0) * 1000), "source": SOURCE_LABEL}
 
 
 def _es():

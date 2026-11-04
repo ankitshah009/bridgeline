@@ -21,6 +21,8 @@ from app.search import es_client  # noqa: E402
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--yes", action="store_true", help="actually delete")
+    ap.add_argument("--id", action="append", default=[], metavar="HB-…",
+                    help="limit to these application ids (repeatable); without it, every live application")
     args = ap.parse_args()
 
     es = es_client()
@@ -28,6 +30,8 @@ def main() -> int:
         print("ES_URL / ES_API_KEY missing", file=sys.stderr)
         return 1
     live = {"bool": {"must_not": [{"term": {"simulated": True}}]}}
+    if args.id:
+        live["bool"]["filter"] = [{"terms": {"id": args.id}}]
     hits = es.search(index=config.INDEX_APPLICATIONS, query=live, size=200,
                      source=["id", "status", "program_name", "created_at"])["hits"]["hits"]
     for h in hits:

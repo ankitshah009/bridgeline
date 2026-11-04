@@ -26,15 +26,16 @@
     "refund_policy": true,
     "url": "https://sfpl.org",
     "illustrative": false,
+    "offered_now": true,
     "verify_note": "Confirm current class calendar, branch and language availability with SFPL."
   },
   {
     "id": "ctn-digital-skills",
     "name": "Digital Skills Classes in Your Language",
-    "provider": "Community Technology Network (CTN)",
+    "provider": "digitalLIFT (formerly Community Tech Network)",
     "level": "basics",
     "career_tracks": ["digital basics", "computer skills"],
-    "description": "Free small-group digital literacy classes taught by volunteers, often in the learner's own language, including Spanish, Cantonese, Vietnamese and Tagalog. Covers computer basics, internet safety, email, and online job applications. Designed for adults who are new to computers and want confidence before a career program.",
+    "description": "Digital literacy training from the San Francisco nonprofit formerly called Community Tech Network, with curriculum in several languages including English, Spanish, Chinese and Tagalog/Filipino. Covers computer and smartphone basics and internet safety. Free classes for San Francisco older adults and adults with disabilities run through the city-funded SF Connected program.",
     "tuition_usd": 0,
     "materials_usd": 0,
     "exam_fees_usd": 0,
@@ -53,9 +54,10 @@
     "isa_or_required_loan": false,
     "published_outcomes": null,
     "refund_policy": true,
-    "url": "https://www.ctnbayarea.org",
+    "url": "https://digitallift.org/",
     "illustrative": false,
-    "verify_note": "Confirm class sites, schedule and languages offered with CTN."
+    "offered_now": true,
+    "verify_note": "Renamed (checked 2026-11-03): Community Tech Network is now digitalLIFT; the old ctnbayarea.org site no longer connects. Its public site lists paid curricula for organizations; confirm free class options for younger adults."
   },
   {
     "id": "ccsf-noncredit-computer-basics",
@@ -82,9 +84,11 @@
     "isa_or_required_loan": false,
     "published_outcomes": null,
     "refund_policy": true,
-    "url": "https://www.ccsf.edu",
+    "url": "https://www.ccsf.edu/academics/schools/business-fashion-hospitality/business-department",
     "illustrative": false,
-    "verify_note": "Noncredit courses are generally free; confirm current sections, centers and schedule with CCSF."
+    "offered_now": false,
+    "availability_note": "Not running this term (as of 2026-11-03): CCSF's Business Department page says \"Noncredit Business Courses Currently unavailable\", and the Spring 2026 noncredit schedule has no COMP computer-applications sections. CCSF does offer free ESL computer skills classes (e.g. ESLN 6311, Saturdays at Chinatown/North Beach) and the DSPS Accessible Computer Lab. Source: https://www.ccsf.edu/academics/schools/business-fashion-hospitality/business-department",
+    "verify_note": "As of 2026-11-03, CCSF's Business Department lists noncredit business courses as currently unavailable, and the Spring 2026 noncredit schedule (updated 4/5/2026) has no COMP computer-applications sections. It does list free ESL computer skills classes (for example ESLN 6311, Saturdays at Chinatown/North Beach) and the DSPS Accessible Computer Lab. Confirm Fall 2026 and Spring 2027 sections with CCSF before referring."
   },
   {
     "id": "goodwill-digital-skills",
@@ -111,9 +115,10 @@
     "isa_or_required_loan": false,
     "published_outcomes": null,
     "refund_policy": true,
-    "url": "https://www.sfgoodwill.org",
+    "url": "https://sfgoodwill.org/programs/career-services/",
     "illustrative": false,
-    "verify_note": "Confirm current program offerings, location and schedule with Goodwill SF Bay."
+    "offered_now": true,
+    "verify_note": "Checked 2026-11-03: Goodwill SF Bay says its job training programs are free and new participants start with an orientation (San Francisco or Concord). Confirm current digital skills sessions."
   },
   {
     "id": "code-tenderloin-job-readiness",
@@ -142,6 +147,7 @@
     "refund_policy": true,
     "url": "https://www.codetenderloin.org",
     "illustrative": false,
+    "offered_now": true,
     "verify_note": "Confirm cohort dates, schedule and eligibility with Code Tenderloin."
   },
   {
@@ -171,6 +177,7 @@
     "refund_policy": true,
     "url": "https://perscholas.org",
     "illustrative": false,
+    "offered_now": true,
     "verify_note": "Free and no stipend per the design doc; confirm campus, cohort dates and course length with Per Scholas."
   },
   {
@@ -200,6 +207,7 @@
     "refund_policy": true,
     "url": "https://www.jvs.org",
     "illustrative": false,
+    "offered_now": true,
     "verify_note": "Free per the design doc; confirm schedule, hours and eligibility documents with JVS."
   },
   {
@@ -227,9 +235,10 @@
     "isa_or_required_loan": false,
     "published_outcomes": null,
     "refund_policy": true,
-    "url": "https://www.ccsf.edu",
+    "url": "https://www.ccsf.edu/degrees-certificates/computer-networking-and-information-technology/computer-technical-support",
     "illustrative": false,
-    "verify_note": "Confirm the certificate name, evening sections and Free City College eligibility with CCSF; books estimate is a planning assumption."
+    "offered_now": true,
+    "verify_note": "CCSF's CNIT department lists a Computer Technician Certificate of Accomplishment, a Fundamentals of Technical Support Certificate of Accomplishment and a Computer Technical Support Certificate of Achievement, preparing students for IT help desk and technical support roles; it recommends CompTIA A+ and Network+. The page does not list evening sections or Free City eligibility, so confirm both in the class schedule and with Free City. The books estimate is a planning assumption."
   },
   {
     "id": "google-it-support-coursera",
@@ -258,6 +267,7 @@
     "refund_policy": true,
     "url": "https://www.coursera.org",
     "illustrative": false,
+    "offered_now": true,
     "verify_note": "Cost assumes about $49 per month for six months; confirm current price and any free access through libraries or scholarships."
   },
   {
@@ -287,6 +297,7 @@
     "refund_policy": true,
     "url": "https://www.coursera.org",
     "illustrative": false,
+    "offered_now": true,
     "verify_note": "Cost assumes about $49 per month for six months; confirm current price and any free access."
   },
   {
@@ -316,6 +327,7 @@
     "refund_policy": true,
     "url": "https://www.comptia.org",
     "illustrative": false,
+    "offered_now": true,
     "verify_note": "Exam fee is an estimate of two vouchers at about $265 each; confirm current CompTIA pricing and any discounted vouchers through the training provider."
   },
   {
@@ -345,6 +357,7 @@
     "refund_policy": true,
     "url": "https://www.yearup.org",
     "illustrative": false,
+    "offered_now": true,
     "verify_note": "Confirm age range, stipend amount and current Bay Area tracks with Year Up; stipend treatment must be reviewed with housing counsel."
   },
   {
@@ -374,6 +387,7 @@
     "refund_policy": true,
     "url": "",
     "illustrative": true,
+    "offered_now": true,
     "verify_note": "Illustrative example for the demo, not a real provider; shows how a Career-tier grant pays tuition when no free option fits."
   },
   {
@@ -403,6 +417,7 @@
     "refund_policy": true,
     "url": "",
     "illustrative": true,
+    "offered_now": true,
     "verify_note": "Illustrative example for the demo, not a real provider; shows the WIOA-first funding order."
   },
   {
@@ -432,6 +447,7 @@
     "refund_policy": true,
     "url": "",
     "illustrative": true,
+    "offered_now": true,
     "verify_note": "Illustrative example for the demo; validate employer demand before each cohort."
   },
   {
@@ -461,6 +477,7 @@
     "refund_policy": false,
     "url": "",
     "illustrative": true,
+    "offered_now": true,
     "verify_note": "Illustrative example of a program the grant rules reject (income-share agreement, no published outcomes)."
   }
 ]

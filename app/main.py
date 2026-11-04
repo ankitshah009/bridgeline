@@ -233,8 +233,66 @@ def schedule_fit(program: dict, profile: dict) -> bool:
     return not avail or need <= avail + 2
 
 
-def _fit_label(program: dict, wf: dict, fits: bool) -> str:
-    parts = [SCHEDULE_LABELS.get(program.get("schedule"), program.get("schedule") or "")]
+ROLE_LABELS = {"goal": "Matches your goal", "on_ramp": "On-ramp: start here"}
+
+
+def goal_tracks(profile: dict) -> list[str]:
+    """The resident's goal tracks; generic "digital basics" counts only when it is the whole goal."""
+    tracks = [str(t) for t in profile.get("career_tracks") or [] if t]
+    specific = [t for t in tracks if t.lower() != "digital basics"]
+    return specific or tracks
+
+
+NOT_RUNNING_LABEL = "Not running this term"
+
+
+def offered_now(program: dict) -> bool:
+    """False only when we know the program is not running; "unknown" still counts as offered."""
+    return program.get("offered_now", True) is not False
+
+
+def with_availability(program: dict) -> dict:
+    """Availability comes from the catalog (source of truth), so a stale Elasticsearch copy can't hide a change."""
+    from app import catalog
+
+    cat = catalog.get_program(program.get("id") or "") or {}
+    out = dict(program)
+    if "offered_now" in cat:
+        out["offered_now"] = cat["offered_now"]
+    if cat.get("availability_note"):
+        out["availability_note"] = cat["availability_note"]
+    return out
+
+
+def match_role(program: dict, profile: dict) -> str:
+    """goal: leads where the resident wants to go. on_ramp: a basics class to start with. other: everything else.
+    A program that is not running this term is never the goal match or the on-ramp."""
+    from app.search import _track_match
+
+    if not offered_now(program):
+        return "other"
+    if _track_match(goal_tracks(profile), program.get("career_tracks") or []):
+        return "goal"
+    if program.get("level") == "basics":
+        return "on_ramp"
+    return "other"
+
+
+def _rank(p: dict) -> tuple:
+    """Order: goal programs that fit the schedule, then a basics on-ramp, then goal programs with a
+    schedule conflict (shown, labelled), then other fits, then the rest. Free and $0-to-you break ties."""
+    role, fits = p["match_role"], p["schedule_fit"]
+    tier = ({"goal": 0, "on_ramp": 1, "other": 3}[role] if fits else (2 if role == "goal" else 4))
+    if not p["waterfall"]["approved_provider"]:
+        tier += 10
+    if not offered_now(p):
+        tier += 20  # after every program that is actually running
+    return (tier, p["waterfall"]["totals"]["resident"] > 0, not p.get("free_to_resident"), -(p.get("_score") or 0))
+
+
+def _fit_label(program: dict, wf: dict, fits: bool, role: str | None = None) -> str:
+    lead = NOT_RUNNING_LABEL if not offered_now(program) else ROLE_LABELS.get(role or "", "")
+    parts = [lead, SCHEDULE_LABELS.get(program.get("schedule"), program.get("schedule") or "")]
     if program.get("hours_per_week"):
         parts.append(f"{program['hours_per_week']:g} h/week")
     if program.get("weeks"):
@@ -253,21 +311,44 @@ def _fit_label(program: dict, wf: dict, fits: bool) -> str:
 async def match(request: Request):
     body = await request.json()
     profile = body.get("profile") or {}
-    query = profile.get("search_query") or profile.get("goal") or "beginner tech training"
-    t0 = time.perf_counter()
-    hits = _elastic(_search().search_programs, query, profile, 6)
+    base = {"out_of_scope": False, "needs_clarification": False, "alternatives": [], "supports": []}
+    if profile.get("needs_clarification"):
+        # No goal yet: ask the follow-up first instead of matching on a guess.
+        return {**base, "programs": [], "needs_clarification": True, "follow_up": profile.get("follow_up"),
+                "query": None, "ms": 0}
+
+    out_of_scope = profile.get("in_scope") is False
     building = _building(body.get("building_id"))
+    t0 = time.perf_counter()
+    if out_of_scope:
+        # Bridgeline funds tech training. Show free City training for the resident's own goal, and digital
+        # basics only if they also asked for computer skills. Never recast their goal as tech.
+        found = _elastic(_resources().alternative_training, profile,
+                         _housing_type(body.get("property_code"), building), 4)
+        _attach_live_checks(found["alternatives"])
+        _attach_live_checks(found["supports"])
+        hits = []
+        if profile.get("wants_digital_skills"):
+            hits = [p for p in map(with_availability, _elastic(
+                _search().search_programs, "beginner digital skills and computer basics", profile, 10))
+                if p.get("level") == "basics" and offered_now(p)][:3]
+        base.update(out_of_scope=True, alternatives=found["alternatives"], supports=found["supports"],
+                    scope_note=profile.get("scope_note"), alternatives_query=found["query"])
+        query = "beginner digital skills and computer basics" if hits else None
+    else:
+        query = profile.get("search_query") or profile.get("goal") or "beginner tech training"
+        hits = _elastic(_search().search_programs, query, profile, 16)  # small catalog: rank all, keep 6
     ms = _ms(t0)
     out = []
-    for p in hits:
+    for p in map(with_availability, hits):
         wf = rules.funding_waterfall(p, profile)
         fits = schedule_fit(p, profile)
-        out.append({**p, "waterfall": wf, "schedule_fit": fits, "fit": _fit_label(p, wf, fits),
+        role = "on_ramp" if out_of_scope else match_role(p, profile)
+        out.append({**p, "waterfall": wf, "schedule_fit": fits, "match_role": role,
+                    "goal_match": role == "goal", "fit": _fit_label(p, wf, fits, role),
                     "distance_km": _distance(building, p)})
-    out.sort(key=lambda p: (not p["waterfall"]["approved_provider"], not p["schedule_fit"],
-                            p["waterfall"]["totals"]["resident"] > 0,
-                            not p.get("free_to_resident"), -(p.get("_score") or 0)))
-    return {"programs": out, "query": query, "ms": ms}
+    out.sort(key=_rank)
+    return {**base, "programs": out[:6], "query": query, "ms": ms}
 
 
 def _housing_type(property_code: str | None, building: dict | None = None) -> str:

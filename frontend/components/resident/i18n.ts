@@ -23,6 +23,8 @@ export const T: Record<Lang, Dict> = {
     reading: "Mistral is reading your story…", searching: "Searching San Francisco programs…", planning: "Building your plan…", listening: "Listening… tap again to stop",
     k_goal: "Goal", k_sched: "When you can study", k_child: "Child care", k_comp: "Computer", k_exp: "Experience", k_lang: "Language", k_work: "Work now",
     yes: "Yes", no: "No", needed: "Needed", not_needed: "Not needed", has_one: "Has one", needs_one: "Needs one",
+    clarify_title: "One quick question", clarify_hint: "Mistral needs a bit more to build a plan that fits you.", answer_ph: "Type your answer…", send_answer: "Send answer", oos_kicker: "Honest answer", oos_title: "Bridgeline focuses on tech training", oos_body: "We won't change your goal to fit our programs. Here is free help for the path you described.", oos_checking: "Looking for free help for your goal…", oos_alts: "Free help for your goal", oos_none: "We don't have a listing for this goal yet. A navigator can help you find one.", oos_directory: "Browse all free help →", oos_tech: "See tech options anyway →", oos_tech_heading: "Tech options, if you're curious", on_ramp: "On-ramp", not_running: "Not running this term", on_ramp_hint: "A starter class that builds skills for the program above", no_match: "No programs matched. A navigator will reach out to plan with you.", st_available: "Available", st_confirm: "Confirm", source: "Source",
+    goal_match: "Matches your goal", oos_supports: "Help while you train", oos_digital: "See computer classes →", clarify_default: "What kind of work would you like to do, and when could you study?", clarify_back: "Answer the question",
   },
   es: {
     tagline: "Tu próxima carrera empieza en <em>casa</em>.",
@@ -43,6 +45,8 @@ export const T: Record<Lang, Dict> = {
     reading: "Mistral está leyendo tu historia…", searching: "Buscando programas en San Francisco…", planning: "Creando tu plan…", listening: "Escuchando… toca otra vez para parar",
     k_goal: "Meta", k_sched: "Cuándo puedes estudiar", k_child: "Cuidado infantil", k_comp: "Computadora", k_exp: "Experiencia", k_lang: "Idioma", k_work: "Trabajo actual",
     yes: "Sí", no: "No", needed: "Lo necesita", not_needed: "No lo necesita", has_one: "Tiene", needs_one: "Necesita una",
+    clarify_title: "Una pregunta rápida", clarify_hint: "Mistral necesita un poco más para hacer un plan a tu medida.", answer_ph: "Escribe tu respuesta…", send_answer: "Enviar respuesta", oos_kicker: "Respuesta honesta", oos_title: "Bridgeline se enfoca en capacitación tecnológica", oos_body: "No vamos a cambiar tu meta para que encaje en nuestros programas. Aquí tienes ayuda gratuita para el camino que describiste.", oos_checking: "Buscando ayuda gratuita para tu meta…", oos_alts: "Ayuda gratuita para tu meta", oos_none: "Aún no tenemos un programa para esta meta. Un navegador te puede ayudar a encontrarlo.", oos_directory: "Ver toda la ayuda gratuita →", oos_tech: "Ver opciones de tecnología →", oos_tech_heading: "Opciones de tecnología, por si te interesan", on_ramp: "Primer paso", not_running: "No se ofrece este semestre", on_ramp_hint: "Una clase inicial que te prepara para el programa de arriba", no_match: "No encontramos programas. Un navegador se comunicará contigo para planear juntos.", st_available: "Disponible", st_confirm: "Confirmar", source: "Fuente",
+    goal_match: "Coincide con tu meta", oos_supports: "Ayuda mientras estudias", oos_digital: "Ver clases de computación →", clarify_default: "¿Qué tipo de trabajo te gustaría hacer y cuándo podrías estudiar?", clarify_back: "Responder la pregunta",
   },
   zh: {
     tagline: "你的下一份事業，從<em>家</em>開始。",
@@ -63,6 +67,8 @@ export const T: Record<Lang, Dict> = {
     reading: "Mistral 正在閱讀…", searching: "正在搜尋三藩市的課程…", planning: "正在建立你的計劃…", listening: "正在聆聽…再按一次停止",
     k_goal: "目標", k_sched: "上課時間", k_child: "托兒", k_comp: "電腦", k_exp: "經驗", k_lang: "語言", k_work: "現職",
     yes: "是", no: "否", needed: "需要", not_needed: "不需要", has_one: "有", needs_one: "需要一部",
+    clarify_title: "一個簡單問題", clarify_hint: "Mistral 需要多一點資料，才能為你建立合適的計劃。", answer_ph: "輸入你的回答…", send_answer: "送出回答", oos_kicker: "坦白說", oos_title: "Bridgeline 專注於科技培訓", oos_body: "我們不會為了配合課程而改變你的目標。以下是適合你所描述方向的免費資源。", oos_checking: "正在搜尋適合你目標的免費資源…", oos_alts: "適合你目標的免費資源", oos_none: "我們暫時沒有這個目標的資料。導師可以幫你尋找。", oos_directory: "瀏覽所有免費資源 →", oos_tech: "仍然查看科技課程 →", oos_tech_heading: "科技課程（供參考）", on_ramp: "入門", not_running: "本學期未開班", on_ramp_hint: "為上面的課程打好基礎的入門班", no_match: "沒有配對的課程。導師會聯絡你一起計劃。", st_available: "可申請", st_confirm: "待確認", source: "來源",
+    goal_match: "符合你的目標", oos_supports: "上課期間的支援", oos_digital: "查看電腦課程 →", clarify_default: "你想做甚麼工作？甚麼時候可以上課？", clarify_back: "回答問題",
   },
   fil: {
     tagline: "Ang susunod mong karera ay nagsisimula sa <em>bahay</em>.",
@@ -83,6 +89,8 @@ export const T: Record<Lang, Dict> = {
     reading: "Binabasa ng Mistral…", searching: "Naghahanap ng programa sa San Francisco…", planning: "Ginagawa ang plano mo…", listening: "Nakikinig… i-tap ulit para huminto",
     k_goal: "Layunin", k_sched: "Oras ng pag-aaral", k_child: "Child care", k_comp: "Computer", k_exp: "Karanasan", k_lang: "Wika", k_work: "Trabaho ngayon",
     yes: "Oo", no: "Hindi", needed: "Kailangan", not_needed: "Hindi kailangan", has_one: "Mayroon", needs_one: "Kailangan",
+    clarify_title: "Isang mabilis na tanong", clarify_hint: "Kailangan ng Mistral ng kaunti pang detalye para sa planong bagay sa iyo.", answer_ph: "I-type ang sagot mo…", send_answer: "Ipadala ang sagot", oos_kicker: "Tapat na sagot", oos_title: "Nakatuon ang Bridgeline sa tech training", oos_body: "Hindi namin babaguhin ang layunin mo para lang tumugma sa aming mga programa. Narito ang libreng tulong para sa landas na sinabi mo.", oos_checking: "Naghahanap ng libreng tulong para sa layunin mo…", oos_alts: "Libreng tulong para sa layunin mo", oos_none: "Wala pa kaming listahan para sa layuning ito. Matutulungan ka ng navigator na humanap.", oos_directory: "Tingnan ang lahat ng libreng tulong →", oos_tech: "Tingnan pa rin ang tech options →", oos_tech_heading: "Mga tech option, kung interesado ka", on_ramp: "Panimula", not_running: "Hindi bukas ngayong termino", on_ramp_hint: "Panimulang klase na naghahanda sa iyo para sa programa sa itaas", no_match: "Walang tumugmang programa. Kokontakin ka ng navigator para magplano.", st_available: "Bukas", st_confirm: "Kumpirmahin", source: "Pinagmulan",
+    goal_match: "Tugma sa layunin mo", oos_supports: "Tulong habang nag-aaral", oos_digital: "Tingnan ang computer classes →", clarify_default: "Anong trabaho ang gusto mo, at kailan ka puwedeng mag-aral?", clarify_back: "Sagutin ang tanong",
   },
   vi: {
     tagline: "Sự nghiệp mới của bạn bắt đầu từ <em>nhà</em>.",
@@ -103,6 +111,8 @@ export const T: Record<Lang, Dict> = {
     reading: "Mistral đang đọc…", searching: "Đang tìm chương trình ở San Francisco…", planning: "Đang lập kế hoạch…", listening: "Đang nghe… chạm lần nữa để dừng",
     k_goal: "Mục tiêu", k_sched: "Thời gian học", k_child: "Giữ trẻ", k_comp: "Máy tính", k_exp: "Kinh nghiệm", k_lang: "Ngôn ngữ", k_work: "Công việc hiện tại",
     yes: "Có", no: "Không", needed: "Cần", not_needed: "Không cần", has_one: "Đã có", needs_one: "Cần một máy",
+    clarify_title: "Một câu hỏi nhanh", clarify_hint: "Mistral cần thêm một chút thông tin để lập kế hoạch phù hợp với bạn.", answer_ph: "Nhập câu trả lời…", send_answer: "Gửi câu trả lời", oos_kicker: "Nói thật", oos_title: "Bridgeline tập trung vào đào tạo công nghệ", oos_body: "Chúng tôi sẽ không đổi mục tiêu của bạn cho vừa chương trình của mình. Đây là hỗ trợ miễn phí cho con đường bạn mô tả.", oos_checking: "Đang tìm hỗ trợ miễn phí cho mục tiêu của bạn…", oos_alts: "Hỗ trợ miễn phí cho mục tiêu của bạn", oos_none: "Chúng tôi chưa có thông tin cho mục tiêu này. Người hướng dẫn có thể giúp bạn tìm.", oos_directory: "Xem tất cả hỗ trợ miễn phí →", oos_tech: "Vẫn xem lựa chọn công nghệ →", oos_tech_heading: "Lựa chọn công nghệ, nếu bạn quan tâm", on_ramp: "Bước khởi đầu", not_running: "Học kỳ này không mở lớp", on_ramp_hint: "Lớp nhập môn giúp bạn chuẩn bị cho chương trình ở trên", no_match: "Không có chương trình phù hợp. Người hướng dẫn sẽ liên hệ để lập kế hoạch cùng bạn.", st_available: "Đang mở", st_confirm: "Cần xác nhận", source: "Nguồn",
+    goal_match: "Đúng mục tiêu của bạn", oos_supports: "Hỗ trợ trong lúc học", oos_digital: "Xem lớp học máy tính →", clarify_default: "Bạn muốn làm công việc gì và khi nào có thể học?", clarify_back: "Trả lời câu hỏi",
   },
 };
 

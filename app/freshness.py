@@ -26,10 +26,13 @@ INDEX = "homebase-source-checks"
 CONCURRENCY = 8
 FETCH_TIMEOUT = 8.0
 RUN_DEADLINE_S = 55.0
-MAX_TEXT = 3000  # keeps a full run under the Mistral tokens-per-minute limit
+MAX_TEXT = 6000  # page text sent per comparison; checks run one Mistral call at a time on the small model
+FOCUS_WINDOW = 2500  # chars kept on each side of the best match for the listing's key terms
+FOCUS_HEAD = 600  # chars of the page's opening (title, intro) kept for context when the window is deeper
+PAGE_TEXT_CAP = 400_000  # safety cap on cleaned page text before focusing
 USER_AGENT = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/130.0 Safari/537.36 BridgelineLinkCheck/1.0")
-BLOCKED_STATUSES = {401, 403, 428, 429}  # site refuses automated checks; not evidence the link is dead
+BLOCKED_STATUSES = {202, 401, 403, 428, 429}  # site refuses automated checks; not evidence the link is dead
 
 MAPPING = {
     "properties": {
@@ -105,6 +108,63 @@ _WS = re.compile(r"\s+")
 def page_text(html: str, limit: int = MAX_TEXT) -> str:
     text = _ANY_TAG.sub(" ", _TAGS.sub(" ", html))
     return _WS.sub(" ", unescape(text)).strip()[:limit]
+
+
+_STOPWORDS = {"the", "and", "for", "with", "your", "free", "program", "programs", "classes", "class",
+              "services", "san", "francisco", "city", "college", "center", "training"}
+
+
+def key_terms(src: dict) -> list[str]:
+    """Phrases that identify this listing on its page: the program name and provider, then their distinctive words."""
+    listing = src.get("listing") or {}
+    phrases = [str(v).strip() for v in (listing.get("program"), listing.get("name"), src.get("name"),
+                                        listing.get("provider")) if v and str(v).strip()]
+    words = []
+    for ph in phrases:
+        for w in re.findall(r"[A-Za-z][A-Za-z0-9+.'-]{3,}", re.sub(r"\(.*?\)", " ", ph)):
+            if w.lower() not in _STOPWORDS:
+                words.append(w)
+    seen, out = set(), []
+    for t in phrases + words:
+        if t.lower() not in seen:
+            seen.add(t.lower())
+            out.append(t)
+    return out
+
+
+def focus_text(text: str, terms: list[str], window: int = FOCUS_WINDOW, cap: int = MAX_TEXT) -> str:
+    """Send Mistral the part of the page that is about this listing, within `cap` chars.
+
+    Short pages go whole. Otherwise find every occurrence of the key terms and keep ±`window` chars
+    around the occurrence whose window holds the most distinct terms (ties: earliest), so a mention in
+    the site nav doesn't win over the program's own section. A short slice of the page's opening is
+    prepended for context. No match: the start of the page, as before.
+    """
+    if len(text) <= cap:
+        return text
+    low = text.lower()
+    hits: list[tuple[int, str]] = []
+    for t in terms:
+        tl = t.lower()
+        start = low.find(tl)
+        while start != -1 and len(hits) < 400:
+            hits.append((start, tl))
+            start = low.find(tl, start + 1)
+    if not hits:
+        return text[:cap]
+    best_pos, best_score = None, -1
+    for pos, _ in sorted(hits):
+        lo, hi = pos - window, pos + window
+        score = len({t for p, t in hits if lo <= p <= hi})
+        if score > best_score:
+            best_pos, best_score = pos, score
+    lo = max(0, best_pos - window)
+    hi = min(len(text), best_pos + window)
+    segment = text[lo:hi]
+    if lo == 0:
+        return segment[:cap]
+    head_len = min(FOCUS_HEAD, lo, cap - len(segment) - 3)
+    return (text[:head_len] + " … " + segment)[:cap] if head_len > 0 else segment[:cap]
 
 
 def classify(http_status: int | None, ok: bool, extraction: dict | None) -> tuple[str, bool]:
@@ -192,8 +252,11 @@ async def check_one(client: httpx.AsyncClient, src: dict, sem: asyncio.Semaphore
             doc["http_status"] = r.status_code
             doc["final_url"] = str(r.url)
             doc["ok"] = 200 <= r.status_code < 400
+            # Some WAFs (e.g. csac.ca.gov) answer bots with an empty 202 challenge: that is not a verified page.
+            if r.status_code == 202 and not r.text.strip():
+                doc["ok"] = False
             if doc["ok"] and "html" in r.headers.get("content-type", "html"):
-                text = page_text(r.text)
+                text = focus_text(page_text(r.text, limit=PAGE_TEXT_CAP), key_terms(src))
         except Exception as exc:  # DNS, TLS, timeout: recorded, never raised
             doc["error"] = f"{type(exc).__name__}: {str(exc)[:160]}"
         doc["fetch_ms"] = int((time.perf_counter() - t0) * 1000)
@@ -273,10 +336,11 @@ def summarize(docs: list[dict]) -> dict:
     }
 
 
-def run(use_ai: bool = True) -> dict:
-    """Synchronous full run: fetch + extract + store. Returns the summary plus items."""
+def run(use_ai: bool = True, ids: list[str] | None = None) -> dict:
+    """Synchronous run: fetch + extract + store. `ids` limits it to those sources (resource or program id)."""
     t0 = time.perf_counter()
-    docs = asyncio.run(run_async(use_ai=use_ai))
+    srcs = [s for s in sources() if s["id"] in set(ids)] if ids else None
+    docs = asyncio.run(run_async(srcs, use_ai=use_ai))
     stored = store(docs)
     out = summarize(docs) | {"stored": stored, "seconds": round(time.perf_counter() - t0, 1), "items": docs}
     _last_run.update({k: v for k, v in out.items() if k != "items"})

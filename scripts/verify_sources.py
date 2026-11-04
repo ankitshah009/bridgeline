@@ -17,8 +17,9 @@ from app import freshness  # noqa: E402
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-ai", action="store_true", help="HTTP checks only, skip the Mistral comparison")
+    ap.add_argument("--ids", nargs="+", metavar="ID", help="check only these resource/program ids")
     args = ap.parse_args()
-    res = freshness.run(use_ai=not args.no_ai)
+    res = freshness.run(use_ai=not args.no_ai, ids=args.ids)
     print(f"checked {res['total']} sources in {res['seconds']} s: ok {res['ok']}, flagged {res['flagged']}, "
           f"broken {res['broken']}, unverified (site blocks bots) {res['unverified']}; stored {res['stored']}")
     for d in sorted(res["items"], key=lambda d: (d["state"] == "ok", d["kind"], d["id"])):

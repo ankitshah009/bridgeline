@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { LANG_NAMES, SPEECH_LANG, normLang, type Lang, type TFn } from "./i18n";
 import { Bolt, ErrorCard, Thinking, reducedMotion, type Any } from "./helpers";
+import { FollowUp, OutOfScopeCard } from "./Alternatives";
 
 export const EXAMPLES: { lang: Lang; flag: string; text: string }[] = [
   { lang: "es", flag: "ES", text: "Trabajo de día cuidando ancianos, tengo dos hijos y quiero trabajar en computadoras. Solo puedo estudiar en la noche." },
@@ -11,6 +12,18 @@ export const EXAMPLES: { lang: Lang; flag: string; text: string }[] = [
 ];
 
 export type IntakeState = { loading: boolean; error: unknown; profile: Any; ms: number | null };
+
+/** What the plan screen shows after intake: a follow-up question, an honest out-of-scope answer, or the plan profile. */
+export type IntakeView = "none" | "clarify" | "out_of_scope" | "profile";
+
+export function intakeView(profile: Any): IntakeView {
+  if (!profile) return "none";
+  if (profile.needs_clarification === true) return "clarify";
+  if (profile.in_scope === false) return "out_of_scope";
+  return "profile";
+}
+
+export type ScopeState = { loading: boolean; alternatives: Any[] | null; supports: Any[] | null; techCount: number; error?: unknown };
 
 function ProfileCards({ t, profile, ms }: { t: TFn; profile: Any; ms: number | null }) {
   const p = profile || {};
@@ -59,10 +72,12 @@ function ProfileCards({ t, profile, ms }: { t: TFn; profile: Any; ms: number | n
 type SR = Any;
 
 export function PlanStep({
-  t, lang, property, story, setStory, intake, onIntake,
+  t, lang, property, story, setStory, intake, onIntake, view, scope, onAnswer, onSeeTech,
 }: {
   t: TFn; lang: Lang; property: Any; story: string; setStory: (s: string) => void;
   intake: IntakeState; onIntake: (text: string) => void;
+  view: IntakeView; scope: ScopeState;
+  onAnswer: (answer: string) => void; onSeeTech: () => void;
 }) {
   const [listening, setListening] = useState(false);
   const [micHint, setMicHint] = useState("");
@@ -186,7 +201,27 @@ export function PlanStep({
         <div aria-live="polite">
           {intake.loading && <Thinking msg={t("reading")} />}
           {!intake.loading && intake.error != null && <ErrorCard error={intake.error} context="Couldn't read your story" />}
-          {!intake.loading && intake.profile && <ProfileCards t={t} profile={intake.profile} ms={intake.ms} />}
+          {!intake.loading && view === "clarify" && (
+            <FollowUp t={t} question={String(intake.profile.follow_up || t("clarify_default"))} loading={intake.loading} onAnswer={onAnswer} />
+          )}
+          {!intake.loading && (view === "profile" || view === "out_of_scope") && (
+            <ProfileCards t={t} profile={intake.profile} ms={intake.ms} />
+          )}
+          {!intake.loading && view === "out_of_scope" && (
+            <div style={{ marginTop: 18 }}>
+              {scope.error != null && <ErrorCard error={scope.error} context="Couldn't look up free help" />}
+              <OutOfScopeCard
+                t={t}
+                note={intake.profile.scope_note}
+                alternatives={scope.alternatives}
+                supports={scope.supports}
+                loading={scope.loading}
+                hasTech={scope.techCount > 0}
+                techLabel={intake.profile.wants_digital_skills ? t("oos_digital") : undefined}
+                onSeeTech={onSeeTech}
+              />
+            </div>
+          )}
         </div>
       </div>
     </section>

@@ -5,7 +5,7 @@ import { HTML_LANG, LANG_NAMES, makeT, normLang, type Lang } from "./i18n";
 import { STATUS_LABEL, call, reducedMotion, type Any } from "./helpers";
 import { PathProgress } from "./PathProgress";
 import { JoinStep } from "./JoinStep";
-import { PlanStep, type IntakeState } from "./PlanStep";
+import { PlanStep, intakeView, type IntakeState, type ScopeState } from "./PlanStep";
 import { MatchStep, type MatchState } from "./MatchStep";
 import { DetailStep, type DetailState } from "./DetailStep";
 import { StatusStep, statusStep } from "./StatusStep";
@@ -28,6 +28,7 @@ const store = {
 const EMPTY_INTAKE: IntakeState = { loading: false, error: null, profile: null, ms: null };
 const EMPTY_MATCH: MatchState = { loading: false, error: null, programs: null, ms: null, query: null };
 const EMPTY_DETAIL: DetailState = { loading: false, error: null, detail: null };
+const EMPTY_SCOPE: ScopeState = { loading: false, alternatives: null, supports: null, techCount: 0 };
 
 /** Deterministic pseudo-random in [0, 1) so confetti stays pure during render. */
 const seeded = (n: number) => {
@@ -63,6 +64,8 @@ export function ResidentApp() {
   const [intake, setIntake] = useState<IntakeState>(EMPTY_INTAKE);
   const [match, setMatch] = useState<MatchState>(EMPTY_MATCH);
   const [detail, setDetail] = useState<DetailState>(EMPTY_DETAIL);
+  // Honesty states: a follow-up question when the story is too thin, and free help for non-tech goals.
+  const [scope, setScope] = useState<ScopeState>(EMPTY_SCOPE);
   const [applying, setApplying] = useState(false);
   const [applyError, setApplyError] = useState<unknown>(null);
   const [app, setApp] = useState<Any>(null);
@@ -70,7 +73,8 @@ export function ResidentApp() {
   const [party, setParty] = useState(0);
   const prevStatus = useRef<string | null>(null);
 
-  const busy = intake.loading || match.loading || detail.loading || applying;
+  const busy = intake.loading || match.loading || detail.loading || applying || scope.loading;
+  const view = intakeView(intake.profile);
 
   /* language */
   const applyLang = useCallback((l: Lang) => {
@@ -174,18 +178,38 @@ export function ResidentApp() {
   /* actions */
   const setStory = (s: string) => {
     setStoryRaw(s);
-    if (intake.profile || intake.error) setIntake(EMPTY_INTAKE);
+    if (intake.profile || intake.error) {
+      setIntake(EMPTY_INTAKE);
+      setScope(EMPTY_SCOPE);
+    }
+  };
+
+  /* Goal outside tech: fetch free help for the path the resident described (and any tech options). */
+  const checkScope = async (profile: Any) => {
+    setScope({ ...EMPTY_SCOPE, loading: true });
+    try {
+      const r = await call("/api/match", { profile, property_code: property?.code, building_id: building?.id });
+      const programs: Any[] = r.programs || [];
+      const alternatives: Any[] = Array.isArray(r.alternatives) ? r.alternatives : [];
+      const supports: Any[] = Array.isArray(r.supports) ? r.supports : [];
+      setScope({ loading: false, alternatives, supports, techCount: programs.length });
+      setMatch({ loading: false, error: null, programs, ms: r.ms ?? null, query: r.query ?? null, outOfScope: true, alternatives, supports });
+    } catch (e) {
+      setScope({ loading: false, alternatives: null, supports: null, techCount: 0, error: e });
+    }
   };
 
   const doIntake = async (textArg?: string) => {
     const text = (textArg ?? story).trim();
     if (!text || busy) return;
     setIntake({ ...EMPTY_INTAKE, loading: true });
+    setScope(EMPTY_SCOPE);
     try {
       const r = await call("/api/intake", { text, language: lang });
       setIntake({ loading: false, error: null, profile: r.profile, ms: r.ms ?? null });
       const nl = normLang(r.profile?.language);
       if (nl && nl !== lang) applyLang(nl);
+      if (intakeView(r.profile) === "out_of_scope") checkScope(r.profile);
     } catch (e) {
       setIntake({ ...EMPTY_INTAKE, error: e });
     }
@@ -197,10 +221,22 @@ export function ResidentApp() {
     setMatch({ ...EMPTY_MATCH, loading: true });
     try {
       const r = await call("/api/match", { profile: intake.profile, property_code: property?.code, building_id: building?.id });
-      setMatch({ loading: false, error: null, programs: r.programs || [], ms: r.ms ?? null, query: r.query ?? null });
+      setMatch({
+        loading: false, error: null, programs: r.programs || [], ms: r.ms ?? null, query: r.query ?? null,
+        outOfScope: Boolean(r.out_of_scope), alternatives: Array.isArray(r.alternatives) ? r.alternatives : null,
+        supports: Array.isArray(r.supports) ? r.supports : null,
+        needsClarification: Boolean(r.needs_clarification), followUp: r.follow_up ?? null,
+      });
     } catch (e) {
       setMatch({ ...EMPTY_MATCH, error: e });
     }
+  };
+
+  /* The resident answers Mistral's follow-up: plan again from the original story plus the answer. */
+  const answerFollowUp = (answer: string) => {
+    const combined = `${story.trim()}\n${answer.trim()}`;
+    setStoryRaw(combined);
+    doIntake(combined);
   };
 
   const openPlan = async (pid: string) => {
@@ -245,6 +281,7 @@ export function ResidentApp() {
     prevStatus.current = null;
     setProperty(null); setBuilding(null); setStoryRaw("");
     setIntake(EMPTY_INTAKE); setMatch(EMPTY_MATCH); setDetail(EMPTY_DETAIL);
+    setScope(EMPTY_SCOPE);
     setApp(null); setApplyError(null);
     go("join");
   };
@@ -252,9 +289,12 @@ export function ResidentApp() {
   /* sticky CTA */
   let cta: { label: string; onClick: () => void; disabled: boolean } | null = null;
   if (screen === "plan") {
-    cta = intake.profile
-      ? { label: t("find_programs") + " →", onClick: doMatch, disabled: busy }
-      : { label: t("build_plan"), onClick: () => doIntake(), disabled: !story.trim() || busy };
+    if (view === "none") cta = { label: t("build_plan"), onClick: () => doIntake(), disabled: !story.trim() || busy };
+    else if (view === "profile") cta = { label: t("find_programs") + " →", onClick: doMatch, disabled: busy };
+    else if (view === "out_of_scope" && scope.techCount > 0) {
+      cta = { label: intake.profile?.wants_digital_skills ? t("oos_digital") : t("oos_tech"), onClick: () => go("match"), disabled: busy };
+    }
+    // "clarify": the follow-up card has its own send button.
   } else if (screen === "detail" && detail.detail) {
     cta = { label: t("apply"), onClick: doApply, disabled: busy };
   }
@@ -278,9 +318,17 @@ export function ResidentApp() {
           <JoinStep t={t} building={building} setBuilding={setBuilding} onJoined={(p) => { setProperty(p); go("plan"); }} />
         )}
         {screen === "plan" && (
-          <PlanStep t={t} lang={lang} property={property} story={story} setStory={setStory} intake={intake} onIntake={doIntake} />
+          <PlanStep
+            t={t} lang={lang} property={property} story={story} setStory={setStory} intake={intake} onIntake={doIntake}
+            view={view} scope={scope} onAnswer={answerFollowUp} onSeeTech={() => go("match")}
+          />
         )}
-        {screen === "match" && <MatchStep t={t} state={match} onOpen={openPlan} busy={busy} />}
+        {screen === "match" && (
+          <MatchStep
+            t={t} state={match} onOpen={openPlan} busy={busy} scopeNote={intake.profile?.scope_note}
+            onBackToPlan={() => { setMatch(EMPTY_MATCH); go("plan"); }}
+          />
+        )}
         {screen === "detail" && (
           <DetailStep t={t} state={detail} applyError={applyError} onBack={() => { setDetail(EMPTY_DETAIL); go("match"); }} />
         )}

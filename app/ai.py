@@ -99,11 +99,25 @@ def _chat_json(system: str, user: str, temperature: float = 0.1, max_tokens: int
 
 
 INTAKE_SYSTEM = """You turn a resident's message (any language) into a profile for a career navigator.
-The resident lives in San Francisco affordable housing and wants digital skills or a tech-related job.
+The resident lives in San Francisco affordable housing. Bridgeline funds tech and digital-skills training, but you
+must record the resident's OWN goal faithfully. Never turn a non-tech goal (nursing, medical assistant, trades,
+cooking, driving...) into a tech goal, and never invent a goal the message does not state.
 Return ONLY a JSON object with exactly these keys:
 - language: ISO code of the resident's message, one of en, es, zh, tl, vi (Traditional Chinese -> zh, Filipino/Tagalog -> tl)
-- goal: short English goal, e.g. "Get an entry-level IT support job"
-- career_tracks: English list from: "digital basics", "IT support", "help desk", "data center operations", "cybersecurity", "software development", "data analytics", "digital marketing", "UX design", "cloud"
+- goal: short English goal in the resident's own meaning, e.g. "Become a medical assistant" or "Get an entry-level
+  IT support job"; null if the message states no goal (for example a greeting like "hi")
+- needs_clarification: true if the message has no clear goal, so a navigator must ask before matching
+- follow_up: if needs_clarification, one short friendly question in the resident's language asking what work they
+  want, when they could study, and whether they have kids who need care; otherwise null
+- in_scope: true if the goal is tech, digital skills, computers, or learning to use technology; false if the stated
+  goal is another field; true when there is no goal yet
+- wants_digital_skills: true if the resident also says they want computer or digital skills (even with a non-tech goal)
+- scope_note: if in_scope is false, one warm sentence in the resident's language saying Bridgeline focuses on tech
+  training and showing free City training for their goal; otherwise null
+- age_group: "under_25", "25_54" or "55_plus" ONLY if the resident states their age or says they are a senior or
+  a young adult; otherwise null. Never guess age.
+- career_tracks: English list from: "digital basics", "IT support", "help desk", "data center operations", "cybersecurity", "software development", "data analytics", "digital marketing", "UX design", "cloud".
+  Use [] for a non-tech goal (add "digital basics" only if wants_digital_skills) and [] when there is no goal.
 - experience: short English description of computer and work experience
 - current_work: short English description of current job and hours, or "" if none
 - availability: one of evenings, daytime, weekends, full-time, flexible (when they can attend training)
@@ -113,9 +127,10 @@ Return ONLY a JSON object with exactly these keys:
 - has_computer: false unless they say they have a computer or laptop (a phone does not count)
 - commute: one of muni, walk, bike, car, unknown
 - summary: one English sentence for the navigator
-- search_query: one English sentence describing the ideal training program for semantic search (level, schedule, field)
+- search_query: one English sentence describing the ideal training program for semantic search (level, schedule,
+  field). For a non-tech goal describe free job training for THAT goal; with no goal use "beginner digital skills"
 - display: object with keys goal, availability, experience, current_work: the same facts, short, written in the
-  resident's own language (the language of their message) for profile cards they will read
+  resident's own language (the language of their message) for profile cards they will read; goal "" if none
 Rules: never record race, ethnicity, religion or immigration status, even if mentioned. Do not judge eligibility."""
 
 
@@ -127,6 +142,45 @@ def _bool(v, default=False) -> bool:
     if isinstance(v, (int, float)):
         return bool(v)
     return default
+
+
+AGE_GROUPS = {"under_25", "25_54", "55_plus"}
+
+# Messages that carry no goal at all. Matched after lowercasing and stripping punctuation.
+GREETINGS = {
+    "hi", "hello", "hey", "hiya", "yo", "help", "ok", "okay", "yes", "no", "thanks", "thank you", "start",
+    "hola", "buenas", "buenos dias", "buenas tardes", "ayuda", "si", "sí",
+    "你好", "您好", "哈囉", "嗨", "幫忙",
+    "kumusta", "kamusta", "hello po", "tulong",
+    "xin chào", "chào", "chao", "giúp",
+}
+
+FOLLOW_UP = {
+    "en": "Happy to help! What kind of work would you like to do, when could you study, and do you have kids who need care while you train?",
+    "es": "¡Con gusto te ayudo! ¿Qué tipo de trabajo te gustaría hacer, cuándo podrías estudiar y tienes hijos que necesiten cuidado mientras estudias?",
+    "zh": "很樂意幫忙！你想做什麼樣的工作？什麼時間可以上課？上課時有孩子需要照顧嗎？",
+    "tl": "Masaya kaming tumulong! Anong klaseng trabaho ang gusto mo, kailan ka pwedeng mag-aral, at may mga anak ka bang kailangang alagaan habang nag-aaral ka?",
+    "vi": "Rất vui được giúp bạn! Bạn muốn làm công việc gì, khi nào bạn có thể học, và bạn có con nhỏ cần người trông khi đi học không?",
+}
+
+SCOPE_NOTE = {
+    "en": "Bridgeline focuses on tech training, so here is free City training for your goal.",
+    "es": "Bridgeline se enfoca en capacitación en tecnología, así que aquí tienes capacitación gratuita de la Ciudad para tu meta.",
+    "zh": "Bridgeline 專注於科技培訓，以下是符合你目標的免費市政府培訓。",
+    "tl": "Nakatuon ang Bridgeline sa tech training, kaya narito ang libreng training ng Lungsod para sa iyong layunin.",
+    "vi": "Bridgeline tập trung vào đào tạo công nghệ, vì vậy đây là các chương trình đào tạo miễn phí của Thành phố cho mục tiêu của bạn.",
+}
+
+
+def is_greeting_only(text: str) -> bool:
+    """True when the message is only a greeting or a filler word, so there is no goal to record."""
+    t = re.sub(r"[\s!?.,¡¿~。！？，…]+", " ", (text or "").lower()).strip()
+    return not t or t in GREETINGS
+
+
+def _goal(value) -> str | None:
+    g = str(value).strip() if value is not None else ""
+    return None if not g or g.lower() in ("null", "none", "n/a", "unknown") else g
 
 
 def _normalize_profile(raw: dict, text: str, language_hint: str | None) -> dict:
@@ -149,10 +203,33 @@ def _normalize_profile(raw: dict, text: str, language_hint: str | None) -> dict:
     tracks = raw.get("career_tracks") or []
     if isinstance(tracks, str):
         tracks = [tracks]
+    tracks = [str(t) for t in tracks][:4]
+
+    goal = _goal(raw.get("goal"))
+    needs_clarification = _bool(raw.get("needs_clarification"), False) or goal is None or is_greeting_only(text)
+    in_scope = _bool(raw.get("in_scope"), True)
+    wants_digital = _bool(raw.get("wants_digital_skills"), False)
+    if needs_clarification:
+        goal, in_scope, tracks = None, True, []  # never invent a goal; ask first
+    elif not in_scope:
+        tracks = ["digital basics"] if wants_digital else []  # never recast a non-tech goal as tech
+    age_group = str(raw.get("age_group") or "").strip().lower() or None
+    if age_group not in AGE_GROUPS:
+        age_group = None
+    follow_up = (str(raw.get("follow_up") or "").strip() or FOLLOW_UP.get(lang, FOLLOW_UP["en"])) if needs_clarification else None
+    scope_note = None if in_scope else (str(raw.get("scope_note") or "").strip() or SCOPE_NOTE.get(lang, SCOPE_NOTE["en"]))
+    default_query = "beginner digital skills" if needs_clarification else (goal or "beginner tech training")
+
     profile = {
         "language": lang,
-        "goal": str(raw.get("goal") or "Explore a tech career"),
-        "career_tracks": [str(t) for t in tracks][:4],
+        "goal": goal,
+        "needs_clarification": needs_clarification,
+        "follow_up": follow_up,
+        "in_scope": in_scope,
+        "wants_digital_skills": wants_digital,
+        "scope_note": scope_note,
+        "age_group": age_group,
+        "career_tracks": tracks,
         "experience": str(raw.get("experience") or ""),
         "current_work": str(raw.get("current_work") or ""),
         "availability": availability,
@@ -162,18 +239,32 @@ def _normalize_profile(raw: dict, text: str, language_hint: str | None) -> dict:
         "has_computer": _bool(raw.get("has_computer"), False),
         "commute": str(raw.get("commute") or "unknown"),
         "summary": str(raw.get("summary") or ""),
-        "search_query": str(raw.get("search_query") or raw.get("goal") or "beginner tech training"),
+        "search_query": "beginner digital skills" if needs_clarification
+        else str(raw.get("search_query") or default_query),
         "original_text": text,
     }
     disp = raw.get("display") if isinstance(raw.get("display"), dict) else {}
-    profile["display"] = {k: str(disp.get(k) or profile[k]) for k in ("goal", "availability", "experience", "current_work")}
+    profile["display"] = {k: str(disp.get(k) or profile[k] or "") for k in ("goal", "availability", "experience", "current_work")}
+    if needs_clarification:
+        profile["display"]["goal"] = ""
     return profile
+
+
+GREETING_LANG = {"hola": "es", "buenas": "es", "buenos dias": "es", "buenas tardes": "es", "ayuda": "es",
+                 "你好": "zh", "您好": "zh", "哈囉": "zh", "嗨": "zh", "幫忙": "zh",
+                 "kumusta": "tl", "kamusta": "tl", "hello po": "tl", "tulong": "tl",
+                 "xin chào": "vi", "chào": "vi", "chao": "vi", "giúp": "vi"}
 
 
 def parse_intake(text: str, language_hint: str | None = None) -> dict:
     text = (text or "").strip()
     if not text:
         raise AIError("Empty intake text")
+    if is_greeting_only(text):
+        # Nothing to extract, so no model call: ask the follow-up instead of inventing a goal.
+        key = re.sub(r"[\s!?.,¡¿~。！？，…]+", " ", text.lower()).strip()
+        lang = GREETING_LANG.get(key) or (language_hint if language_hint in LANGS else "en")
+        return _normalize_profile({"language": lang, "goal": None, "needs_clarification": True}, text, language_hint)
     hint = f"\n(UI language: {language_hint})" if language_hint else ""
     raw = _chat_json(INTAKE_SYSTEM, f"Resident's message:\n{text}{hint}")
     return _normalize_profile(raw, text, language_hint)

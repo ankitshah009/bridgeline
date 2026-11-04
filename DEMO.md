@@ -25,8 +25,9 @@ Backup Elastic: `set -a; . ./.env.local-es; set +a` before starting uvicorn swit
 **Measured live on 2026-11-03 (Elastic Cloud serverless 9.7 + Mistral Large):** intake 4.1 s, match 0.5 s, plan 5.0 s,
 apply 0.4 s, approve 0.7 s, impact 0.2 s. Spanish 2-kids evening profile → CCSF evening IT certificate, Stay-in-Training,
 grant $2,442 paid to child care / SFMTA Lifeline / device vendor, resident $0, benefits shield "protected" (LIHTC).
-On Match, tap **Computer Technician / IT Support Certificate** (second card) for the career story; the first card is the
-digital-basics on-ramp.
+On Match, the first card is **Computer Technician / IT Support Certificate** ("Matches your goal"); the digital-basics
+class appears below it labelled **On-ramp**. If a judge tries a non-tech goal (e.g. medical assistant), Bridgeline keeps
+their goal, says honestly that it focuses on tech, and lists free City alternatives; a bare "hi" gets a follow-up question.
 
 ## Script (about 90 s)
 
