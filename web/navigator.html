@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Navigator Console</title>
-<meta name="description" content="Homebase Tech career navigator caseload and grant review.">
+<meta name="description" content="Bridgeline career navigator caseload and grant review.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
@@ -58,7 +58,7 @@
 </head>
 <body>
 <header class="topbar">
-  <a class="brand" href="/"><span id="brandIcon"></span>Homebase <small>Navigator</small></a>
+  <a class="brand" href="/"><span id="brandIcon"></span>Bridgeline <small>Navigator</small></a>
   <span class="spacer"></span>
   <nav class="navlinks" aria-label="Views"><a href="/">Resident</a><a href="/navigator" aria-current="page">Navigator</a><a href="/impact">Impact</a></nav>
 </header>
@@ -203,7 +203,7 @@
       '<div style="margin-top:10px">' + payBar(tot) + payLegend(tot) + '</div>' +
       '<table><thead><tr><th>Item</th><th>Payer</th><th>Paid to</th><th class="num">Amount</th></tr></thead><tbody>' +
       (w.lines || []).map(l => '<tr><td>' + esc(l.item) + '</td><td><span class="badge ' + ((PAYER[l.payer] || {}).badge || "") + '">' + esc(l.payer_label || (PAYER[l.payer] || {}).label || l.payer) + '</span></td><td>' + esc(l.paid_to || "") + '</td><td class="num">' + money(l.amount) + '</td></tr>').join("") +
-      '</tbody><tfoot><tr><td colspan="3">Homebase grant</td><td class="num">' + money(tot.grant) + '</td></tr><tr><td colspan="3">Resident pays</td><td class="num">' + money(tot.resident) + '</td></tr></tfoot></table></div>';
+      '</tbody><tfoot><tr><td colspan="3">Bridgeline grant</td><td class="num">' + money(tot.grant) + '</td></tr><tr><td colspan="3">Resident pays</td><td class="num">' + money(tot.resident) + '</td></tr></tfoot></table></div>';
     html += '</div>';
 
     // benefits check + decision

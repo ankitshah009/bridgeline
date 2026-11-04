@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Homebase Impact</title>
-<meta name="description" content="Homebase Tech pilot outcomes and spending, aggregated with Elasticsearch.">
+<title>Bridgeline Impact</title>
+<meta name="description" content="Bridgeline pilot outcomes and spending, aggregated with Elasticsearch.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
@@ -75,7 +75,7 @@
 </head>
 <body>
 <header class="topbar">
-  <a class="brand" href="/"><span id="brandIcon"></span>Homebase <small>Impact</small></a>
+  <a class="brand" href="/"><span id="brandIcon"></span>Bridgeline <small>Impact</small></a>
   <span class="spacer"></span>
   <nav class="navlinks" aria-label="Views"><a href="/">Resident</a><a href="/navigator">Navigator</a><a href="/impact" aria-current="page">Impact</a></nav>
 </header>
@@ -132,7 +132,7 @@
     </details>
   </div>
 </section>
-<footer class="foot">Homebase Tech · working name · planning figures are proposals, not benchmarks · <a href="/">Resident app</a> · <a href="/navigator">Navigator</a></footer>
+<footer class="foot">Bridgeline · working name · planning figures are proposals, not benchmarks · <a href="/">Resident app</a> · <a href="/navigator">Navigator</a></footer>
 
 <script src="/static/common.js"></script>
 <script>
@@ -249,7 +249,7 @@
       document.getElementById("dollars").innerHTML =
         (lev != null ? '<p class="lever">Every <span class="x">$1</span> of grant unlocked <span class="x">' + money(lev) + '</span> of free and public training.</p>' : '<p class="lever">No grant dollars yet.</p>') +
         payBar({ free_program: free, public_aid: pub, grant: grant, resident: 0 }) +
-        payLegend({ free_program: free, public_aid: pub, grant: grant, resident: 0 }, { free_program: "Free programs", public_aid: "Public aid", grant: "Homebase grant", resident: "Residents" }) +
+        payLegend({ free_program: free, public_aid: pub, grant: grant, resident: 0 }, { free_program: "Free programs", public_aid: "Public aid", grant: "Bridgeline grant", resident: "Residents" }) +
         '<p class="note">Grant dollars are paid to providers and vendors. Residents receive no cash and no stipends.</p>';
 
       const bp = (d.by_property || []).slice(0, 8);

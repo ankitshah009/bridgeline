@@ -1,4 +1,4 @@
-/* Homebase Tech: shared helpers (no build step) */
+/* Bridgeline: shared helpers (no build step) */
 (function () {
   "use strict";
 
@@ -17,7 +17,7 @@
     }
     let res;
     try { res = await fetch(path, init); }
-    catch (e) { throw new ApiError("Can't reach the Homebase server. Is it running?", "network"); }
+    catch (e) { throw new ApiError("Can't reach the Bridgeline server. Is it running?", "network"); }
     let data = null;
     const text = await res.text();
     try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; }
@@ -67,7 +67,7 @@
   const PAYER = {
     free_program: { label: "Free program", cls: "free", badge: "badge-green" },
     public_aid: { label: "Public aid", cls: "public", badge: "badge-blue" },
-    grant: { label: "Homebase grant", cls: "grant", badge: "badge-purple" },
+    grant: { label: "Bridgeline grant", cls: "grant", badge: "badge-purple" },
     resident: { label: "You pay", cls: "resident", badge: "badge-orange" }
   };
 
