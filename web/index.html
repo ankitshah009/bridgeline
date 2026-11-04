@@ -1,0 +1,910 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Homebase Tech</title>
+<meta name="description" content="Free tech training for residents, with a grant that covers what free programs don't. Paid straight to providers.">
+<meta name="theme-color" content="#fbf6ec">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/app.css">
+<style>
+  .app { max-width: 640px; margin: 0 auto; padding: 0 16px 120px; }
+  .screen { display: none; animation: enter .45s var(--ease) both; }
+  .screen.active { display: block; }
+  @keyframes enter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* lesson path progress */
+  .pathbar { max-width: 640px; margin: 0 auto; padding: 8px 12px 0; }
+  .pathbar svg { display: block; width: 100%; height: auto; }
+  .pathbar text { font-family: var(--font-ui); font-weight: 700; font-size: 19px; fill: var(--ink-3); }
+  .pathbar text.cur { fill: var(--ink); }
+  .pulse { transform-origin: center; transform-box: fill-box; animation: pulse 1.6s infinite var(--ease); }
+  @keyframes pulse { 0% { opacity: .55; transform: scale(1); } 100% { opacity: 0; transform: scale(1.9); } }
+
+  /* hero */
+  .hero { position: relative; padding: 18px 0 8px; text-align: center; }
+  .hero-art { width: 100%; max-width: 520px; margin: 0 auto -6px; display: block; }
+  .hero h1 em { font-style: italic; color: var(--green); }
+  .hero p.lead { font-size: 1.12rem; color: var(--ink-2); max-width: 30em; margin: 14px auto 0; }
+  .graph-paper {
+    background-image: linear-gradient(rgba(21,24,44,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(21,24,44,.05) 1px, transparent 1px);
+    background-size: 28px 28px; background-position: center;
+  }
+  .band { margin: 26px -16px 0; padding: 22px 16px; background: var(--navy); color: var(--navy-ink); text-align: center; }
+  .band h3 { color: #fff; font-size: 1.35rem; }
+  .flow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .flow div { background: var(--navy-2); border-radius: 14px; padding: 12px 8px; font-size: .82rem; font-weight: 600; color: #dfe3ff; }
+  .flow b { display: block; font-family: var(--font-display); font-size: 1.05rem; color: #fff; margin-bottom: 2px; }
+  .flow .n { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font-weight: 800; font-size: .8rem; margin-bottom: 6px; color: var(--navy); }
+
+  .field label { display: block; font-weight: 700; margin-bottom: 6px; }
+  .input {
+    width: 100%; min-height: 56px; padding: 14px 16px; border-radius: 16px; border: 2px solid var(--line);
+    background: var(--paper); font-size: 1.2rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+  }
+  .input:focus { border-color: var(--ink); outline: none; }
+  textarea.input { text-transform: none; letter-spacing: 0; font-weight: 500; font-size: 1.1rem; min-height: 150px; resize: vertical; line-height: 1.45; }
+  .input-plain { text-transform: none; letter-spacing: 0; font-weight: 500; font-size: 1.05rem; }
+  .ta-wrap { position: relative; }
+  .typeahead { position: absolute; left: 0; right: 0; top: calc(100% - 26px); z-index: 25; list-style: none; margin: 0; padding: 6px; background: var(--paper); border: 2px solid var(--ink); border-radius: 16px; box-shadow: 0 6px 0 var(--ink); max-height: 300px; overflow-y: auto; }
+  .typeahead button { width: 100%; text-align: left; background: none; border: 0; border-radius: 10px; padding: 10px 12px; min-height: 44px; cursor: pointer; display: grid; gap: 2px; }
+  .typeahead button:hover, .typeahead button.on { background: var(--cream); }
+  .typeahead .bn { font-weight: 700; }
+  .typeahead .ba { font-size: .82rem; color: var(--ink-3); }
+  .picked { display: flex; gap: 10px; align-items: center; margin-top: 10px; padding: 12px 14px; border-radius: 16px; background: var(--blue-soft); border: 1.5px solid #c2d3ff; }
+  .picked .x { margin-left: auto; min-width: 44px; min-height: 44px; border: 0; background: none; cursor: pointer; font-size: 1.2rem; color: var(--ink-2); }
+  .section-head { padding: 20px 0 14px; }
+  .section-head p { color: var(--ink-2); margin-top: 8px; font-size: 1.05rem; }
+  .welcome { display: flex; gap: 12px; align-items: center; padding: 12px 14px; border-radius: 16px; background: var(--green-soft); color: #0d5a26; font-weight: 600; margin-top: 12px; }
+  .welcome svg { flex: none; }
+
+  .mic.listening { background: var(--pink); color: #fff; box-shadow: 0 0 0 6px rgba(255,79,126,.2); }
+  .example-chips { display: grid; gap: 8px; }
+  .example-chips .chip { width: 100%; font-weight: 500; line-height: 1.35; padding: 10px 14px; }
+  .example-chips .chip .flag { font-weight: 800; font-size: .72rem; letter-spacing: .06em; color: var(--ink-3); flex: none; min-width: 26px; }
+
+  .understood { border-radius: var(--radius); background: var(--paper); border: 2px solid var(--ink); box-shadow: 0 6px 0 var(--ink); padding: 18px; }
+  .understood-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .understood-head h3 { font-size: 1.35rem; }
+  .bolt { display: inline-grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--yellow); border: 2px solid var(--ink); flex: none; }
+  .pgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .pcard { border-radius: 14px; padding: 12px; background: var(--cream); border: 1.5px solid var(--line); min-width: 0; }
+  .pcard .k { font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .pcard .v { font-weight: 700; margin-top: 3px; overflow-wrap: anywhere; }
+  .pcard.wide { grid-column: 1 / -1; }
+  .pcard.c1 { background: #fff4cf; border-color: #f5df9a; } .pcard.c2 { background: #e3f6e8; border-color: #b9e6c6; }
+  .pcard.c3 { background: #ece7ff; border-color: #d3c9ff; } .pcard.c4 { background: #e2ebff; border-color: #c2d3ff; }
+  .pcard.c5 { background: #ffeadb; border-color: #ffd0b1; }
+
+  .meta-line { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; color: var(--ink-3); font-size: .85rem; margin-bottom: 12px; }
+  .prog { position: relative; background: var(--paper); border: 2px solid var(--line); border-radius: 22px; padding: 18px; box-shadow: var(--shadow-chunky); cursor: pointer; transition: transform .2s var(--ease), border-color .2s, box-shadow .2s; text-align: left; width: 100%; }
+  .prog:hover { transform: translateY(-2px); border-color: var(--ink); box-shadow: 0 6px 0 var(--ink); }
+  .prog.best { border-color: var(--ink); box-shadow: 0 6px 0 var(--ink); }
+  .prog .ribbon { position: absolute; top: -12px; left: 16px; background: var(--yellow); border: 2px solid var(--ink); border-radius: 999px; font-size: .72rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 3px 10px; }
+  .prog h3 { font-size: 1.3rem; margin: 6px 0 2px; }
+  .prog .provider { color: var(--ink-2); font-weight: 600; font-size: .92rem; }
+  .facts { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0; }
+  .why { font-size: .9rem; color: var(--ink-2); background: var(--cream); border-radius: 12px; padding: 8px 12px; margin-bottom: 12px; }
+  .youpay { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+  .youpay .big { font-family: var(--font-display); font-size: 1.9rem; font-weight: 700; color: var(--green); line-height: 1; }
+  .youpay .big.nonzero { color: var(--orange); }
+  .prog .go { font-weight: 800; color: var(--ink); }
+  .search-proof { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .82rem; color: var(--ink-3); margin: -4px 0 16px; }
+  .search-proof code { background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 2px 8px; font-size: .78rem; color: var(--ink-2); overflow-wrap: anywhere; }
+
+  .zero-hero { text-align: center; padding: 26px 18px; position: relative; overflow: hidden; }
+  .zero-hero .num { font-family: var(--font-display); font-size: clamp(4.2rem, 20vw, 6.5rem); font-weight: 700; line-height: .9; color: #fff; letter-spacing: -.04em; }
+  .zero-hero .num.zero { color: #7ef0a0; }
+  .zero-hero .foryou { font-family: var(--font-display); font-size: 1.5rem; color: #fff; margin-top: 4px; }
+  .zero-hero .val { margin-top: 12px; color: #c6ccf0; font-size: .95rem; }
+  .zero-hero .paybar { margin-top: 16px; height: 16px; background: var(--navy-2); }
+  .zero-hero .paylegend { justify-content: center; color: #dfe3ff; }
+  .zero-hero svg.spark { position: absolute; opacity: .9; }
+
+  .wline { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; padding: 12px 0; border-bottom: 1.5px dashed var(--line); }
+  .wline:last-child { border-bottom: 0; }
+  .wline .item { font-weight: 700; }
+  .wline .amt { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; text-align: right; }
+  .wline .sub { grid-column: 1 / -1; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; font-size: .82rem; color: var(--ink-3); }
+
+  .milestones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; position: relative; }
+  .ms { text-align: center; padding: 12px 6px; border-radius: 16px; background: var(--cream); border: 1.5px solid var(--line); }
+  .ms .ring { width: 56px; height: 56px; margin: 0 auto 6px; display: block; }
+  .ms b { display: block; font-size: .85rem; }
+  .ms span { font-size: .78rem; color: var(--ink-3); }
+
+  .shield { border-radius: var(--radius); padding: 18px; border: 2px solid #9fdcb2; background: linear-gradient(180deg, #effaf2, #fff); }
+  .shield.review { border-color: #f5d27a; background: linear-gradient(180deg, #fff9e6, #fff); }
+  .shield-head { display: flex; gap: 12px; align-items: center; }
+  .shield-head h3 { font-size: 1.3rem; }
+  .shield ul { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 10px; }
+  .shield li { display: grid; grid-template-columns: 24px 1fr; gap: 8px; font-size: .92rem; }
+  .shield li .cite { display: block; font-size: .75rem; color: var(--ink-3); margin-top: 2px; }
+  .disclaimer { font-size: .75rem; color: var(--ink-3); margin-top: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+
+  .ai-card { border-radius: var(--radius); padding: 18px; background: var(--paper); border: 1.5px solid var(--line); box-shadow: var(--shadow); }
+  .bubble { position: relative; margin-top: 12px; padding: 14px 16px; background: var(--purple-soft); border-radius: 18px 18px 18px 6px; font-size: 1.05rem; line-height: 1.5; color: #23175c; white-space: pre-line; }
+  .ai-card ol { margin: 12px 0 0; padding-left: 1.3em; display: grid; gap: 6px; }
+  details.assume summary { cursor: pointer; font-weight: 700; color: var(--ink-2); min-height: 44px; display: flex; align-items: center; }
+  details.assume ul { margin: 4px 0 0; padding-left: 1.2em; font-size: .85rem; color: var(--ink-3); }
+
+  .sticky-cta { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: linear-gradient(180deg, rgba(251,246,236,0), var(--cream) 30%); }
+  .sticky-cta .inner { max-width: 608px; margin: 0 auto; }
+
+  /* status journey (Brilliant-style guided path) */
+  .journey { position: relative; margin: 18px 0 0; padding: 0; list-style: none; }
+  .journey li { position: relative; display: grid; grid-template-columns: 64px 1fr; gap: 14px; padding: 0 0 22px; }
+  .journey li::before { content: ""; position: absolute; left: 30px; top: 50px; bottom: -4px; width: 5px; border-radius: 4px; background: var(--line); }
+  .journey li:last-child::before { display: none; }
+  .journey li.done::before { background: var(--green-hi); }
+  .diamond { width: 48px; height: 48px; margin: 4px 0 0 9px; transform: rotate(45deg); border-radius: 12px; display: grid; place-items: center; background: var(--paper); border: 3px solid #cfc7b5; box-shadow: 0 4px 0 #cfc7b5; }
+  .diamond > * { transform: rotate(-45deg); }
+  .journey li.done .diamond { background: var(--green-hi); border-color: #0e7a33; box-shadow: 0 4px 0 #0e7a33; color: #fff; }
+  .journey li.cur .diamond { background: var(--yellow); border-color: var(--ink); box-shadow: 0 4px 0 var(--ink); }
+  .journey li.warn .diamond { background: var(--orange); border-color: #a3440b; box-shadow: 0 4px 0 #a3440b; color: #fff; }
+  .journey .jt { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; }
+  .journey .jd { color: var(--ink-2); font-size: .93rem; margin-top: 2px; }
+  .journey .jcard { background: var(--paper); border: 1.5px solid var(--line); border-radius: 16px; padding: 12px 14px; }
+  .journey li.cur .jcard { border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); }
+  .pay-log { margin-top: 8px; display: grid; gap: 6px; }
+  .pay-log div { display: flex; justify-content: space-between; gap: 10px; font-size: .85rem; background: var(--cream); border-radius: 10px; padding: 6px 10px; }
+
+  .celebrate { position: fixed; inset: 0; pointer-events: none; z-index: 50; overflow: hidden; }
+  .celebrate i { position: absolute; top: -20px; width: 12px; height: 18px; border-radius: 3px; animation: fall 2.4s var(--ease) forwards; }
+  @keyframes fall { to { transform: translateY(110vh) rotate(540deg); opacity: .9; } }
+  .toast { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 12px 18px; border-radius: 999px; font-weight: 700; z-index: 60; box-shadow: var(--shadow); max-width: calc(100% - 32px); text-align: center; animation: enter .3s var(--ease) both; }
+
+  @media (min-width: 900px) {
+    .app { max-width: 720px; }
+    .pathbar { max-width: 760px; }
+    .pgrid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 380px) { .pgrid { grid-template-columns: 1fr; } .flow { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" id="brand"><span id="brandIcon"></span>Homebase</a>
+  <span class="spacer"></span>
+  <label class="sr-only" for="lang">Language</label>
+  <select id="lang" class="lang-select" aria-label="Language">
+    <option value="en">English</option>
+    <option value="es">Español</option>
+    <option value="zh">繁體中文</option>
+    <option value="fil">Filipino</option>
+    <option value="vi">Tiếng Việt</option>
+  </select>
+</header>
+
+<nav class="pathbar" aria-label="Your journey"><div id="pathbar"></div></nav>
+
+<main class="app">
+  <!-- 1. JOIN -->
+  <section class="screen active" id="s-join" aria-labelledby="joinTitle">
+    <div class="hero graph-paper">
+      <svg class="hero-art" viewBox="0 0 520 250" role="img" aria-label="A home connected by a path to a laptop">
+        <line x1="20" y1="190" x2="500" y2="190" stroke="#15182c" stroke-width="2"/>
+        <g stroke="#15182c" stroke-width="1.5" opacity=".35">
+          <line x1="70" y1="184" x2="70" y2="196"/><line x1="140" y1="184" x2="140" y2="196"/><line x1="210" y1="184" x2="210" y2="196"/>
+          <line x1="310" y1="184" x2="310" y2="196"/><line x1="380" y1="184" x2="380" y2="196"/><line x1="450" y1="184" x2="450" y2="196"/>
+        </g>
+        <path d="M40 190 A60 60 0 0 1 100 130 L100 190Z" fill="#ffc933"/>
+        <text x="62" y="182" font-family="DM Sans" font-size="13" font-weight="700" fill="#15182c">45°</text>
+        <!-- house -->
+        <g transform="translate(120 70)">
+          <path d="M0 62 L58 10 L116 62 V120 H0Z" fill="#0f1535"/>
+          <path d="M-8 64 L58 4 L124 64" fill="none" stroke="#15182c" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="44" y="76" width="28" height="44" rx="4" fill="#ffc933"/>
+          <rect x="14" y="72" width="20" height="18" rx="3" fill="#6d4dff"/><rect x="82" y="72" width="20" height="18" rx="3" fill="#6d4dff"/>
+        </g>
+        <!-- dotted path to laptop -->
+        <path id="artPath" d="M178 190 C 230 230, 300 120, 360 150" fill="none" stroke="#1fb24e" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12"/>
+        <!-- laptop -->
+        <g transform="translate(350 96)">
+          <rect x="8" y="0" width="112" height="72" rx="8" fill="#fff" stroke="#15182c" stroke-width="4"/>
+          <rect x="20" y="12" width="88" height="48" rx="4" fill="#e2ebff"/>
+          <path d="M34 48 L52 30 L66 40 L92 20" fill="none" stroke="#2f6bff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M0 76 H128 L118 90 H10Z" fill="#15182c"/>
+        </g>
+        <!-- floating nodes -->
+        <circle cx="300" cy="62" r="14" fill="#ff7a2f" stroke="#15182c" stroke-width="3"/>
+        <circle cx="460" cy="58" r="10" fill="#fff" stroke="#15182c" stroke-width="3"/>
+        <line x1="314" y1="62" x2="450" y2="58" stroke="#15182c" stroke-width="2" stroke-dasharray="4 6"/>
+        <g transform="translate(250 20)"><path d="M14 0 L2 22 H12 L8 40 L24 14 H14Z" fill="#ffc933" stroke="#15182c" stroke-width="3" stroke-linejoin="round"/></g>
+        <circle cx="478" cy="190" r="9" fill="#2f6bff" stroke="#fff" stroke-width="3"/>
+        <g fill="#ff7a2f"><circle cx="420" cy="30" r="3"/><circle cx="432" cy="22" r="2.5"/><circle cx="440" cy="36" r="2"/><circle cx="410" cy="18" r="2"/></g>
+      </svg>
+      <h1 id="joinTitle" data-i18n="tagline">Your next career starts at <em>home</em>.</h1>
+      <p class="lead" data-i18n="join_sub">Free tech training for residents of participating buildings. We cover what free programs don't: child care, transit, a laptop, exam fees. Paid straight to providers, so your rent stays the same.</p>
+    </div>
+
+    <form id="joinForm" class="stack" style="margin-top:22px" novalidate>
+      <div class="field">
+        <label for="code" data-i18n="code_label">Your building code</label>
+        <input id="code" class="input" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="e.g. MISSION-24" required>
+        <p class="small muted" style="margin-top:6px" data-i18n="code_hint">It's in the text message from your building.</p>
+      </div>
+      <div class="row" id="codeChips" aria-label="Demo building codes"></div>
+      <div class="field ta-wrap">
+        <label for="bq"><span data-i18n="find_building">Find your building</span> <span class="small muted" data-i18n="optional">(optional)</span></label>
+        <input id="bq" class="input input-plain" type="search" autocomplete="off" spellcheck="false" placeholder="Street or building name" role="combobox" aria-autocomplete="list" aria-controls="bList" aria-expanded="false">
+        <ul id="bList" class="typeahead hidden" role="listbox" aria-label="Buildings"></ul>
+        <p class="tiny muted" style="margin-top:6px">From DataSF's affordable housing portfolio. We use it only to estimate travel to class.</p>
+        <div id="bPicked"></div>
+      </div>
+      <div id="joinMsg"></div>
+      <button class="btn btn-primary btn-block" type="submit" data-i18n="get_started">Get started</button>
+    </form>
+
+    <div class="band">
+      <h3 data-i18n="band_title">Who pays, in order</h3>
+      <div class="flow">
+        <div><span class="n" style="background:#7ef0a0">1</span><b data-i18n="pay_free">Free program</b><span data-i18n="band_1">Per Scholas, TechSF, City College</span></div>
+        <div><span class="n" style="background:#9db8ff">2</span><b data-i18n="pay_public">Public aid</b><span data-i18n="band_2">WIOA training accounts</span></div>
+        <div><span class="n" style="background:#c3b4ff">3</span><b data-i18n="pay_grant">Homebase grant</b><span data-i18n="band_3">Only what's left, paid to providers</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. PLAN -->
+  <section class="screen" id="s-plan" aria-labelledby="planTitle">
+    <div class="section-head">
+      <span class="kicker" data-i18n="step_plan_k">Step 2 · 5 minutes</span>
+      <h2 id="planTitle" data-i18n="plan_title">Tell us in your own words.</h2>
+      <p data-i18n="plan_sub">Any language. What you do now, what you'd like to do, and when you can study.</p>
+      <div id="welcome"></div>
+    </div>
+    <div class="stack">
+      <div class="field">
+        <label for="story" class="sr-only">Your story</label>
+        <textarea id="story" class="input" rows="5" placeholder="I work days as a caregiver, I have two kids…"></textarea>
+      </div>
+      <div class="row">
+        <button type="button" class="btn btn-ghost btn-icon mic hidden" id="mic" aria-label="Speak instead of typing" title="Speak">
+          <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="2" width="8" height="13" rx="4" fill="currentColor"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4M8 22h8" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <span class="small muted" id="micHint"></span>
+      </div>
+      <div>
+        <p class="small muted" style="margin-bottom:8px;font-weight:700" data-i18n="try_one">Or try one:</p>
+        <div class="example-chips" id="examples">
+          <button type="button" class="chip" data-lang="es"><span class="flag">ES</span><span>Trabajo de día cuidando ancianos, tengo dos hijos y quiero trabajar en computadoras. Solo puedo estudiar en la noche.</span></button>
+          <button type="button" class="chip" data-lang="zh"><span class="flag">中文</span><span>我在餐廳全職工作，想學電腦，找辦公室的工作。我沒有電腦，週末和晚上有空。</span></button>
+          <button type="button" class="chip" data-lang="en"><span class="flag">EN</span><span>I got laid off from a warehouse job. I'm good with computers and want an IT help desk job fast. I can study full time.</span></button>
+        </div>
+      </div>
+      <div id="intakeOut" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- 3. MATCH -->
+  <section class="screen" id="s-match" aria-labelledby="matchTitle">
+    <div class="section-head">
+      <span class="kicker" data-i18n="step_match_k">Step 3 · Your options</span>
+      <h2 id="matchTitle" data-i18n="match_title">Free options first.</h2>
+      <p data-i18n="match_sub">Ranked for your schedule. Each bar shows who pays.</p>
+    </div>
+    <div id="matchOut" class="stack" aria-live="polite"></div>
+  </section>
+
+  <!-- 4. DETAIL -->
+  <section class="screen" id="s-detail" aria-labelledby="detailTitle">
+    <div class="section-head" style="padding-bottom:8px">
+      <button type="button" class="btn btn-ghost btn-sm" id="backToMatch">← <span data-i18n="back">Back</span></button>
+    </div>
+    <h2 id="detailTitle" class="sr-only">Your plan</h2>
+    <div id="detailOut" class="stack" aria-live="polite"></div>
+  </section>
+
+  <!-- 5. STATUS -->
+  <section class="screen" id="s-status" aria-labelledby="statusTitle">
+    <div class="section-head">
+      <span class="kicker" id="appIdK"></span>
+      <h2 id="statusTitle" data-i18n="status_title">You're in.</h2>
+      <p id="statusLead" data-i18n="status_waiting">Your navigator is reviewing your plan. Decisions take 10 business days or less.</p>
+    </div>
+    <div id="statusOut" aria-live="polite"></div>
+    <div class="row" style="margin-top:18px"><button type="button" class="btn btn-ghost btn-sm" id="startOver" data-i18n="start_over">Start over</button></div>
+  </section>
+</main>
+
+<div class="sticky-cta hidden" id="cta"><div class="inner"><button type="button" class="btn btn-primary btn-block" id="ctaBtn"></button></div></div>
+<footer class="foot">Homebase Tech · working name · San Francisco pilot design · <a href="/navigator">Navigator</a> · <a href="/impact">Impact</a></footer>
+
+<script src="/static/common.js"></script>
+<script>
+(function () {
+  "use strict";
+  const { api, esc, money, errorHTML, payBar, payLegend, PAYER, TIER_LABEL, STATUS_LABEL } = HB;
+  document.getElementById("brandIcon").innerHTML = HB.BRAND_SVG;
+
+  /* ---------- i18n (UI chrome only) ---------- */
+  const T = {
+    en: {
+      tagline: 'Your next career starts at <em>home</em>.',
+      join_sub: "Free tech training for residents of participating buildings. We cover what free programs don't: child care, transit, a laptop, exam fees. Paid straight to providers, so your rent stays the same.",
+      code_label: "Your building code", find_building: "Find your building", optional: "(optional)", mi_home: "mi from home", code_hint: "It's in the text message from your building.", get_started: "Get started",
+      band_title: "Who pays, in order", pay_free: "Free program", pay_public: "Public aid", pay_grant: "Homebase grant", pay_resident: "You pay",
+      band_1: "Per Scholas, TechSF, City College", band_2: "WIOA training accounts", band_3: "Only what's left, paid to providers",
+      step_plan_k: "Step 2 · 5 minutes", plan_title: "Tell us in your own words.", plan_sub: "Any language. What you do now, what you'd like to do, and when you can study.",
+      try_one: "Or try one:", build_plan: "Build my plan", understood: "Mistral understood you", find_programs: "Show my options",
+      step_match_k: "Step 3 · Your options", match_title: "Free options first.", match_sub: "Ranked for your schedule. Each bar shows who pays.",
+      best_fit: "Best fit", you_pay: "You pay", see_plan: "See my plan →", back: "Back", for_you: "for you",
+      apply: "Apply in one tap", shield_title: "Benefits Shield", shield_ok: "Your rent stays the same", shield_review: "A navigator will double-check your rent",
+      ai_label: "Draft from Mistral · reviewed by your navigator", how_paid: "How it's paid", milestones: "Tuition is paid in three steps", upfront: "Paid to vendors when you start",
+      ms_enroll: "Enrollment", ms_complete: "Completion", ms_place: "Job or raise",
+      status_title: "You're in.", status_waiting: "Your navigator is reviewing your plan. Decisions take 10 business days or less.",
+      status_approved: "Approved. Your grant pays providers directly. Nothing for you to pay.", start_over: "Start over",
+      j_join: "Join", j_plan: "Plan", j_match: "Match", j_apply: "Apply", j_fund: "Fund", j_complete: "Complete", j_advance: "Advance",
+      reading: "Mistral is reading your story…", searching: "Searching San Francisco programs…", planning: "Building your plan…", listening: "Listening… tap again to stop",
+      k_goal: "Goal", k_sched: "When you can study", k_child: "Child care", k_comp: "Computer", k_exp: "Experience", k_lang: "Language", k_work: "Work now",
+      yes: "Yes", no: "No", needed: "Needed", not_needed: "Not needed", has_one: "Has one", needs_one: "Needs one"
+    },
+    es: {
+      tagline: 'Tu próxima carrera empieza en <em>casa</em>.',
+      join_sub: "Capacitación tecnológica gratuita para residentes de edificios participantes. Cubrimos lo que los programas gratuitos no cubren: cuidado infantil, transporte, una laptop y exámenes. Pagamos directo a los proveedores, así tu renta no cambia.",
+      code_label: "Código de tu edificio", find_building: "Busca tu edificio", optional: "(opcional)", mi_home: "mi de tu casa", code_hint: "Está en el mensaje de texto de tu edificio.", get_started: "Empezar",
+      band_title: "Quién paga, en orden", pay_free: "Programa gratuito", pay_public: "Ayuda pública", pay_grant: "Beca Homebase", pay_resident: "Tú pagas",
+      band_1: "Per Scholas, TechSF, City College", band_2: "Cuentas de capacitación WIOA", band_3: "Solo lo que falta, pagado a proveedores",
+      step_plan_k: "Paso 2 · 5 minutos", plan_title: "Cuéntanos con tus palabras.", plan_sub: "En cualquier idioma. Qué haces ahora, qué te gustaría hacer y cuándo puedes estudiar.",
+      try_one: "O prueba uno:", build_plan: "Crear mi plan", understood: "Mistral te entendió", find_programs: "Ver mis opciones",
+      step_match_k: "Paso 3 · Tus opciones", match_title: "Primero lo gratuito.", match_sub: "Ordenado según tu horario. Cada barra muestra quién paga.",
+      best_fit: "Mejor opción", you_pay: "Tú pagas", see_plan: "Ver mi plan →", back: "Atrás", for_you: "para ti",
+      apply: "Solicitar con un toque", shield_title: "Escudo de beneficios", shield_ok: "Tu renta no cambia", shield_review: "Un navegador revisará tu renta",
+      ai_label: "Borrador de Mistral · revisado por tu navegador", how_paid: "Cómo se paga", milestones: "La matrícula se paga en tres pasos", upfront: "Pagado a proveedores al empezar",
+      ms_enroll: "Inscripción", ms_complete: "Graduación", ms_place: "Empleo o aumento",
+      status_title: "¡Ya estás dentro!", status_waiting: "Tu navegador está revisando tu plan. La decisión toma 10 días hábiles o menos.",
+      status_approved: "Aprobado. Tu beca paga directo a los proveedores. No tienes que pagar nada.", start_over: "Empezar de nuevo",
+      j_join: "Unirse", j_plan: "Plan", j_match: "Opciones", j_apply: "Solicitar", j_fund: "Fondos", j_complete: "Completar", j_advance: "Avanzar",
+      reading: "Mistral está leyendo tu historia…", searching: "Buscando programas en San Francisco…", planning: "Creando tu plan…", listening: "Escuchando… toca otra vez para parar",
+      k_goal: "Meta", k_sched: "Cuándo puedes estudiar", k_child: "Cuidado infantil", k_comp: "Computadora", k_exp: "Experiencia", k_lang: "Idioma", k_work: "Trabajo actual",
+      yes: "Sí", no: "No", needed: "Lo necesita", not_needed: "No lo necesita", has_one: "Tiene", needs_one: "Necesita una"
+    },
+    zh: {
+      tagline: '你的下一份事業，從<em>家</em>開始。',
+      join_sub: "為參與計劃大樓的住戶提供免費科技培訓。我們支付免費課程不包的費用：托兒、交通、手提電腦和考試費。直接付款給服務機構，你的租金不會改變。",
+      code_label: "你的大樓代碼", find_building: "搜尋你的大樓", optional: "（可選）", mi_home: "英里（離家）", code_hint: "代碼在大樓發給你的短訊裡。", get_started: "開始",
+      band_title: "付款次序", pay_free: "免費課程", pay_public: "公共資助", pay_grant: "Homebase 補助", pay_resident: "你需付",
+      band_1: "Per Scholas、TechSF、城市學院", band_2: "WIOA 培訓帳戶", band_3: "只補餘額，直接付給機構",
+      step_plan_k: "第 2 步 · 5 分鐘", plan_title: "用你自己的話告訴我們。", plan_sub: "任何語言都可以。你現在做甚麼、想做甚麼、甚麼時候可以上課。",
+      try_one: "或試試這些：", build_plan: "建立我的計劃", understood: "Mistral 明白你了", find_programs: "查看我的選擇",
+      step_match_k: "第 3 步 · 你的選擇", match_title: "免費課程優先。", match_sub: "按你的時間排序。每條長條顯示由誰付款。",
+      best_fit: "最適合", you_pay: "你需付", see_plan: "查看我的計劃 →", back: "返回", for_you: "由你支付",
+      apply: "一按申請", shield_title: "福利保護", shield_ok: "你的租金不變", shield_review: "導師會再核對你的租金",
+      ai_label: "Mistral 草稿 · 由你的導師審核", how_paid: "付款方式", milestones: "學費分三次支付", upfront: "開課時直接付給供應商",
+      ms_enroll: "入學", ms_complete: "完成課程", ms_place: "就業或加薪",
+      status_title: "申請已送出。", status_waiting: "你的導師正在審核你的計劃，10 個工作天內會有決定。",
+      status_approved: "已批准。補助直接付給機構，你不用付任何費用。", start_over: "重新開始",
+      j_join: "加入", j_plan: "計劃", j_match: "配對", j_apply: "申請", j_fund: "資助", j_complete: "完成", j_advance: "前進",
+      reading: "Mistral 正在閱讀…", searching: "正在搜尋三藩市的課程…", planning: "正在建立你的計劃…", listening: "正在聆聽…再按一次停止",
+      k_goal: "目標", k_sched: "上課時間", k_child: "托兒", k_comp: "電腦", k_exp: "經驗", k_lang: "語言", k_work: "現職",
+      yes: "是", no: "否", needed: "需要", not_needed: "不需要", has_one: "有", needs_one: "需要一部"
+    },
+    fil: {
+      tagline: 'Ang susunod mong karera ay nagsisimula sa <em>bahay</em>.',
+      join_sub: "Libreng tech training para sa mga residente ng kalahok na gusali. Sinasagot namin ang hindi sakop ng libreng programa: child care, pamasahe, laptop at exam fee. Diretsong bayad sa provider, kaya hindi magbabago ang upa mo.",
+      code_label: "Code ng gusali mo", find_building: "Hanapin ang gusali mo", optional: "(opsyonal)", mi_home: "mi mula sa bahay", code_hint: "Nasa text message mula sa gusali mo.", get_started: "Magsimula",
+      band_title: "Sino ang nagbabayad, ayon sa pagkakasunod", pay_free: "Libreng programa", pay_public: "Pampublikong tulong", pay_grant: "Homebase grant", pay_resident: "Babayaran mo",
+      band_1: "Per Scholas, TechSF, City College", band_2: "WIOA training account", band_3: "Ang natitira lang, bayad sa provider",
+      step_plan_k: "Hakbang 2 · 5 minuto", plan_title: "Sabihin mo sa sarili mong salita.", plan_sub: "Kahit anong wika. Ano ang trabaho mo ngayon, ano ang gusto mo, at kailan ka puwedeng mag-aral.",
+      try_one: "O subukan ang isa:", build_plan: "Gawin ang plano ko", understood: "Naintindihan ka ng Mistral", find_programs: "Ipakita ang mga opsyon",
+      step_match_k: "Hakbang 3 · Mga opsyon", match_title: "Libre muna.", match_sub: "Ayon sa iskedyul mo. Ipinapakita ng bawat bar kung sino ang nagbabayad.",
+      best_fit: "Pinakaangkop", you_pay: "Babayaran mo", see_plan: "Tingnan ang plano →", back: "Bumalik", for_you: "para sa iyo",
+      apply: "Mag-apply sa isang tap", shield_title: "Benefits Shield", shield_ok: "Hindi magbabago ang upa mo", shield_review: "Susuriin ng navigator ang upa mo",
+      ai_label: "Draft ng Mistral · sinuri ng navigator mo", how_paid: "Paano binabayaran", milestones: "Tatlong hakbang ang bayad sa tuition", upfront: "Bayad sa vendor pagsisimula mo",
+      ms_enroll: "Pag-enroll", ms_complete: "Pagtatapos", ms_place: "Trabaho o taas-sahod",
+      status_title: "Pasok ka na.", status_waiting: "Sinusuri ng navigator ang plano mo. 10 araw ng trabaho o mas maikli ang desisyon.",
+      status_approved: "Aprubado. Diretsong binabayaran ng grant ang provider. Wala kang babayaran.", start_over: "Magsimula ulit",
+      j_join: "Sumali", j_plan: "Plano", j_match: "Tugma", j_apply: "Apply", j_fund: "Pondo", j_complete: "Tapusin", j_advance: "Umusad",
+      reading: "Binabasa ng Mistral…", searching: "Naghahanap ng programa sa San Francisco…", planning: "Ginagawa ang plano mo…", listening: "Nakikinig… i-tap ulit para huminto",
+      k_goal: "Layunin", k_sched: "Oras ng pag-aaral", k_child: "Child care", k_comp: "Computer", k_exp: "Karanasan", k_lang: "Wika", k_work: "Trabaho ngayon",
+      yes: "Oo", no: "Hindi", needed: "Kailangan", not_needed: "Hindi kailangan", has_one: "Mayroon", needs_one: "Kailangan"
+    },
+    vi: {
+      tagline: 'Sự nghiệp mới của bạn bắt đầu từ <em>nhà</em>.',
+      join_sub: "Đào tạo công nghệ miễn phí cho cư dân các tòa nhà tham gia. Chúng tôi chi trả những gì chương trình miễn phí không có: giữ trẻ, đi lại, máy tính xách tay, lệ phí thi. Trả thẳng cho nhà cung cấp, nên tiền thuê nhà của bạn không đổi.",
+      code_label: "Mã tòa nhà của bạn", find_building: "Tìm tòa nhà của bạn", optional: "(không bắt buộc)", mi_home: "dặm từ nhà", code_hint: "Mã có trong tin nhắn từ tòa nhà.", get_started: "Bắt đầu",
+      band_title: "Ai trả, theo thứ tự", pay_free: "Chương trình miễn phí", pay_public: "Hỗ trợ công", pay_grant: "Trợ cấp Homebase", pay_resident: "Bạn trả",
+      band_1: "Per Scholas, TechSF, City College", band_2: "Tài khoản đào tạo WIOA", band_3: "Chỉ phần còn lại, trả cho nhà cung cấp",
+      step_plan_k: "Bước 2 · 5 phút", plan_title: "Hãy kể bằng lời của bạn.", plan_sub: "Bất kỳ ngôn ngữ nào. Bạn đang làm gì, muốn làm gì và khi nào có thể học.",
+      try_one: "Hoặc thử một câu:", build_plan: "Lập kế hoạch", understood: "Mistral đã hiểu bạn", find_programs: "Xem lựa chọn",
+      step_match_k: "Bước 3 · Lựa chọn", match_title: "Ưu tiên miễn phí.", match_sub: "Xếp theo lịch của bạn. Mỗi thanh cho thấy ai trả.",
+      best_fit: "Phù hợp nhất", you_pay: "Bạn trả", see_plan: "Xem kế hoạch →", back: "Quay lại", for_you: "cho bạn",
+      apply: "Nộp đơn một chạm", shield_title: "Lá chắn phúc lợi", shield_ok: "Tiền thuê nhà không đổi", shield_review: "Người hướng dẫn sẽ kiểm tra lại tiền thuê",
+      ai_label: "Bản nháp của Mistral · người hướng dẫn xem xét", how_paid: "Cách chi trả", milestones: "Học phí trả theo ba mốc", upfront: "Trả cho nhà cung cấp khi bắt đầu",
+      ms_enroll: "Nhập học", ms_complete: "Hoàn thành", ms_place: "Có việc hoặc tăng lương",
+      status_title: "Bạn đã đăng ký.", status_waiting: "Người hướng dẫn đang xem kế hoạch. Quyết định trong 10 ngày làm việc hoặc sớm hơn.",
+      status_approved: "Đã duyệt. Trợ cấp trả thẳng cho nhà cung cấp. Bạn không phải trả gì.", start_over: "Làm lại",
+      j_join: "Tham gia", j_plan: "Kế hoạch", j_match: "Ghép", j_apply: "Nộp đơn", j_fund: "Tài trợ", j_complete: "Hoàn thành", j_advance: "Tiến lên",
+      reading: "Mistral đang đọc…", searching: "Đang tìm chương trình ở San Francisco…", planning: "Đang lập kế hoạch…", listening: "Đang nghe… chạm lần nữa để dừng",
+      k_goal: "Mục tiêu", k_sched: "Thời gian học", k_child: "Giữ trẻ", k_comp: "Máy tính", k_exp: "Kinh nghiệm", k_lang: "Ngôn ngữ", k_work: "Công việc hiện tại",
+      yes: "Có", no: "Không", needed: "Cần", not_needed: "Không cần", has_one: "Đã có", needs_one: "Cần một máy"
+    }
+  };
+  const LANG_NAMES = { en: "English", es: "Español", zh: "繁體中文", fil: "Filipino", vi: "Tiếng Việt" };
+  const SPEECH_LANG = { en: "en-US", es: "es-US", zh: "zh-TW", fil: "fil-PH", vi: "vi-VN" };
+  let lang = "en";
+  const t = k => (T[lang] && T[lang][k]) || T.en[k] || k;
+  function normLang(l) {
+    l = String(l || "").toLowerCase();
+    if (l.startsWith("zh") || l.includes("chinese") || l.includes("cant")) return "zh";
+    if (l.startsWith("es") || l.includes("span")) return "es";
+    if (l.startsWith("fil") || l.startsWith("tl") || l.includes("tagalog") || l.includes("filip")) return "fil";
+    if (l.startsWith("vi") || l.includes("viet")) return "vi";
+    if (l.startsWith("en")) return "en";
+    return null;
+  }
+  function applyLang(l) {
+    lang = T[l] ? l : "en";
+    document.documentElement.lang = { zh: "zh-Hant", fil: "fil" }[lang] || lang;
+    document.getElementById("lang").value = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+      const v = t(el.getAttribute("data-i18n"));
+      if (/<em>/.test(v)) el.innerHTML = v; else el.textContent = v;
+    });
+    renderPath();
+    renderCTA();
+    if (state.screen === "status" && state.app) renderStatus(state.app);
+    try { localStorage.setItem("hb.lang", lang); } catch (e) {}
+  }
+  document.getElementById("lang").addEventListener("change", e => applyLang(e.target.value));
+
+  /* ---------- state ---------- */
+  const state = { screen: "join", building: null, property: null, profile: null, programs: null, program: null, detail: null, app: null, prevStatus: null };
+  const STEP_OF = { join: 0, plan: 1, match: 2, detail: 3 };
+  function statusStep(s) {
+    if (!s) return 4;
+    if (s === "approved" || s === "enrolled") return 5;
+    if (s === "completed") return 6;
+    if (s === "placed") return 7;
+    return 4;
+  }
+  function currentStep() { return state.screen === "status" ? statusStep(state.app && state.app.status) : STEP_OF[state.screen]; }
+
+  function go(screen) {
+    state.screen = screen;
+    document.querySelectorAll(".screen").forEach(s => s.classList.toggle("active", s.id === "s-" + screen));
+    renderPath();
+    renderCTA();
+    window.scrollTo({ top: 0, behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
+
+  /* ---------- lesson path progress ---------- */
+  const JKEYS = ["j_join", "j_plan", "j_match", "j_apply", "j_fund", "j_complete", "j_advance"];
+  function renderPath() {
+    const cur = currentStep();
+    const W = 720, n = 7, x0 = 52, dx = (W - 2 * x0) / (n - 1);
+    const pts = JKEYS.map((_, i) => [x0 + i * dx, i % 2 ? 66 : 38]);
+    let segs = "";
+    for (let i = 0; i < n - 1; i++) {
+      const [ax, ay] = pts[i], [bx, by] = pts[i + 1], mx = (ax + bx) / 2;
+      const done = i < cur;
+      segs += '<path d="M' + ax + ' ' + ay + ' C ' + mx + ' ' + ay + ', ' + mx + ' ' + by + ', ' + bx + ' ' + by + '" fill="none" stroke="' + (done ? "#1fb24e" : "#d9d1bf") + '" stroke-width="' + (done ? 7 : 5) + '" stroke-linecap="round"' + (done ? "" : ' stroke-dasharray="1 12"') + '/>';
+    }
+    let nodes = "";
+    pts.forEach(([x, y], i) => {
+      const done = i < cur, isCur = i === cur;
+      if (done) {
+        nodes += '<circle cx="' + x + '" cy="' + y + '" r="19" fill="#1fb24e" stroke="#0e7a33" stroke-width="3"/><path d="M' + (x - 8) + ' ' + y + ' l5.5 6 l10 -11" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>';
+      } else if (isCur) {
+        nodes += '<circle class="pulse" cx="' + x + '" cy="' + y + '" r="21" fill="#ffc933"/><circle cx="' + x + '" cy="' + y + '" r="21" fill="#ffc933" stroke="#15182c" stroke-width="3"/><path d="M' + (x + 2) + ' ' + (y - 13) + ' L' + (x - 7) + ' ' + (y + 2) + ' H' + (x - 1) + ' L' + (x - 3) + ' ' + (y + 13) + ' L' + (x + 8) + ' ' + (y - 3) + ' H' + (x + 1) + 'Z" fill="#15182c"/>';
+      } else {
+        nodes += '<circle cx="' + x + '" cy="' + y + '" r="17" fill="#fff" stroke="#d9d1bf" stroke-width="3"/><text x="' + x + '" y="' + (y + 6) + '" text-anchor="middle" style="font-size:16px">' + (i + 1) + '</text>';
+      }
+      nodes += '<text x="' + x + '" y="112" text-anchor="middle" class="' + (isCur ? "cur" : "") + '">' + esc(t(JKEYS[i])) + '</text>';
+    });
+    document.getElementById("pathbar").innerHTML = '<svg viewBox="0 0 ' + W + ' 122" role="img" aria-label="Step ' + Math.min(cur + 1, 7) + ' of 7: ' + esc(t(JKEYS[Math.min(cur, 6)])) + '">' + segs + nodes + '</svg>';
+  }
+
+  /* ---------- sticky CTA ---------- */
+  let ctaAction = null;
+  function renderCTA() {
+    const wrap = document.getElementById("cta"), btn = document.getElementById("ctaBtn");
+    let label = null; ctaAction = null; btn.disabled = false;
+    if (state.screen === "plan") {
+      if (state.profile) { label = t("find_programs") + " →"; ctaAction = doMatch; }
+      else { label = t("build_plan"); ctaAction = doIntake; btn.disabled = !document.getElementById("story").value.trim() || busy; }
+    } else if (state.screen === "detail" && state.detail) { label = t("apply"); ctaAction = doApply; btn.disabled = busy; }
+    wrap.classList.toggle("hidden", !label);
+    if (label) btn.textContent = label;
+  }
+  document.getElementById("ctaBtn").addEventListener("click", () => ctaAction && ctaAction());
+  let busy = false;
+  function setBusy(b) { busy = b; renderCTA(); }
+
+  function thinking(msg) { return '<div class="thinking"><span class="dots"><i></i><i></i><i></i></span><span>' + esc(msg) + '</span></div>'; }
+
+  /* ---------- 1. JOIN ---------- */
+  api("/api/properties").then(list => {
+    const chips = document.getElementById("codeChips");
+    (list || []).slice(0, 3).forEach(p => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "chip";
+      b.innerHTML = '<span class="badge badge-ink">DEMO</span> ' + esc(p.code);
+      b.title = p.name;
+      b.addEventListener("click", () => { document.getElementById("code").value = p.code; document.getElementById("joinForm").requestSubmit(); });
+      chips.appendChild(b);
+    });
+  }).catch(() => {});
+
+
+  /* building typeahead (DataSF affordable housing, via Elasticsearch) */
+  (function () {
+    const input = document.getElementById("bq"), list = document.getElementById("bList"), picked = document.getElementById("bPicked");
+    let timer = null, seq = 0, items = [], active = -1;
+    function close() { list.classList.add("hidden"); input.setAttribute("aria-expanded", "false"); active = -1; }
+    function show(html) { list.innerHTML = html; list.classList.remove("hidden"); input.setAttribute("aria-expanded", "true"); }
+    function renderPicked() {
+      const b = state.building;
+      picked.innerHTML = b ? '<div class="picked"><span aria-hidden="true">📍</span><div><div style="font-weight:700">' + esc(b.name) + '</div><div class="small muted">' + esc([b.address, b.neighborhood].filter(Boolean).join(" · ")) + (b.affordable_units ? ' · ' + esc(b.affordable_units) + ' affordable homes' : '') + '</div></div><button type="button" class="x" aria-label="Clear building">×</button></div>' : "";
+      const x = picked.querySelector(".x"); if (x) x.addEventListener("click", () => { state.building = null; renderPicked(); input.focus(); });
+    }
+    function pick(i) { state.building = items[i]; input.value = ""; close(); renderPicked(); }
+    input.addEventListener("input", () => {
+      clearTimeout(timer);
+      const q = input.value.trim();
+      if (q.length < 2) { close(); return; }
+      timer = setTimeout(async () => {
+        const my = ++seq;
+        try {
+          const r = await api("/api/buildings?q=" + encodeURIComponent(q));
+          if (my !== seq) return;
+          items = (r && r.buildings) || []; active = -1;
+          if (!items.length) { show('<li class="small muted" style="padding:10px 12px">No match in the DataSF portfolio.</li>'); return; }
+          show(items.slice(0, 8).map((b, i) => '<li role="option" id="bo' + i + '"><button type="button" tabindex="-1" data-i="' + i + '"><span class="bn">' + esc(b.name) + '</span><span class="ba">' + esc([b.address, b.neighborhood, b.affordable_units ? b.affordable_units + " affordable homes" : ""].filter(Boolean).join(" · ")) + '</span></button></li>').join(""));
+          list.querySelectorAll("button").forEach(btn => btn.addEventListener("mousedown", e => { e.preventDefault(); pick(+btn.dataset.i); }));
+        } catch (err) {
+          if (my === seq) show('<li style="padding:6px">' + errorHTML(err, "Building search failed") + '</li>');
+        }
+      }, 200);
+    });
+    input.addEventListener("keydown", e => {
+      const btns = list.querySelectorAll("button");
+      if (list.classList.contains("hidden") || !btns.length) return;
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        e.preventDefault();
+        active = (active + (e.key === "ArrowDown" ? 1 : -1) + btns.length) % btns.length;
+        btns.forEach((b, i) => b.classList.toggle("on", i === active));
+        input.setAttribute("aria-activedescendant", "bo" + active);
+      } else if (e.key === "Enter" && active >= 0) { e.preventDefault(); pick(active); }
+      else if (e.key === "Escape") close();
+    });
+    input.addEventListener("keydown", e => { if (e.key === "Enter") e.preventDefault(); });
+    input.addEventListener("blur", () => setTimeout(close, 150));
+    window.__hbRenderPicked = renderPicked;
+  })();
+
+  document.getElementById("joinForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const code = document.getElementById("code").value.trim().toUpperCase();
+    const out = document.getElementById("joinMsg");
+    if (!code) { out.innerHTML = '<p class="small" style="color:var(--red)">Enter the code from your building\'s text message.</p>'; return; }
+    out.innerHTML = thinking("…");
+    try {
+      const r = await api("/api/join", { body: { property_code: code } });
+      state.property = r.property;
+      out.innerHTML = "";
+      document.getElementById("welcome").innerHTML = '<div class="welcome"><svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="13" fill="#1fb24e"/><path d="M8 14l4 4 8-9" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>' + esc(r.property.name) + (r.property.neighborhood ? ' · ' + esc(r.property.neighborhood) : '') + '</span></div>';
+      go("plan");
+      setTimeout(() => document.getElementById("story").focus({ preventScroll: true }), 350);
+    } catch (err) {
+      out.innerHTML = err.status === 404
+        ? '<div class="error-card" role="alert"><strong>We don\'t recognize that code.</strong><span class="small">Check the text from your building, or ask your service coordinator.</span></div>'
+        : errorHTML(err, "Couldn't confirm your building");
+    }
+  });
+
+  /* ---------- 2. PLAN (intake) ---------- */
+  const story = document.getElementById("story");
+  story.addEventListener("input", () => { if (state.profile) { state.profile = null; document.getElementById("intakeOut").innerHTML = ""; } renderCTA(); });
+  document.querySelectorAll("#examples .chip").forEach(c => c.addEventListener("click", () => {
+    story.value = c.querySelector("span:last-child").textContent;
+    state.profile = null; document.getElementById("intakeOut").innerHTML = "";
+    renderCTA(); doIntake();
+  }));
+
+  // Voice (Web Speech API, where the browser supports it)
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (SR) {
+    const mic = document.getElementById("mic"), hint = document.getElementById("micHint");
+    mic.classList.remove("hidden");
+    let rec = null, base = "";
+    mic.addEventListener("click", () => {
+      if (rec) { rec.stop(); return; }
+      rec = new SR(); rec.lang = SPEECH_LANG[lang] || "en-US"; rec.interimResults = true; rec.continuous = true;
+      base = story.value ? story.value.replace(/\s*$/, " ") : "";
+      rec.onresult = ev => { let s = ""; for (let i = 0; i < ev.results.length; i++) s += ev.results[i][0].transcript; story.value = base + s; story.dispatchEvent(new Event("input")); };
+      rec.onend = () => { rec = null; mic.classList.remove("listening"); hint.textContent = ""; };
+      rec.onerror = ev => { hint.textContent = ev.error === "not-allowed" ? "Microphone blocked. You can type instead." : ""; };
+      mic.classList.add("listening"); hint.textContent = t("listening");
+      try { rec.start(); } catch (e) { rec = null; mic.classList.remove("listening"); }
+    });
+  }
+
+  function yn(v, a, b) { return v === true ? a : v === false ? b : "—"; }
+  async function doIntake() {
+    const text = story.value.trim();
+    if (!text || busy) return;
+    const out = document.getElementById("intakeOut");
+    out.innerHTML = thinking(t("reading"));
+    setBusy(true);
+    try {
+      const r = await api("/api/intake", { body: { text, language: lang } });
+      state.profile = r.profile;
+      const p = r.profile || {};
+      const nl = normLang(p.language);
+      if (nl && nl !== lang) applyLang(nl);
+      const sched = [p.availability, p.hours_per_week_available ? p.hours_per_week_available + " h/wk" : null].filter(Boolean).join(" · ");
+      const child = p.needs_childcare ? (t("needed") + (p.children ? " · " + p.children : "")) : (p.needs_childcare === false ? t("not_needed") : "—");
+      const cards = [
+        ["c1 wide", t("k_goal"), p.goal || (p.career_tracks || []).join(", ")],
+        ["c2", t("k_sched"), sched || "—"],
+        ["c3", t("k_child"), child],
+        ["c4", t("k_comp"), yn(p.has_computer, t("has_one"), t("needs_one"))],
+        ["c5", t("k_work"), p.current_work || "—"],
+        ["", t("k_lang"), LANG_NAMES[nl] || p.language || "—"],
+        ["", t("k_exp"), p.experience || "—"]
+      ];
+      out.innerHTML = '<div class="understood"><div class="understood-head"><span class="bolt"><svg width="18" height="22" viewBox="0 0 18 22" aria-hidden="true"><path d="M11 0 1 13h6l-2 9 11-14h-6z" fill="#15182c"/></svg></span><h3>' + esc(t("understood")) + '</h3><span class="spacer"></span><span class="badge badge-ai">Mistral · ' + (r.ms != null ? (r.ms / 1000).toFixed(1) + " s" : "") + '</span></div>' +
+        (p.summary ? '<p class="small muted" style="margin-top:8px">' + esc(p.summary) + '</p>' : '') +
+        '<div class="pgrid">' + cards.map(c => '<div class="pcard ' + c[0] + '"><div class="k">' + esc(c[1]) + '</div><div class="v">' + esc(c[2]) + '</div></div>').join("") + '</div></div>';
+      const card = out.querySelector(".understood");
+      if (card) card.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
+    } catch (err) {
+      state.profile = null;
+      out.innerHTML = errorHTML(err, "Couldn't read your story");
+    } finally { setBusy(false); }
+  }
+
+  /* ---------- 3. MATCH ---------- */
+  const SCHED = { "full-time-day": "Full-time · days", "part-time-day": "Part-time · days", "part-time-evening": "Evenings", "self-paced": "Self-paced" };
+  const LEVEL = { basics: ["Digital basics", "badge-yellow"], entry: ["Entry level", "badge-blue"], career: ["Career program", "badge-purple"] };
+  async function doMatch() {
+    if (!state.profile || busy) return;
+    go("match");
+    const out = document.getElementById("matchOut");
+    out.innerHTML = thinking(t("searching")) + '<div class="skeleton"></div><div class="skeleton"></div>';
+    setBusy(true);
+    try {
+      const r = await api("/api/match", { body: { profile: state.profile, property_code: state.property && state.property.code, building_id: state.building && state.building.id } });
+      state.programs = r.programs || [];
+      if (!state.programs.length) { out.innerHTML = '<div class="card-flat">No programs matched. A navigator will reach out to plan with you.</div>'; return; }
+      const proof = '<div class="search-proof"><span class="badge badge-blue">Elasticsearch</span><span>' + state.programs.length + ' matches · semantic search' + (r.ms != null ? ' · ' + r.ms + ' ms' : '') + '</span>' + (r.query ? '<code>' + esc(r.query) + '</code>' : '') + '</div>';
+      out.innerHTML = proof + state.programs.map((p, i) => programCard(p, i)).join("");
+      out.querySelectorAll(".prog").forEach(el => el.addEventListener("click", () => openPlan(el.dataset.id)));
+    } catch (err) {
+      out.innerHTML = errorHTML(err, "Couldn't search programs");
+    } finally { setBusy(false); }
+  }
+  function distBadge(p) {
+    if (p.distance_km == null || isNaN(Number(p.distance_km))) return '';
+    const mi = Number(p.distance_km) * 0.621371;
+    return '<span class="badge badge-blue">📍 ' + (mi < 10 ? mi.toFixed(1) : Math.round(mi)) + ' ' + esc(t("mi_home")) + '</span>';
+  }
+  function programCard(p, i) {
+    const w = p.waterfall || {}, tot = w.totals || {};
+    const lv = LEVEL[p.level] || [p.level || "Program", "badge-ink"];
+    const resident = Number(tot.resident) || 0;
+    const facts = [
+      p.tuition_usd === 0 || p.free_to_resident ? '<span class="badge badge-green">Free tuition</span>' : '<span class="badge badge-orange">Tuition ' + money(p.tuition_usd) + '</span>',
+      '<span class="badge">' + esc(SCHED[p.schedule] || p.schedule || "") + '</span>',
+      p.hours_per_week ? '<span class="badge">' + esc(p.hours_per_week) + ' h/wk' + (p.weeks ? ' × ' + esc(p.weeks) + ' wks' : '') + '</span>' : '',
+      p.format ? '<span class="badge">' + esc(p.format) + '</span>' : '',
+      p.neighborhood ? '<span class="badge">' + esc(p.neighborhood) + '</span>' : '',
+      distBadge(p),
+      p.stipend ? '<span class="badge badge-yellow" title="Stipends may count as income">Stipend: check rent</span>' : '',
+      p.illustrative ? '<span class="badge badge-red">Illustrative</span>' : ''
+    ].join("");
+    return '<button type="button" class="prog' + (i === 0 ? " best" : "") + '" data-id="' + esc(p.id) + '">' +
+      (i === 0 ? '<span class="ribbon">⚡ ' + esc(t("best_fit")) + '</span>' : '') +
+      '<div class="row"><span class="badge ' + lv[1] + '">' + esc(lv[0]) + '</span>' + (p.fit ? '<span class="badge badge-ink">' + esc(p.fit) + '</span>' : '') + (w.tier ? '<span class="badge badge-purple">' + esc(TIER_LABEL[w.tier] || w.tier) + '</span>' : '') + '</div>' +
+      '<h3>' + esc(p.name) + '</h3><div class="provider">' + esc(p.provider) + '</div>' +
+      '<div class="facts">' + facts + '</div>' +
+      (p._why ? '<div class="why">' + esc(p._why) + '</div>' : '') +
+      payBar(tot) + payLegend(tot, { free_program: t("pay_free"), public_aid: t("pay_public"), grant: t("pay_grant"), resident: t("pay_resident") }) +
+      '<div class="youpay"><span><span class="small muted" style="font-weight:700">' + esc(t("you_pay")) + '</span> <span class="big' + (resident > 0 ? " nonzero" : "") + '">' + money(resident) + '</span></span><span class="go">' + esc(t("see_plan")) + '</span></div></button>';
+  }
+
+  /* ---------- 4. DETAIL ---------- */
+  document.getElementById("backToMatch").addEventListener("click", () => { state.detail = null; go("match"); });
+  async function openPlan(pid) {
+    if (busy) return;
+    state.detail = null;
+    go("detail");
+    const out = document.getElementById("detailOut");
+    out.innerHTML = thinking(t("planning")) + '<div class="skeleton" style="min-height:220px"></div>';
+    setBusy(true);
+    try {
+      const r = await api("/api/plan", { body: { profile: state.profile, program_id: pid, property_code: state.property && state.property.code, building_id: state.building && state.building.id } });
+      state.detail = r;
+      out.innerHTML = renderDetail(r);
+    } catch (err) {
+      out.innerHTML = errorHTML(err, "Couldn't build your plan");
+    } finally { setBusy(false); }
+  }
+  function ring(pct, color) {
+    const r = 22, c = 2 * Math.PI * r, v = Math.max(0, Math.min(100, pct)) / 100 * c;
+    return '<svg class="ring" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="' + r + '" fill="none" stroke="#e7e0d0" stroke-width="7"/><circle cx="28" cy="28" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="7" stroke-linecap="round" stroke-dasharray="' + v + ' ' + c + '" transform="rotate(-90 28 28)"/><text x="28" y="33" text-anchor="middle" font-family="DM Sans" font-weight="800" font-size="14" fill="#15182c">' + pct + '%</text></svg>';
+  }
+  function renderDetail(r) {
+    const w = r.waterfall || {}, tot = w.totals || {}, p = r.program || {}, b = r.benefits || {}, plan = r.plan || {};
+    const resident = Number(tot.resident) || 0;
+    const value = ["free_program", "public_aid", "grant", "resident"].reduce((a, k) => a + (Number(tot[k]) || 0), 0);
+    const L = { free_program: t("pay_free"), public_aid: t("pay_public"), grant: t("pay_grant"), resident: t("pay_resident") };
+    let html = '';
+    // hero
+    html += '<div class="card-navy zero-hero">' +
+      '<svg class="spark" width="40" height="52" viewBox="0 0 40 52" style="top:14px;right:18px" aria-hidden="true"><path d="M24 0 4 30h12l-4 22 24-32H24z" fill="#ffc933"/></svg>' +
+      '<svg class="spark" width="80" height="80" viewBox="0 0 80 80" style="bottom:-20px;left:-20px" aria-hidden="true"><circle cx="40" cy="40" r="38" fill="none" stroke="#2c3670" stroke-width="3" stroke-dasharray="3 7"/></svg>' +
+      '<div class="kicker">' + esc(p.name || "") + '</div>' +
+      '<div class="num' + (resident === 0 ? " zero" : "") + '">' + money(resident) + '</div>' +
+      '<div class="foryou">' + esc(t("for_you")) + '</div>' +
+      '<div class="val">' + esc(money(value)) + ' total · ' + esc(p.provider || "") + '</div>' +
+      payBar(tot) + payLegend(tot, L) +
+      (w.tier ? '<div class="row" style="justify-content:center;margin-top:14px"><span class="badge badge-purple">' + esc(TIER_LABEL[w.tier] || w.tier) + ' grant · cap ' + money(w.tier_cap) + '</span>' + (w.within_cap === false ? '<span class="badge badge-orange">Over cap: navigator review</span>' : '<span class="badge badge-green">Within cap</span>') + '</div>' : '') +
+      '</div>';
+    // AI plan
+    if (plan && (plan.message || plan.headline)) {
+      html += '<div class="ai-card"><div class="row"><span class="badge badge-ai">✦ ' + esc(t("ai_label")) + '</span></div>' +
+        (plan.headline ? '<h3 style="margin-top:12px">' + esc(plan.headline) + '</h3>' : '') +
+        (plan.message ? '<div class="bubble">' + esc(plan.message) + '</div>' : '') +
+        (plan.steps && plan.steps.length ? '<ol>' + plan.steps.map(s => '<li>' + esc(s) + '</li>').join("") + '</ol>' : '') + '</div>';
+    }
+    // waterfall lines
+    html += '<div class="card"><div class="kicker">' + esc(t("how_paid")) + '</div>' +
+      (w.lines || []).map(l => {
+        const py = PAYER[l.payer] || { label: l.payer, badge: "" };
+        return '<div class="wline"><span class="item">' + esc(l.item) + '</span><span class="amt">' + money(l.amount) + '</span><div class="sub"><span class="badge ' + py.badge + '">' + esc(L[l.payer] || l.payer_label || py.label) + '</span>' +
+          (l.paid_to ? '<span>→ ' + esc(l.paid_to) + '</span>' : '') + (l.note ? '<span>· ' + esc(l.note) + '</span>' : '') + '</div></div>';
+      }).join("") + '</div>';
+    // milestones
+    if (w.payment_schedule && w.payment_schedule.length) {
+      const MS = { enrollment: t("ms_enroll"), completion: t("ms_complete"), placement: t("ms_place") };
+      const colors = ["#1fb24e", "#2f6bff", "#6d4dff"];
+      const sched = w.payment_schedule;
+      const tuition = sched.filter(m => Number(m.pct) < 100 || m.milestone !== "enrollment");
+      const upfront = sched.filter(m => !tuition.includes(m));
+      if (tuition.length) {
+        html += '<div class="card"><div class="kicker">' + esc(t("milestones")) + '</div><div class="milestones">' +
+          tuition.map((m, i) => '<div class="ms">' + ring(m.pct, colors[i % 3]) + '<b>' + esc(MS[m.milestone] || m.milestone) + '</b><span>' + money(m.amount) + (m.paid_to ? ' → ' + esc(m.paid_to) : '') + '</span></div>').join("") +
+          '</div></div>';
+      }
+      if (upfront.length) {
+        html += '<div class="card"><div class="kicker">' + esc(t("upfront")) + '</div>' +
+          upfront.map(m => '<div class="wline"><span class="item">' + esc(m.item || m.paid_to || "") + '</span><span class="amt">' + money(m.amount) + '</span><div class="sub"><span>→ ' + esc(m.paid_to || "") + '</span></div></div>').join("") + '</div>';
+      }
+    }
+    // benefits shield
+    const ok = b.status === "protected";
+    html += '<div class="shield' + (ok ? "" : " review") + '"><div class="shield-head">' +
+      '<svg width="44" height="50" viewBox="0 0 44 50" aria-hidden="true"><path d="M22 2 40 9v14c0 12-8 21-18 25C12 44 4 35 4 23V9z" fill="' + (ok ? "#1fb24e" : "#ffc933") + '" stroke="#15182c" stroke-width="3" stroke-linejoin="round"/>' +
+      (ok ? '<path d="M13 25l6 6 12-13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>' : '<path d="M22 14v14M22 35v.5" stroke="#15182c" stroke-width="4" stroke-linecap="round"/>') + '</svg>' +
+      '<div><div class="kicker">' + esc(t("shield_title")) + '</div><h3>' + esc(ok ? t("shield_ok") : t("shield_review")) + '</h3></div></div>' +
+      (b.summary ? '<p class="small" style="margin-top:10px">' + esc(b.summary) + '</p>' : '') +
+      '<ul>' + (b.items || []).map(it => '<li><span aria-hidden="true">' + (it.ok ? '✅' : '⚠️') + '</span><span><strong>' + esc(it.line) + ':</strong> ' + esc(it.treatment) + (it.cite ? '<span class="cite">' + esc(it.cite) + '</span>' : '') + '</span></li>').join("") + '</ul>' +
+      '<p class="disclaimer">Planning guidance, not legal advice. Your building\'s compliance team confirms before any award.</p></div>';
+    // program facts
+    html += '<div class="card-flat"><div class="kicker">Program</div><h3 style="margin-top:6px">' + esc(p.name) + '</h3><p class="muted small">' + esc(p.provider) + (p.neighborhood ? ' · ' + esc(p.neighborhood) : '') + '</p>' + (distBadge(p) ? '<div class="row" style="margin-top:6px">' + distBadge(p) + '</div>' : '') +
+      (p.description ? '<p style="margin-top:8px">' + esc(p.description) + '</p>' : '') +
+      (p.requirements && p.requirements.length ? '<p class="small muted" style="margin-top:8px"><strong>Provider requirements:</strong> ' + esc(p.requirements.join("; ")) + '</p>' : '') +
+      (p.verify_note ? '<p class="tiny muted" style="margin-top:6px">' + esc(p.verify_note) + '</p>' : '') +
+      (p.url ? '<p class="small" style="margin-top:8px"><a href="' + esc(p.url) + '" target="_blank" rel="noopener">Provider site ↗</a></p>' : '') + '</div>';
+    if (w.assumptions && w.assumptions.length) {
+      html += '<details class="assume"><summary>Planning assumptions</summary><ul>' + w.assumptions.map(a => '<li>' + esc(a) + '</li>').join("") + '</ul></details>';
+    }
+    return html;
+  }
+
+  /* ---------- 5. APPLY + STATUS ---------- */
+  async function doApply() {
+    if (!state.detail || busy) return;
+    setBusy(true);
+    const d = state.detail;
+    try {
+      const r = await api("/api/applications", { body: { profile: state.profile, program_id: d.program.id, property_code: state.property && state.property.code, building_id: state.building && state.building.id, waterfall: d.waterfall, benefits: d.benefits, plan: d.plan } });
+      state.app = r.application; state.prevStatus = r.application.status;
+      try { localStorage.setItem("hb.app", r.application.id); } catch (e) {}
+      go("status");
+      renderStatus(state.app);
+      startPolling();
+    } catch (err) {
+      document.getElementById("detailOut").insertAdjacentHTML("afterbegin", errorHTML(err, "Couldn't send your application"));
+    } finally { setBusy(false); }
+  }
+
+  function renderStatus(a) {
+    const s = a.status;
+    const cur = statusStep(s);
+    document.getElementById("appIdK").textContent = (a.id || "") + " · " + (STATUS_LABEL[s] || s);
+    const lead = document.getElementById("statusLead");
+    const approvedish = ["approved", "enrolled", "completed", "placed"].includes(s);
+    lead.textContent = approvedish ? t("status_approved") : s === "declined" ? (a.decision && a.decision.note) || "Not approved this round. You can reapply after talking with your navigator." : s === "needs_info" ? "Your navigator needs one more thing: " + ((a.decision && a.decision.note) || "they'll text you.") : t("status_waiting");
+    const prof = a.profile || {};
+    const pays = (a.payments || []);
+    const fundDesc = approvedish
+      ? 'Approved' + (a.decision && a.decision.reviewer ? ' by ' + esc(a.decision.reviewer) : '') + ' · ' + esc(TIER_LABEL[a.tier] || a.tier || "") + ' grant ' + money(a.grant_amount) + (a.decision && a.decision.note ? '<br><span class="small">“' + esc(a.decision.note) + '”</span>' : '')
+      : s === "needs_info" ? 'Needs info: ' + esc((a.decision && a.decision.note) || "")
+      : s === "declined" ? 'Not approved' + (a.decision && a.decision.note ? ': ' + esc(a.decision.note) : '')
+      : 'Navigator reviewing · ' + esc(TIER_LABEL[a.tier] || a.tier || "") + ' grant ' + money(a.grant_amount) + ' requested';
+    const items = [
+      [t("j_join"), esc(a.property_name || (state.property && state.property.name) || a.property_code || "")],
+      [t("j_plan"), esc(prof.goal || "")],
+      [t("j_match"), esc(a.program_name || "") + (a.provider ? ' · ' + esc(a.provider) : '')],
+      [t("j_apply"), 'Application ' + esc(a.id) + ' · ' + HB.relTime(a.created_at)],
+      [t("j_fund"), fundDesc],
+      [t("j_complete"), (pays.length ? 'Paid to providers:<div class="pay-log">' + pays.map(p => '<div><span>' + esc(p.milestone) + ' → ' + esc(p.paid_to || "") + '</span><strong>' + money(p.amount) + '</strong></div>').join("") + '</div>' : 'Reminders, attendance, and help if life gets in the way.')],
+      [t("j_advance"), s === "placed" ? 'Hired or earning more. Check-ins at 30, 90 and 180 days.' : 'Job search support. Check-ins at 30, 90 and 180 days.']
+    ];
+    const icons = ["🏠", "✏️", "🔎", "📨", "💸", "🎓", "🚀"];
+    const warn = s === "needs_info" || s === "declined";
+    document.getElementById("statusOut").innerHTML = '<ol class="journey">' + items.map((it, i) => {
+      const cls = i < cur ? "done" : i === cur ? (warn && i === 4 ? "warn" : "cur") : "";
+      return '<li class="' + cls + '"><div class="diamond"><span aria-hidden="true">' + (i < cur ? '<svg width="22" height="22" viewBox="0 0 22 22"><path d="M4 11l5 5 9-10" stroke="#fff" stroke-width="3.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' : icons[i]) + '</span></div><div class="jcard"><div class="jt">' + esc(it[0]) + '</div><div class="jd">' + it[1] + '</div></div></li>';
+    }).join("") + '</ol>';
+    renderPath();
+  }
+
+  let pollTimer = null;
+  function startPolling() {
+    clearInterval(pollTimer);
+    pollTimer = setInterval(async () => {
+      if (!state.app || document.hidden) return;
+      try {
+        const r = await api("/api/applications/" + encodeURIComponent(state.app.id));
+        const a = r.application;
+        const changed = a.status !== state.app.status || (a.payments || []).length !== (state.app.payments || []).length;
+        state.app = a;
+        if (changed) {
+          renderStatus(a);
+          if (a.status === "approved" && state.prevStatus !== "approved") { celebrate(); toast("✅ " + t("status_approved")); }
+          else if (a.status !== state.prevStatus) toast((STATUS_LABEL[a.status] || a.status));
+          state.prevStatus = a.status;
+        }
+      } catch (e) { /* keep last known state; next poll retries */ }
+    }, 3000);
+  }
+  function toast(msg) {
+    const el = document.createElement("div"); el.className = "toast"; el.setAttribute("role", "status"); el.textContent = msg;
+    document.body.appendChild(el); setTimeout(() => el.remove(), 3800);
+  }
+  function celebrate() {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const box = document.createElement("div"); box.className = "celebrate"; box.setAttribute("aria-hidden", "true");
+    const colors = ["#1fb24e", "#ffc933", "#6d4dff", "#ff7a2f", "#2f6bff", "#ff4f7e"];
+    for (let i = 0; i < 70; i++) {
+      const c = document.createElement("i");
+      c.style.left = Math.random() * 100 + "%"; c.style.background = colors[i % colors.length];
+      c.style.animationDelay = (Math.random() * .6) + "s"; c.style.transform = "rotate(" + (Math.random() * 360) + "deg)";
+      box.appendChild(c);
+    }
+    document.body.appendChild(box); setTimeout(() => box.remove(), 3400);
+  }
+
+  document.getElementById("startOver").addEventListener("click", () => {
+    clearInterval(pollTimer);
+    try { localStorage.removeItem("hb.app"); } catch (e) {}
+    Object.assign(state, { building: null, property: null, profile: null, programs: null, program: null, detail: null, app: null, prevStatus: null });
+    story.value = ""; ["intakeOut", "matchOut", "detailOut", "statusOut", "welcome", "joinMsg"].forEach(id => document.getElementById(id).innerHTML = "");
+    document.getElementById("code").value = ""; document.getElementById("bPicked").innerHTML = "";
+    go("join");
+  });
+
+  /* ---------- boot ---------- */
+  let saved = null;
+  try { saved = localStorage.getItem("hb.lang"); } catch (e) {}
+  applyLang(normLang(saved) || normLang(new URLSearchParams(location.search).get("lang")) || "en");
+  let savedApp = null;
+  try { savedApp = localStorage.getItem("hb.app"); } catch (e) {}
+  if (savedApp && !new URLSearchParams(location.search).has("new")) {
+    api("/api/applications/" + encodeURIComponent(savedApp)).then(r => {
+      state.app = r.application; state.prevStatus = r.application.status;
+      go("status"); renderStatus(state.app); startPolling();
+    }).catch(() => { try { localStorage.removeItem("hb.app"); } catch (e) {} });
+  }
+})();
+</script>
+</body>
+</html>

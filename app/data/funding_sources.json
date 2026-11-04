@@ -1,0 +1,60 @@
+[
+  {
+    "id": "free_program",
+    "order": 1,
+    "name": "Free training programs",
+    "status": "Strong Bay Area tech training is already free (for example Per Scholas, TechSF, Free City College).",
+    "use": "Matched first. The grant then covers only the cost of attending: child care, transit, equipment and exam fees.",
+    "budget_on_it": true
+  },
+  {
+    "id": "wioa_ita",
+    "order": 2,
+    "name": "WIOA Individual Training Accounts",
+    "status": "San Francisco's 2023 policy caps total cost at $6,000 and covers tuition and materials, not supportive services. Vouchers require a state-listed (ETPL) provider. Eligibility and current funding must be confirmed.",
+    "use": "Screen residents and route them to a job center first, so the grant pays only the remainder.",
+    "cap_usd": 6000,
+    "covers": ["tuition", "materials"],
+    "budget_on_it": true
+  },
+  {
+    "id": "workforce_pell",
+    "order": 3,
+    "name": "Workforce Pell",
+    "status": "Final rules took effect in July 2026 for programs of 150 to 599 clock hours. Each program needs governor and federal approval. California's status was not confirmed.",
+    "use": "A future source for eligible programs at eligible institutions. Added to matching once available.",
+    "budget_on_it": false
+  },
+  {
+    "id": "casf_adoption",
+    "order": 4,
+    "name": "California CASF Adoption Account",
+    "status": "$40 million authorized for FY2026-27. Recipients cannot charge for classes, and the fund does not pay rent, incentives or internet service.",
+    "use": "May fund free digital foundations classes, not tuition for paid programs.",
+    "budget_on_it": false
+  },
+  {
+    "id": "digital_equity",
+    "order": 5,
+    "name": "Federal Digital Equity Competitive Grant",
+    "status": "A new notice is expected in December 2026, with final rules unknown.",
+    "use": "Potential upside. Not budgeted.",
+    "budget_on_it": false
+  },
+  {
+    "id": "hud_self_sufficiency",
+    "order": 6,
+    "name": "HUD self-sufficiency programs (FSS, ROSS, Jobs-Plus)",
+    "status": "The FY2027 budget request proposes no funding for FSS, ROSS or Jobs-Plus, against $206.4 million enacted for FY2026. Congress decides final funding.",
+    "use": "Coordinate with existing FSS or ROSS coordinators, but do not depend on these programs.",
+    "budget_on_it": false
+  },
+  {
+    "id": "homebase_grant",
+    "order": 7,
+    "name": "Bridgeline last-dollar grant (private and local philanthropy)",
+    "status": "Most flexible source. Specific funders not yet researched.",
+    "use": "Primary source for the pilot grant pool, including costs public programs exclude. Paid directly to providers and vendors, never as cash.",
+    "budget_on_it": true
+  }
+]

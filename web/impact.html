@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Homebase Impact</title>
+<meta name="description" content="Homebase Tech pilot outcomes and spending, aggregated with Elasticsearch.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/app.css">
+<style>
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
+  .hero { background: var(--navy); color: var(--navy-ink); padding: 34px 0 30px; position: relative; overflow: hidden; }
+  .hero h1 { color: #fff; font-size: clamp(2.2rem, 5.5vw, 3.8rem); max-width: 16em; }
+  .hero h1 em { color: #7ef0a0; font-style: italic; }
+  .hero p { color: #b8bfe6; margin-top: 10px; max-width: 46em; }
+  .hero .deco { position: absolute; right: -30px; top: -30px; opacity: .5; pointer-events: none; }
+  .health { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: var(--navy-2); font-size: .82rem; font-weight: 700; color: #dfe3ff; }
+  .pill i { width: 9px; height: 9px; border-radius: 50%; background: #7a809f; }
+  .pill.ok i { background: #3ee07a; box-shadow: 0 0 0 4px rgba(62,224,122,.18); }
+  .pill.bad i { background: #ff5c6c; }
+  section.block { padding: 30px 0; }
+  .sec-title { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+  .sec-title h2 { font-size: clamp(1.6rem, 3.5vw, 2.3rem); }
+  .ctx { background: var(--paper); border-top: 1.5px solid var(--line); border-bottom: 1.5px solid var(--line); }
+  .ctx-head { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.5rem, 3.6vw, 2.5rem); line-height: 1.15; letter-spacing: -.02em; }
+  .ctx-head .n { color: var(--purple); }
+  .ctx-head .n.g { color: var(--green); }
+  .ctx-head .n.o { color: var(--orange); }
+  .ctx-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 18px; margin-top: 20px; }
+  .kpis { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .kpi { background: var(--paper); border: 1.5px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow-chunky); display: grid; gap: 6px; }
+  .kpi .k { font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); }
+  .kpi .v { font-family: var(--font-display); font-size: 2.3rem; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
+  .kpi .tgt { font-size: .8rem; color: var(--ink-3); }
+  .meter { height: 8px; border-radius: 999px; background: var(--cream-2); overflow: hidden; }
+  .meter span { display: block; height: 100%; border-radius: 999px; background: var(--green-hi); transition: width .6s var(--ease); }
+  .meter.warn span { background: var(--yellow); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .funnel { display: grid; gap: 10px; margin-top: 10px; }
+  .frow { display: grid; grid-template-columns: 130px 1fr 60px; gap: 10px; align-items: center; font-size: .92rem; }
+  .frow .bar { height: 30px; border-radius: 10px; background: var(--cream-2); overflow: hidden; }
+  .frow .bar span { display: block; height: 100%; border-radius: 10px; transition: width .6s var(--ease); }
+  .frow b { text-align: right; font-variant-numeric: tabular-nums; }
+  .hbar { display: grid; grid-template-columns: minmax(90px, 160px) 1fr auto; gap: 10px; align-items: center; font-size: .86rem; padding: 4px 0; }
+  .hbar .lbl { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+  .hbar .track { height: 14px; background: var(--cream-2); border-radius: 999px; overflow: hidden; display: flex; }
+  .hbar .track span { display: block; height: 100%; }
+  .hbar .val { font-variant-numeric: tabular-nums; color: var(--ink-2); font-weight: 700; white-space: nowrap; }
+  .lever { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-top: 12px; line-height: 1.2; }
+  .lever .x { color: var(--green); }
+  .paybig .paybar { height: 28px; border-radius: 12px; margin-top: 14px; }
+  .budget table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+  .budget td { padding: 8px 4px; border-bottom: 1px solid var(--line); }
+  .budget td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; white-space: nowrap; }
+  .budget tr.total td { border-bottom: 0; font-weight: 800; font-size: 1.05rem; }
+  .unit-cost { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+  .unit-cost div { background: var(--cream); border-radius: 14px; padding: 12px; }
+  .unit-cost b { display: block; font-family: var(--font-display); font-size: 1.6rem; }
+  .unit-cost span { font-size: .8rem; color: var(--ink-3); }
+  details.es { background: var(--navy); color: var(--navy-ink); border-radius: var(--radius); padding: 0 18px; }
+  details.es summary { cursor: pointer; min-height: 56px; display: flex; align-items: center; gap: 10px; font-weight: 800; color: #fff; list-style: none; }
+  details.es summary::-webkit-details-marker { display: none; }
+  details.es summary::after { content: "+"; margin-left: auto; font-size: 1.4rem; }
+  details.es[open] summary::after { content: "–"; }
+  details.es pre { background: #0a0f29; border-radius: 12px; padding: 14px; overflow: auto; max-height: 420px; font-size: .78rem; line-height: 1.5; color: #cfe1ff; margin: 0 0 16px; }
+  details.es h4 { margin: 6px 0 8px; color: #9ea8e0; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; }
+  .note { font-size: .8rem; color: var(--ink-3); margin-top: 10px; }
+  .src a { color: var(--blue); font-weight: 700; }
+  @media (max-width: 1000px) { .kpis { grid-template-columns: repeat(2, 1fr); } .grid2, .ctx-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 420px) { .kpis { grid-template-columns: 1fr 1fr; } .kpi .v { font-size: 1.8rem; } .frow { grid-template-columns: 96px 1fr 44px; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><span id="brandIcon"></span>Homebase <small>Impact</small></a>
+  <span class="spacer"></span>
+  <nav class="navlinks" aria-label="Views"><a href="/">Resident</a><a href="/navigator">Navigator</a><a href="/impact" aria-current="page">Impact</a></nav>
+</header>
+
+<section class="hero">
+  <svg class="deco" width="320" height="320" viewBox="0 0 320 320" aria-hidden="true">
+    <circle cx="200" cy="120" r="110" fill="none" stroke="#2c3670" stroke-width="2" stroke-dasharray="4 10"/>
+    <circle cx="200" cy="120" r="60" fill="none" stroke="#2c3670" stroke-width="2"/>
+    <path d="M150 40 L125 95 H150 L140 140 L180 75 H155Z" fill="#ffc933"/>
+    <circle cx="290" cy="200" r="14" fill="#6d4dff"/><circle cx="95" cy="200" r="9" fill="#1fb24e"/>
+  </svg>
+  <div class="wrap">
+    <span class="kicker">Funder &amp; city view · aggregates only</span>
+    <h1>Training that pays off, <em>without</em> touching anyone's rent.</h1>
+    <p>Live from Elasticsearch. No names, no individual records: operators and funders see counts and dollars only.</p>
+    <div class="health" id="health"><span class="pill"><i></i>Checking Mistral and Elastic…</span></div>
+  </div>
+</section>
+
+<section class="block ctx">
+  <div class="wrap">
+    <div class="sec-title"><span class="kicker">San Francisco context · DataSF open data</span></div>
+    <div id="ctx"><div class="skeleton"></div></div>
+  </div>
+</section>
+
+<section class="block">
+  <div class="wrap">
+    <div class="sec-title"><h2>Pilot scorecard</h2><span class="muted small" id="updated"></span></div>
+    <div id="kpis" class="kpis"><div class="skeleton"></div></div>
+    <p class="note" id="cohortNote"></p>
+  </div>
+</section>
+
+<section class="block" style="padding-top:0">
+  <div class="wrap grid2">
+    <div class="card"><span class="kicker">Funnel</span><div class="funnel" id="funnel"></div></div>
+    <div class="card paybig"><span class="kicker">Who paid for training</span><div id="dollars"></div></div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:0">
+  <div class="wrap grid2">
+    <div class="card"><span class="kicker">By property (aggregated)</span><div id="byProp" style="margin-top:10px"></div></div>
+    <div class="card budget"><span class="kicker">Illustrative pilot budget</span><div id="budget" style="margin-top:10px"></div></div>
+  </div>
+</section>
+
+<section class="block" style="padding-top:0">
+  <div class="wrap">
+    <details class="es" id="esPanel">
+      <summary><span class="badge badge-blue">Elasticsearch</span> Powered by Elasticsearch: the actual queries behind this page</summary>
+      <div id="esQueries"></div>
+    </details>
+  </div>
+</section>
+<footer class="foot">Homebase Tech · working name · planning figures are proposals, not benchmarks · <a href="/">Resident app</a> · <a href="/navigator">Navigator</a></footer>
+
+<script src="/static/common.js"></script>
+<script>
+(function () {
+  "use strict";
+  const { api, esc, money, errorHTML, payBar, payLegend, TIER_LABEL } = HB;
+  document.getElementById("brandIcon").innerHTML = HB.BRAND_SVG;
+  const num = n => (Number(n) || 0).toLocaleString("en-US");
+  const queries = { impact: null, housing: null };
+
+  function renderQueries() {
+    const parts = [];
+    if (queries.impact) parts.push('<h4>Pilot scorecard · index homebase-applications</h4><pre>' + esc(JSON.stringify(queries.impact, null, 2)) + '</pre>');
+    if (queries.housing) parts.push('<h4>San Francisco context · DataSF affordable housing</h4><pre>' + esc(JSON.stringify(queries.housing, null, 2)) + '</pre>');
+    const el = document.getElementById("esQueries");
+    const html = parts.join("") || '<p class="small" style="margin:0 0 16px">No query returned yet.</p>';
+    if (el.dataset.html !== html) { el.innerHTML = html; el.dataset.html = html; }
+  }
+
+  async function loadHealth() {
+    const el = document.getElementById("health");
+    try {
+      const h = await api("/api/health");
+      const e = h.elastic || {};
+      el.innerHTML =
+        '<span class="pill ' + (h.mistral ? "ok" : "bad") + '"><i></i>Mistral ' + (h.mistral ? "connected" : "not configured") + '</span>' +
+        '<span class="pill ' + (e.connected ? "ok" : "bad") + '"><i></i>Elastic ' + (e.connected ? esc(e.cluster || "connected") : esc(e.error || "not connected")) + '</span>' +
+        (e.inference_id ? '<span class="pill ok"><i></i>Embeddings: ' + esc(e.inference_id) + '</span>' : '') +
+        (e.connected ? '<span class="pill"><i></i>' + num(e.programs) + ' programs · ' + num(e.applications) + ' applications indexed</span>' : '');
+    } catch (err) { el.innerHTML = '<span class="pill bad"><i></i>Server unreachable: ' + esc(err.message) + '</span>'; }
+  }
+
+  async function loadContext() {
+    const el = document.getElementById("ctx");
+    try {
+      const d = await api("/api/opendata/housing");
+      queries.housing = d.query || null;
+      const nb = (d.by_neighborhood || []).slice(0, 10);
+      const maxU = Math.max(1, ...nb.map(x => Number(x.units) || 0));
+      const prog = (d.by_program || []).slice(0, 6);
+      const maxP = Math.max(1, ...prog.map(x => Number(x.units) || 0));
+      el.innerHTML =
+        '<p class="ctx-head"><span class="n">' + num(d.buildings) + '</span> affordable rental buildings · <span class="n g">' + num(d.affordable_units || d.units) + '</span> affordable homes' +
+        (d.family_size_units ? ' · <span class="n o">' + num(d.family_size_units) + '</span> family-size' : '') + '.<br>The pilot starts with 1,000.</p>' +
+        '<div class="ctx-grid"><div><span class="kicker">Affordable homes by neighborhood (top 10)</span><div style="margin-top:8px">' +
+        nb.map(x => '<div class="hbar"><span class="lbl" title="' + esc(x.neighborhood) + '">' + esc(x.neighborhood) + '</span><span class="track"><span style="width:' + (100 * (Number(x.units) || 0) / maxU) + '%;background:var(--purple)"></span></span><span class="val">' + num(x.units) + ' · ' + num(x.buildings) + ' bldgs</span></div>').join("") +
+        '</div></div><div><span class="kicker">By housing program</span><div style="margin-top:8px">' +
+        prog.map(x => '<div class="hbar"><span class="lbl" title="' + esc(x.program) + '">' + esc(x.program) + '</span><span class="track"><span style="width:' + (100 * (Number(x.units) || 0) / maxP) + '%;background:var(--orange)"></span></span><span class="val">' + num(x.units) + '</span></div>').join("") +
+        '</div><p class="note">Different housing programs count income differently, which is why every award passes a benefits check.</p></div></div>' +
+        '<p class="note src">Source: ' + (d.source_url ? '<a href="' + esc(d.source_url) + '" target="_blank" rel="noopener">' + esc(d.source || "DataSF") + ' ↗</a>' : esc(d.source || "DataSF")) + ' · ' + num(d.neighborhoods) + ' neighborhoods · indexed in Elasticsearch</p>';
+    } catch (err) {
+      el.innerHTML = errorHTML(err, "Couldn't load DataSF housing context");
+    }
+    renderQueries();
+  }
+
+  function kpi(label, value, target, frac, warn) {
+    const f = Math.max(0, Math.min(1, Number(frac) || 0));
+    return '<div class="kpi"><span class="k">' + esc(label) + '</span><span class="v">' + value + '</span><div class="meter' + (warn ? " warn" : "") + '"><span style="width:' + (f * 100) + '%"></span></div><span class="tgt">' + esc(target) + '</span></div>';
+  }
+
+  function renderBudget(b) {
+    const el = document.getElementById("budget");
+    if (!b || typeof b !== "object") { el.innerHTML = '<p class="muted small">No budget returned.</p>'; return; }
+    const lines = b.items || b.lines || b.line_items || [];
+    let total = Number(b.total) || 0;
+    let rows = "";
+    if (Array.isArray(lines) && lines.length) {
+      rows = lines.map(l => '<tr><td>' + esc(l.item || l.label || l.name) + '</td><td class="num">' + money(l.amount) + '</td></tr>').join("");
+      if (!total) total = lines.reduce((s, l) => s + (Number(l.amount) || 0), 0);
+    } else {
+      rows = Object.entries(b).filter(([k, v]) => typeof v === "number" && !/total|per_|recipients|outcomes|count/i.test(k))
+        .map(([k, v]) => '<tr><td>' + esc(k.replace(/_/g, " ")) + '</td><td class="num">' + money(v) + '</td></tr>').join("");
+    }
+    const recipients = Number(b.recipients || b.grant_recipients) || null;
+    const outcomes = Number(b.expected_successes || b.successful_outcomes || b.outcomes) || null;
+    const perRec = Number(b.per_recipient || b.cost_per_recipient) || (recipients && total ? total / recipients : null);
+    const perOut = Number(b.per_successful_outcome || b.per_outcome || b.cost_per_outcome) || (outcomes && total ? total / outcomes : null);
+    el.innerHTML = '<table>' + rows + (total ? '<tr class="total"><td>Total</td><td class="num">' + money(total) + '</td></tr>' : '') + '</table>' +
+      ((perRec || perOut) ? '<div class="unit-cost">' + (perRec ? '<div><b>' + money(Math.round(perRec)) + '</b><span>per grant recipient' + (recipients ? ' (' + recipients + ')' : '') + '</span></div>' : '') +
+        (perOut ? '<div><b>' + money(Math.round(perOut)) + '</b><span>per successful outcome' + (outcomes ? ' (' + outcomes + ' placed or earning more)' : '') + '</span></div>' : '') + '</div>' : '') +
+      '<p class="note">Planning assumptions, not quotes. The navigator is a lasting cost and should not be cut to raise the grant share.</p>';
+  }
+
+  async function loadImpact() {
+    try {
+      const d = await api("/api/impact");
+      queries.impact = d.query || null;
+      const bs = d.by_status || {};
+      const total = Number(d.total) || 0;
+      const approved = ["approved", "enrolled", "completed", "placed"].reduce((s, k) => s + (Number(bs[k]) || 0), 0);
+      const oc = d.outcomes || {};
+      const completed = Number(oc.completed) || 0, placed = Number(oc.placed_or_raise) || 0;
+      const compRate = approved ? completed / approved : 0;
+      const placeRate = completed ? placed / completed : 0;
+      const mdd = d.median_decision_days;
+      document.getElementById("kpis").innerHTML =
+        kpi("Residents activated", num(total), "Pilot target 200", total / 200) +
+        kpi("Grants approved", num(approved), "Pilot gate 20 · Prove 40", approved / 40) +
+        kpi("Completion", approved ? Math.round(compRate * 100) + "%" : "—", "Target 70% of grant recipients", compRate / .7, compRate < .7) +
+        kpi("Placed or earning more", completed ? Math.round(placeRate * 100) + "%" : "—", "Target 70% of completers in 180 days", placeRate / .7, placeRate < .7) +
+        kpi("Median days to decision", mdd == null ? "—" : Number(mdd).toFixed(1), "Target ≤ 10 business days", mdd == null ? 0 : Math.min(1, 10 / Math.max(Number(mdd), .1)), mdd != null && mdd > 10);
+      document.getElementById("cohortNote").textContent = "Counts combine the simulated pilot cohort (illustrative, labelled in the navigator) with live applications submitted tonight.";
+      document.getElementById("updated").textContent = "Updated " + new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit", second: "2-digit" });
+
+      const steps = [["Activated", total, "var(--blue)"], ["Approved", approved, "var(--purple)"], ["Completed", completed, "var(--green-hi)"], ["Placed / raise", placed, "var(--orange)"]];
+      const mx = Math.max(1, total);
+      document.getElementById("funnel").innerHTML = steps.map(s => '<div class="frow"><span>' + esc(s[0]) + '</span><span class="bar"><span style="width:' + (100 * s[1] / mx) + '%;background:' + s[2] + '"></span></span><b>' + num(s[1]) + '</b></div>').join("") +
+        '<div class="row" style="margin-top:6px">' + Object.entries(d.by_tier || {}).map(([k, v]) => '<span class="badge badge-purple">' + esc(TIER_LABEL[k] || k) + ': ' + num(v) + '</span>').join("") + '</div>';
+
+      const dl = d.dollars || {};
+      const free = Number(dl.free_program_value) || 0, pub = Number(dl.public_aid) || 0, grant = Number(dl.grant) || 0;
+      const lev = grant ? (free + pub) / grant : null;
+      document.getElementById("dollars").innerHTML =
+        (lev != null ? '<p class="lever">Every <span class="x">$1</span> of grant unlocked <span class="x">' + money(lev) + '</span> of free and public training.</p>' : '<p class="lever">No grant dollars yet.</p>') +
+        payBar({ free_program: free, public_aid: pub, grant: grant, resident: 0 }) +
+        payLegend({ free_program: free, public_aid: pub, grant: grant, resident: 0 }, { free_program: "Free programs", public_aid: "Public aid", grant: "Homebase grant", resident: "Residents" }) +
+        '<p class="note">Grant dollars are paid to providers and vendors. Residents receive no cash and no stipends.</p>';
+
+      const bp = (d.by_property || []).slice(0, 8);
+      const mp = Math.max(1, ...bp.map(x => Number(x.residents) || 0));
+      document.getElementById("byProp").innerHTML = bp.length ? bp.map(x => {
+        const r = Number(x.residents) || 0, a = Number(x.approved) || 0;
+        return '<div class="hbar"><span class="lbl" title="' + esc(x.property) + '">' + esc(x.property) + '</span><span class="track" style="width:' + (100 * r / mp) + '%"><span style="flex:' + a + ';background:var(--green-hi)"></span><span style="flex:' + Math.max(0, r - a) + ';background:#c9d7ff"></span></span><span class="val">' + a + ' / ' + r + '</span></div>';
+      }).join("") + '<div class="paylegend"><span><i class="dot-free"></i>Approved</span><span><i style="background:#c9d7ff"></i>Activated</span></div><p class="note">Operators see these totals only, never individual residents.</p>' : '<p class="muted small">No property data yet.</p>';
+
+      renderBudget(d.budget);
+    } catch (err) {
+      document.getElementById("kpis").innerHTML = '<div style="grid-column:1/-1">' + errorHTML(err, "Couldn't load pilot aggregates") + '</div>';
+    }
+    renderQueries();
+  }
+
+  loadHealth(); loadContext(); loadImpact();
+  setInterval(() => { if (!document.hidden) { loadImpact(); loadHealth(); } }, 5000);
+})();
+</script>
+</body>
+</html>

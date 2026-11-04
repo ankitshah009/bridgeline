@@ -1,0 +1,8 @@
+[
+  {"code": "MISSION-24", "name": "Mission Commons (demo)", "neighborhood": "Mission", "housing_type": "LIHTC", "units": 210, "languages": ["en", "es"], "location": {"lat": 37.7524, "lon": -122.4184}},
+  {"code": "TL-EDDY", "name": "Eddy Street Commons (demo)", "neighborhood": "Tenderloin", "housing_type": "project_based", "units": 160, "languages": ["en", "vi", "es"], "location": {"lat": 37.7836, "lon": -122.4158}},
+  {"code": "BAYVIEW-3", "name": "Third Street Terrace (demo)", "neighborhood": "Bayview", "housing_type": "public_housing", "units": 240, "languages": ["en", "es", "zh"], "location": {"lat": 37.7316, "lon": -122.3911}},
+  {"code": "SOMA-6", "name": "Sixth Street Lofts (demo)", "neighborhood": "SoMa", "housing_type": "LIHTC", "units": 130, "languages": ["en", "fil"], "location": {"lat": 37.7790, "lon": -122.4079}},
+  {"code": "VIZ-VALLEY", "name": "Sunnyside Garden Court (demo)", "neighborhood": "Visitacion Valley", "housing_type": "voucher", "units": 120, "languages": ["en", "zh", "fil"], "location": {"lat": 37.7136, "lon": -122.4080}},
+  {"code": "CHINATOWN-8", "name": "Stockton Street Residences (demo)", "neighborhood": "Chinatown", "housing_type": "project_based", "units": 150, "languages": ["zh", "en"], "location": {"lat": 37.7946, "lon": -122.4078}}
+]

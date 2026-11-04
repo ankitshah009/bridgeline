@@ -1,0 +1,2385 @@
+[
+ {
+  "id": "SIM-030",
+  "created_at": "2026-06-07T04:00:00+00:00",
+  "status": "approved",
+  "property_code": "SOMA-6",
+  "property_name": "Sixth Street Lofts (demo)",
+  "housing_type": "LIHTC",
+  "language": "fil",
+  "profile": {
+   "language": "fil",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "per-scholas-it-support",
+  "program_name": "IT Support (CompTIA A+ prep)",
+  "provider": "Per Scholas San Francisco Bay",
+  "tier": "stay_in_training",
+  "grant_amount": 2200.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-06-19T04:00:00+00:00"
+  },
+  "decision_days": 12,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-024",
+  "created_at": "2026-06-12T08:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-noncredit-computer-basics",
+  "program_name": "Noncredit Computer Basics and Office Skills",
+  "provider": "City College of San Francisco",
+  "tier": "stay_in_training",
+  "grant_amount": 1740.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-06-14T20:00:00+00:00"
+  },
+  "decision_days": 2.5,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1044.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-06-21T20:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-026",
+  "created_at": "2026-06-12T23:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "TL-EDDY",
+  "property_name": "Eddy Street Commons (demo)",
+  "housing_type": "project_based",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-noncredit-computer-basics",
+  "program_name": "Noncredit Computer Basics and Office Skills",
+  "provider": "City College of San Francisco",
+  "tier": "stay_in_training",
+  "grant_amount": 1260.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "high",
+  "risk_reasons": [
+   "Laptop not yet delivered",
+   "Commute over 60 minutes"
+  ],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-06-18T23:00:00+00:00"
+  },
+  "decision_days": 6,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 756.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-06-25T23:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-040",
+  "created_at": "2026-06-12T23:00:00+00:00",
+  "status": "submitted",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ctn-digital-skills",
+  "program_name": "Digital Skills Classes in Your Language",
+  "provider": "Community Technology Network (CTN)",
+  "tier": "starter",
+  "grant_amount": 250.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": null,
+  "decision_days": null,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-002",
+  "created_at": "2026-06-20T07:00:00+00:00",
+  "status": "placed",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-noncredit-computer-basics",
+  "program_name": "Noncredit Computer Basics and Office Skills",
+  "provider": "City College of San Francisco",
+  "tier": "stay_in_training",
+  "grant_amount": 1000.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-06-24T07:00:00+00:00"
+  },
+  "decision_days": 4,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 600.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-07-01T07:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 400.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-08-23T07:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": true
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-018",
+  "created_at": "2026-06-28T00:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "CHINATOWN-8",
+  "property_name": "Stockton Street Residences (demo)",
+  "housing_type": "project_based",
+  "language": "zh",
+  "profile": {
+   "language": "zh",
+   "career_tracks": [
+    "data center operations"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-data-center-technician",
+  "program_name": "Data Center Technician Pathway (illustrative)",
+  "provider": "Illustrative community college and employer partnership",
+  "tier": "career",
+  "grant_amount": 1380.0,
+  "free_program_value": 0.0,
+  "public_aid": 4000.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-07-02T00:00:00+00:00"
+  },
+  "decision_days": 4,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 828.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-07-09T00:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-023",
+  "created_at": "2026-06-28T06:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-it-support-certificate",
+  "program_name": "Computer Technician / IT Support Certificate (evening)",
+  "provider": "City College of San Francisco (Free City College)",
+  "tier": "stay_in_training",
+  "grant_amount": 1320.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-07-07T06:00:00+00:00"
+  },
+  "decision_days": 9,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 792.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-07-14T06:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-012",
+  "created_at": "2026-07-03T07:00:00+00:00",
+  "status": "completed",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-noncredit-computer-basics",
+  "program_name": "Noncredit Computer Basics and Office Skills",
+  "provider": "City College of San Francisco",
+  "tier": "stay_in_training",
+  "grant_amount": 1820.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-07-12T07:00:00+00:00"
+  },
+  "decision_days": 9,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1092.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-07-19T07:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 728.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-09-10T07:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-029",
+  "created_at": "2026-07-11T08:00:00+00:00",
+  "status": "approved",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-noncredit-computer-basics",
+  "program_name": "Noncredit Computer Basics and Office Skills",
+  "provider": "City College of San Francisco",
+  "tier": "stay_in_training",
+  "grant_amount": 1320.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-07-18T08:00:00+00:00"
+  },
+  "decision_days": 7,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-011",
+  "created_at": "2026-07-12T02:00:00+00:00",
+  "status": "completed",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-it-support-certificate",
+  "program_name": "Computer Technician / IT Support Certificate (evening)",
+  "provider": "City College of San Francisco (Free City College)",
+  "tier": "stay_in_training",
+  "grant_amount": 980.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-07-22T02:00:00+00:00"
+  },
+  "decision_days": 10,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 588.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-07-29T02:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 392.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-09-20T02:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-016",
+  "created_at": "2026-07-13T02:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "google-it-support-coursera",
+  "program_name": "Google IT Support Professional Certificate",
+  "provider": "Google via Coursera (online)",
+  "tier": "starter",
+  "grant_amount": 350.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "high",
+  "risk_reasons": [
+   "Low digital confidence at intake",
+   "Commute over 60 minutes"
+  ],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-07-21T02:00:00+00:00"
+  },
+  "decision_days": 8,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 210.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-07-28T02:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-043",
+  "created_at": "2026-07-15T00:00:00+00:00",
+  "status": "needs_info",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "zh",
+  "profile": {
+   "language": "zh",
+   "career_tracks": [
+    "cloud support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-evening-it-cloud-bootcamp",
+  "program_name": "Evening IT and Cloud Bootcamp (illustrative)",
+  "provider": "Illustrative private bootcamp",
+  "tier": "career",
+  "grant_amount": 5610.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "request_info",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Need admission letter from provider.",
+   "at": "2026-07-20T00:00:00+00:00"
+  },
+  "decision_days": 5,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-021",
+  "created_at": "2026-07-20T23:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "SOMA-6",
+  "property_name": "Sixth Street Lofts (demo)",
+  "housing_type": "LIHTC",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "google-it-support-coursera",
+  "program_name": "Google IT Support Professional Certificate",
+  "provider": "Google via Coursera (online)",
+  "tier": "starter",
+  "grant_amount": 250.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-07-27T23:00:00+00:00"
+  },
+  "decision_days": 7,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 150.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-03T23:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-019",
+  "created_at": "2026-07-25T04:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "jvs-techsf-it",
+  "program_name": "TechSF IT Help Desk Training",
+  "provider": "JVS (TechSF)",
+  "tier": "stay_in_training",
+  "grant_amount": 2340.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "medium",
+  "risk_reasons": [
+   "Child care gap during school break"
+  ],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-07-31T04:00:00+00:00"
+  },
+  "decision_days": 6,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1404.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-07T04:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-006",
+  "created_at": "2026-07-26T03:00:00+00:00",
+  "status": "placed",
+  "property_code": "SOMA-6",
+  "property_name": "Sixth Street Lofts (demo)",
+  "housing_type": "LIHTC",
+  "language": "fil",
+  "profile": {
+   "language": "fil",
+   "career_tracks": [
+    "job readiness"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "code-tenderloin-job-readiness",
+  "program_name": "Job Readiness and Intro to Coding",
+  "provider": "Code Tenderloin",
+  "tier": "stay_in_training",
+  "grant_amount": 1520.0,
+  "free_program_value": 1200.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-08-02T03:00:00+00:00"
+  },
+  "decision_days": 7,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 912.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-09T03:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 608.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-10-01T03:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": true
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-005",
+  "created_at": "2026-07-26T05:00:00+00:00",
+  "status": "placed",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "per-scholas-it-support",
+  "program_name": "IT Support (CompTIA A+ prep)",
+  "provider": "Per Scholas San Francisco Bay",
+  "tier": "stay_in_training",
+  "grant_amount": 2400.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-07-30T17:00:00+00:00"
+  },
+  "decision_days": 4.5,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1440.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-06T17:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 960.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-09-28T17:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": true
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-010",
+  "created_at": "2026-07-27T04:00:00+00:00",
+  "status": "completed",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "comptia-a-plus-exams",
+  "program_name": "CompTIA A+ Certification Exams (Core 1 and Core 2)",
+  "provider": "CompTIA (Pearson VUE testing)",
+  "tier": "starter",
+  "grant_amount": 420.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-08-02T04:00:00+00:00"
+  },
+  "decision_days": 6,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 252.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-09T04:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 168.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-10-01T04:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-036",
+  "created_at": "2026-07-28T05:00:00+00:00",
+  "status": "in_review",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "per-scholas-it-support",
+  "program_name": "IT Support (CompTIA A+ prep)",
+  "provider": "Per Scholas San Francisco Bay",
+  "tier": "stay_in_training",
+  "grant_amount": 1760.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": null,
+  "decision_days": null,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-034",
+  "created_at": "2026-07-28T23:00:00+00:00",
+  "status": "in_review",
+  "property_code": "SOMA-6",
+  "property_name": "Sixth Street Lofts (demo)",
+  "housing_type": "LIHTC",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ctn-digital-skills",
+  "program_name": "Digital Skills Classes in Your Language",
+  "provider": "Community Technology Network (CTN)",
+  "tier": "starter",
+  "grant_amount": 180.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": null,
+  "decision_days": null,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-038",
+  "created_at": "2026-07-29T02:00:00+00:00",
+  "status": "submitted",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-it-support-certificate",
+  "program_name": "Computer Technician / IT Support Certificate (evening)",
+  "provider": "City College of San Francisco (Free City College)",
+  "tier": "stay_in_training",
+  "grant_amount": 1160.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": null,
+  "decision_days": null,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-001",
+  "created_at": "2026-07-30T06:00:00+00:00",
+  "status": "placed",
+  "property_code": "CHINATOWN-8",
+  "property_name": "Stockton Street Residences (demo)",
+  "housing_type": "project_based",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "per-scholas-it-support",
+  "program_name": "IT Support (CompTIA A+ prep)",
+  "provider": "Per Scholas San Francisco Bay",
+  "tier": "stay_in_training",
+  "grant_amount": 2000.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-08-03T18:00:00+00:00"
+  },
+  "decision_days": 4.5,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1200.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-10T18:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 800.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-10-02T18:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": true
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-047",
+  "created_at": "2026-07-30T23:00:00+00:00",
+  "status": "declined",
+  "property_code": "TL-EDDY",
+  "property_name": "Eddy Street Commons (demo)",
+  "housing_type": "project_based",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "google-it-support-coursera",
+  "program_name": "Google IT Support Professional Certificate",
+  "provider": "Google via Coursera (online)",
+  "tier": "starter",
+  "grant_amount": 294.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "decline",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Program does not meet approved-provider rules; navigator offered alternatives.",
+   "at": "2026-08-09T23:00:00+00:00"
+  },
+  "decision_days": 10,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-009",
+  "created_at": "2026-07-31T02:00:00+00:00",
+  "status": "placed",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-noncredit-computer-basics",
+  "program_name": "Noncredit Computer Basics and Office Skills",
+  "provider": "City College of San Francisco",
+  "tier": "stay_in_training",
+  "grant_amount": 1200.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-08-05T02:00:00+00:00"
+  },
+  "decision_days": 5,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 720.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-12T02:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 480.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-10-04T02:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": true
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-004",
+  "created_at": "2026-08-01T09:00:00+00:00",
+  "status": "placed",
+  "property_code": "TL-EDDY",
+  "property_name": "Eddy Street Commons (demo)",
+  "housing_type": "project_based",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "cloud support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-evening-it-cloud-bootcamp",
+  "program_name": "Evening IT and Cloud Bootcamp (illustrative)",
+  "provider": "Illustrative private bootcamp",
+  "tier": "career",
+  "grant_amount": 5110.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-08-05T21:00:00+00:00"
+  },
+  "decision_days": 4.5,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 2250.0,
+    "paid_to": "Illustrative private bootcamp",
+    "at": "2026-08-12T21:00:00+00:00"
+   },
+   {
+    "milestone": "enrollment",
+    "amount": 366.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-12T21:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 1350.0,
+    "paid_to": "Illustrative private bootcamp",
+    "at": "2026-10-04T21:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 244.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-10-04T21:00:00+00:00"
+   },
+   {
+    "milestone": "placement",
+    "amount": 900.0,
+    "paid_to": "Illustrative private bootcamp",
+    "at": "2026-11-13T21:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": true
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-048",
+  "created_at": "2026-08-02T04:00:00+00:00",
+  "status": "declined",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "sfpl-tech-help",
+  "program_name": "Digital Literacy Classes and Tech Help",
+  "provider": "San Francisco Public Library",
+  "tier": "starter",
+  "grant_amount": 500.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "decline",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Program does not meet approved-provider rules; navigator offered alternatives.",
+   "at": "2026-08-09T04:00:00+00:00"
+  },
+  "decision_days": 7,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-008",
+  "created_at": "2026-08-03T04:00:00+00:00",
+  "status": "placed",
+  "property_code": "TL-EDDY",
+  "property_name": "Eddy Street Commons (demo)",
+  "housing_type": "project_based",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "per-scholas-it-support",
+  "program_name": "IT Support (CompTIA A+ prep)",
+  "provider": "Per Scholas San Francisco Bay",
+  "tier": "stay_in_training",
+  "grant_amount": 1840.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-08-11T04:00:00+00:00"
+  },
+  "decision_days": 8,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1104.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-18T04:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 736.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-10-10T04:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": true
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-017",
+  "created_at": "2026-08-09T03:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "zh",
+  "profile": {
+   "language": "zh",
+   "career_tracks": [
+    "data analytics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "google-data-analytics-coursera",
+  "program_name": "Google Data Analytics Professional Certificate",
+  "provider": "Google via Coursera (online)",
+  "tier": "starter",
+  "grant_amount": 420.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-08-11T15:00:00+00:00"
+  },
+  "decision_days": 2.5,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 252.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-08-18T15:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-046",
+  "created_at": "2026-08-09T23:00:00+00:00",
+  "status": "declined",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "comptia-a-plus-exams",
+  "program_name": "CompTIA A+ Certification Exams (Core 1 and Core 2)",
+  "provider": "CompTIA (Pearson VUE testing)",
+  "tier": "starter",
+  "grant_amount": 350.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "decline",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Program does not meet approved-provider rules; navigator offered alternatives.",
+   "at": "2026-08-14T11:00:00+00:00"
+  },
+  "decision_days": 4.5,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-022",
+  "created_at": "2026-08-19T02:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "TL-EDDY",
+  "property_name": "Eddy Street Commons (demo)",
+  "housing_type": "project_based",
+  "language": "vi",
+  "profile": {
+   "language": "vi",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "jvs-techsf-it",
+  "program_name": "TechSF IT Help Desk Training",
+  "provider": "JVS (TechSF)",
+  "tier": "stay_in_training",
+  "grant_amount": 2140.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "high",
+  "risk_reasons": [
+   "Commute over 60 minutes",
+   "Low digital confidence at intake"
+  ],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-08-28T02:00:00+00:00"
+  },
+  "decision_days": 9,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1284.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-09-04T02:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-025",
+  "created_at": "2026-08-20T05:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "fil",
+  "profile": {
+   "language": "fil",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-noncredit-computer-basics",
+  "program_name": "Noncredit Computer Basics and Office Skills",
+  "provider": "City College of San Francisco",
+  "tier": "stay_in_training",
+  "grant_amount": 2260.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-08-28T05:00:00+00:00"
+  },
+  "decision_days": 8,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1356.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-09-04T05:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-039",
+  "created_at": "2026-08-25T04:00:00+00:00",
+  "status": "submitted",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-it-support-certificate",
+  "program_name": "Computer Technician / IT Support Certificate (evening)",
+  "provider": "City College of San Francisco (Free City College)",
+  "tier": "stay_in_training",
+  "grant_amount": 1440.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": null,
+  "decision_days": null,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-042",
+  "created_at": "2026-08-31T09:00:00+00:00",
+  "status": "needs_info",
+  "property_code": "TL-EDDY",
+  "property_name": "Eddy Street Commons (demo)",
+  "housing_type": "project_based",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "cloud support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-evening-it-cloud-bootcamp",
+  "program_name": "Evening IT and Cloud Bootcamp (illustrative)",
+  "provider": "Illustrative private bootcamp",
+  "tier": "career",
+  "grant_amount": 5350.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "request_info",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Need admission letter from provider.",
+   "at": "2026-09-02T21:00:00+00:00"
+  },
+  "decision_days": 2.5,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-033",
+  "created_at": "2026-09-06T07:00:00+00:00",
+  "status": "in_review",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "zh",
+  "profile": {
+   "language": "zh",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "per-scholas-it-support",
+  "program_name": "IT Support (CompTIA A+ prep)",
+  "provider": "Per Scholas San Francisco Bay",
+  "tier": "stay_in_training",
+  "grant_amount": 2080.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": null,
+  "decision_days": null,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-027",
+  "created_at": "2026-09-09T06:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "CHINATOWN-8",
+  "property_name": "Stockton Street Residences (demo)",
+  "housing_type": "project_based",
+  "language": "zh",
+  "profile": {
+   "language": "zh",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-it-support-certificate",
+  "program_name": "Computer Technician / IT Support Certificate (evening)",
+  "provider": "City College of San Francisco (Free City College)",
+  "tier": "stay_in_training",
+  "grant_amount": 2060.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "medium",
+  "risk_reasons": [
+   "Shift change at current job"
+  ],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-09-19T06:00:00+00:00"
+  },
+  "decision_days": 10,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1236.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-09-26T06:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-037",
+  "created_at": "2026-09-10T23:00:00+00:00",
+  "status": "in_review",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "fil",
+  "profile": {
+   "language": "fil",
+   "career_tracks": [
+    "computer networking"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-etpl-network-technician",
+  "program_name": "Network Technician Certificate (illustrative ETPL-listed)",
+  "provider": "Illustrative ETPL-listed training provider",
+  "tier": "career",
+  "grant_amount": 1050.0,
+  "free_program_value": 0.0,
+  "public_aid": 5500.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": null,
+  "decision_days": null,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-041",
+  "created_at": "2026-09-13T02:00:00+00:00",
+  "status": "submitted",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "zh",
+  "profile": {
+   "language": "zh",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "comptia-a-plus-exams",
+  "program_name": "CompTIA A+ Certification Exams (Core 1 and Core 2)",
+  "provider": "CompTIA (Pearson VUE testing)",
+  "tier": "starter",
+  "grant_amount": 500.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": null,
+  "decision_days": null,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-035",
+  "created_at": "2026-09-13T06:00:00+00:00",
+  "status": "in_review",
+  "property_code": "SOMA-6",
+  "property_name": "Sixth Street Lofts (demo)",
+  "housing_type": "LIHTC",
+  "language": "vi",
+  "profile": {
+   "language": "vi",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ctn-digital-skills",
+  "program_name": "Digital Skills Classes in Your Language",
+  "provider": "Community Technology Network (CTN)",
+  "tier": "starter",
+  "grant_amount": 500.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": null,
+  "decision_days": null,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-032",
+  "created_at": "2026-09-23T04:00:00+00:00",
+  "status": "approved",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "data center operations"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-data-center-technician",
+  "program_name": "Data Center Technician Pathway (illustrative)",
+  "provider": "Illustrative community college and employer partnership",
+  "tier": "career",
+  "grant_amount": 800.0,
+  "free_program_value": 0.0,
+  "public_aid": 4000.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "high",
+  "risk_reasons": [
+   "Laptop not yet delivered",
+   "Commute over 60 minutes"
+  ],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-09-26T04:00:00+00:00"
+  },
+  "decision_days": 3,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-003",
+  "created_at": "2026-09-27T01:00:00+00:00",
+  "status": "placed",
+  "property_code": "CHINATOWN-8",
+  "property_name": "Stockton Street Residences (demo)",
+  "housing_type": "project_based",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "job readiness"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "code-tenderloin-job-readiness",
+  "program_name": "Job Readiness and Intro to Coding",
+  "provider": "Code Tenderloin",
+  "tier": "stay_in_training",
+  "grant_amount": 1160.0,
+  "free_program_value": 1200.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-10-06T01:00:00+00:00"
+  },
+  "decision_days": 9,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 696.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-10-13T01:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 464.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-12-05T01:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": true
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-044",
+  "created_at": "2026-09-28T03:00:00+00:00",
+  "status": "needs_info",
+  "property_code": "VIZ-VALLEY",
+  "property_name": "Sunnyside Garden Court (demo)",
+  "housing_type": "voucher",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "IT support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "jvs-techsf-it",
+  "program_name": "TechSF IT Help Desk Training",
+  "provider": "JVS (TechSF)",
+  "tier": "stay_in_training",
+  "grant_amount": 960.0,
+  "free_program_value": 4500.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "request_info",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Need admission letter from provider.",
+   "at": "2026-10-02T03:00:00+00:00"
+  },
+  "decision_days": 4,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-045",
+  "created_at": "2026-09-30T02:00:00+00:00",
+  "status": "needs_info",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "cloud support"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-evening-it-cloud-bootcamp",
+  "program_name": "Evening IT and Cloud Bootcamp (illustrative)",
+  "provider": "Illustrative private bootcamp",
+  "tier": "career",
+  "grant_amount": 5230.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "request_info",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Need admission letter from provider.",
+   "at": "2026-10-06T02:00:00+00:00"
+  },
+  "decision_days": 6,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-007",
+  "created_at": "2026-09-30T08:00:00+00:00",
+  "status": "placed",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-noncredit-computer-basics",
+  "program_name": "Noncredit Computer Basics and Office Skills",
+  "provider": "City College of San Francisco",
+  "tier": "stay_in_training",
+  "grant_amount": 2260.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-10-09T08:00:00+00:00"
+  },
+  "decision_days": 9,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1356.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-10-16T08:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 904.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-12-08T08:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": true
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-014",
+  "created_at": "2026-10-01T00:00:00+00:00",
+  "status": "completed",
+  "property_code": "CHINATOWN-8",
+  "property_name": "Stockton Street Residences (demo)",
+  "housing_type": "project_based",
+  "language": "vi",
+  "profile": {
+   "language": "vi",
+   "career_tracks": [
+    "job readiness"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "code-tenderloin-job-readiness",
+  "program_name": "Job Readiness and Intro to Coding",
+  "provider": "Code Tenderloin",
+  "tier": "stay_in_training",
+  "grant_amount": 2280.0,
+  "free_program_value": 1200.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-10-07T00:00:00+00:00"
+  },
+  "decision_days": 6,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1368.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-10-14T00:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 912.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-12-06T00:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-013",
+  "created_at": "2026-10-04T23:00:00+00:00",
+  "status": "completed",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "computer networking"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-etpl-network-technician",
+  "program_name": "Network Technician Certificate (illustrative ETPL-listed)",
+  "provider": "Illustrative ETPL-listed training provider",
+  "tier": "career",
+  "grant_amount": 1490.0,
+  "free_program_value": 0.0,
+  "public_aid": 5500.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-10-10T23:00:00+00:00"
+  },
+  "decision_days": 6,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 894.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-10-17T23:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 596.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-12-09T23:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-015",
+  "created_at": "2026-10-08T01:00:00+00:00",
+  "status": "completed",
+  "property_code": "SOMA-6",
+  "property_name": "Sixth Street Lofts (demo)",
+  "housing_type": "LIHTC",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ctn-digital-skills",
+  "program_name": "Digital Skills Classes in Your Language",
+  "provider": "Community Technology Network (CTN)",
+  "tier": "starter",
+  "grant_amount": 500.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-10-20T01:00:00+00:00"
+  },
+  "decision_days": 12,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 300.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-10-27T01:00:00+00:00"
+   },
+   {
+    "milestone": "completion",
+    "amount": 200.0,
+    "paid_to": "Approved vendors (child care, transit, exam fees)",
+    "at": "2026-12-19T01:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": true,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-031",
+  "created_at": "2026-10-09T08:00:00+00:00",
+  "status": "approved",
+  "property_code": "MISSION-24",
+  "property_name": "Mission Commons (demo)",
+  "housing_type": "LIHTC",
+  "language": "es",
+  "profile": {
+   "language": "es",
+   "career_tracks": [
+    "data center operations"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-data-center-technician",
+  "program_name": "Data Center Technician Pathway (illustrative)",
+  "provider": "Illustrative community college and employer partnership",
+  "tier": "career",
+  "grant_amount": 1200.0,
+  "free_program_value": 0.0,
+  "public_aid": 4000.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-10-11T20:00:00+00:00"
+  },
+  "decision_days": 2.5,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-020",
+  "created_at": "2026-10-20T02:00:00+00:00",
+  "status": "enrolled",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "zh",
+  "profile": {
+   "language": "zh",
+   "career_tracks": [
+    "digital basics"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "ccsf-noncredit-computer-basics",
+  "program_name": "Noncredit Computer Basics and Office Skills",
+  "provider": "City College of San Francisco",
+  "tier": "stay_in_training",
+  "grant_amount": 1780.0,
+  "free_program_value": 0.0,
+  "public_aid": 0.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "low",
+  "risk_reasons": [],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-10-29T02:00:00+00:00"
+  },
+  "decision_days": 9,
+  "payments": [
+   {
+    "milestone": "enrollment",
+    "amount": 1068.0,
+    "paid_to": "Approved vendors (child care, transit, device)",
+    "at": "2026-11-05T02:00:00+00:00"
+   }
+  ],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ },
+ {
+  "id": "SIM-028",
+  "created_at": "2026-10-21T09:00:00+00:00",
+  "status": "approved",
+  "property_code": "BAYVIEW-3",
+  "property_name": "Third Street Terrace (demo)",
+  "housing_type": "public_housing",
+  "language": "en",
+  "profile": {
+   "language": "en",
+   "career_tracks": [
+    "computer networking"
+   ],
+   "summary": "Simulated pilot participant (illustrative)."
+  },
+  "program_id": "illustrative-etpl-network-technician",
+  "program_name": "Network Technician Certificate (illustrative ETPL-listed)",
+  "provider": "Illustrative ETPL-listed training provider",
+  "tier": "career",
+  "grant_amount": 1250.0,
+  "free_program_value": 0.0,
+  "public_aid": 5500.0,
+  "waterfall": null,
+  "benefits": {
+   "status": "protected",
+   "summary": "Simulated: vendors paid directly, no cash stipend."
+  },
+  "plan": null,
+  "risk": "high",
+  "risk_reasons": [
+   "Commute over 60 minutes",
+   "Missed two sessions this month"
+  ],
+  "decision": {
+   "action": "approve",
+   "reviewer": "Grant committee (simulated)",
+   "note": "Benefits check passed; vendors paid directly.",
+   "at": "2026-10-27T09:00:00+00:00"
+  },
+  "decision_days": 6,
+  "payments": [],
+  "outcome": {
+   "completed": false,
+   "placed_or_raise": false
+  },
+  "simulated": true
+ }
+]

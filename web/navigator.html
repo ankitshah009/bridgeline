@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Navigator Console</title>
+<meta name="description" content="Homebase Tech career navigator caseload and grant review.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/app.css">
+<style>
+  .head { background: var(--navy); color: var(--navy-ink); padding: 26px 16px 22px; }
+  .head-inner { max-width: 1280px; margin: 0 auto; display: flex; gap: 18px; align-items: flex-end; flex-wrap: wrap; }
+  .head h1 { color: #fff; font-size: clamp(1.9rem, 4vw, 2.8rem); }
+  .head p { color: #b8bfe6; margin-top: 6px; }
+  .counts { display: flex; gap: 10px; flex-wrap: wrap; margin-left: auto; }
+  .count { background: var(--navy-2); border-radius: 14px; padding: 10px 14px; min-width: 96px; }
+  .count b { display: block; font-family: var(--font-display); font-size: 1.6rem; color: #fff; line-height: 1; }
+  .count span { font-size: .75rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #9ea8e0; }
+  .layout { max-width: 1280px; margin: 0 auto; padding: 18px 16px 60px; display: grid; grid-template-columns: minmax(300px, 400px) 1fr; gap: 18px; align-items: start; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .tab { min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--paper); font-weight: 700; cursor: pointer; font-size: .88rem; }
+  .tab[aria-selected="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .list { display: grid; gap: 8px; max-height: calc(100vh - 260px); overflow-y: auto; padding: 2px 4px 8px 2px; }
+  .case { text-align: left; width: 100%; background: var(--paper); border: 1.5px solid var(--line); border-radius: 16px; padding: 12px 14px; cursor: pointer; display: grid; gap: 6px; transition: border-color .15s, box-shadow .15s, transform .15s; }
+  .case:hover { border-color: var(--ink-3); }
+  .case.sel { border: 2px solid var(--ink); box-shadow: 0 4px 0 var(--ink); }
+  .case.live { border-left: 6px solid var(--green-hi); }
+  .case .top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .case .id { font-weight: 800; font-size: .85rem; }
+  .case .prog { font-weight: 700; }
+  .case .meta { font-size: .8rem; color: var(--ink-3); }
+  .risk-low { background: var(--green-soft); color: #0d6b2d; } .risk-medium { background: var(--yellow-soft); color: #7a5600; } .risk-high { background: var(--red-soft); color: var(--red); }
+  .new-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--green-hi); box-shadow: 0 0 0 4px rgba(31,178,78,.2); }
+  .detail { display: grid; gap: 14px; }
+  .dgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .kv { display: grid; grid-template-columns: 140px 1fr; gap: 6px 12px; font-size: .92rem; margin-top: 10px; }
+  .kv dt { color: var(--ink-3); font-weight: 700; } .kv dd { margin: 0; font-weight: 600; overflow-wrap: anywhere; }
+  .ai-draft { border: 2px dashed #c9bdfd; background: #faf8ff; border-radius: var(--radius); padding: 18px; }
+  .ai-draft ol { margin: 10px 0 0; padding-left: 1.3em; display: grid; gap: 4px; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; margin-top: 8px; }
+  th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  tfoot td { font-weight: 800; border-bottom: 0; }
+  .check { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: start; padding: 8px 0; border-bottom: 1px dashed var(--line); cursor: pointer; }
+  .check:last-child { border-bottom: 0; }
+  .check input { width: 22px; height: 22px; margin: 2px 0 0; accent-color: var(--green); cursor: pointer; }
+  .check .cite { display: block; font-size: .75rem; color: var(--ink-3); }
+  .decide textarea, .decide input { width: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--paper); min-height: 44px; }
+  .decide textarea { min-height: 70px; resize: vertical; }
+  .ms-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .empty { padding: 40px 20px; text-align: center; color: var(--ink-3); }
+  .sim-note { font-size: .78rem; color: var(--ink-3); margin: 0 0 10px; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } .list { max-height: none; } .dgrid { grid-template-columns: 1fr; } .kv { grid-template-columns: 110px 1fr; } }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><span id="brandIcon"></span>Homebase <small>Navigator</small></a>
+  <span class="spacer"></span>
+  <nav class="navlinks" aria-label="Views"><a href="/">Resident</a><a href="/navigator" aria-current="page">Navigator</a><a href="/impact">Impact</a></nav>
+</header>
+<section class="head">
+  <div class="head-inner">
+    <div>
+      <span class="kicker">Career navigator console</span>
+      <h1>Caseload</h1>
+      <p>AI drafts. People decide. Every award passes a benefits check first.</p>
+    </div>
+    <div class="counts" id="counts"></div>
+  </div>
+</section>
+<main class="layout">
+  <section aria-label="Applications">
+    <div class="tabs" role="tablist" id="tabs">
+      <button class="tab" role="tab" data-f="live" aria-selected="true">Live</button>
+      <button class="tab" role="tab" data-f="sim" aria-selected="false">Simulated pilot cohort</button>
+      <button class="tab" role="tab" data-f="all" aria-selected="false">All</button>
+    </div>
+    <p class="sim-note" id="simNote"></p>
+    <div class="list" id="list" aria-live="polite"><div class="skeleton"></div></div>
+  </section>
+  <section class="detail" id="detail" aria-live="polite">
+    <div class="card empty">Select an application to review.</div>
+  </section>
+</main>
+
+<script src="/static/common.js"></script>
+<script>
+(function () {
+  "use strict";
+  const { api, esc, money, errorHTML, payBar, payLegend, PAYER, TIER_LABEL, STATUS_LABEL, relTime } = HB;
+  document.getElementById("brandIcon").innerHTML = HB.BRAND_SVG;
+  const HOUSING = { LIHTC: "LIHTC", public_housing: "Public housing", project_based: "Project-based Section 8", voucher: "Housing Choice Voucher" };
+  const LANGS = { en: "English", es: "Spanish", zh: "Chinese", "zh-hant": "Chinese (Trad.)", fil: "Filipino", tl: "Filipino", vi: "Vietnamese" };
+  let apps = [], filter = "live", selected = null, lastSig = "", userPickedTab = false;
+  const checks = {};   // app id -> {key: bool}
+  const drafts = {};   // app id -> {note, reviewer}
+
+  document.querySelectorAll("#tabs .tab").forEach(b => b.addEventListener("click", () => { filter = b.dataset.f; userPickedTab = true; renderList(); }));
+
+  function filtered() {
+    return apps.filter(a => filter === "all" ? true : filter === "sim" ? a.simulated : !a.simulated);
+  }
+
+  async function load() {
+    try {
+      const r = await api("/api/applications");
+      apps = (r && r.applications) || [];
+      if (!userPickedTab && !apps.some(a => !a.simulated)) filter = "all";
+      if (!selected) { const first = filtered()[0]; if (first) selected = first.id; }
+      renderCounts(); renderList();
+      if (selected) {
+        const a = apps.find(x => x.id === selected);
+        const sig = a ? a.status + "|" + (a.payments || []).length + "|" + (a.decision ? a.decision.at : "") : "";
+        if (a && sig !== lastSig) { lastSig = sig; renderDetail(a); }
+      }
+    } catch (err) {
+      document.getElementById("list").innerHTML = errorHTML(err, "Couldn't load the caseload");
+    }
+  }
+
+  function renderCounts() {
+    const live = apps.filter(a => !a.simulated);
+    const waiting = apps.filter(a => a.status === "submitted" || a.status === "in_review").length;
+    const high = apps.filter(a => a.risk === "high" && !["declined", "placed"].includes(a.status)).length;
+    document.getElementById("counts").innerHTML = [["Live", live.length], ["Awaiting decision", waiting], ["High risk", high], ["Total", apps.length]]
+      .map(c => '<div class="count"><b>' + c[1] + '</b><span>' + c[0] + '</span></div>').join("");
+  }
+
+  function renderList() {
+    document.querySelectorAll("#tabs .tab").forEach(b => b.setAttribute("aria-selected", String(b.dataset.f === filter)));
+    document.getElementById("simNote").textContent = filter !== "live" ? "Simulated pilot cohort (illustrative) is labelled; it is not real residents." : "";
+    const list = filtered();
+    const el = document.getElementById("list");
+    if (!list.length) { el.innerHTML = '<div class="card-flat empty">' + (filter === "live" ? "No live applications yet. Submit one from the resident app." : "Nothing here.") + '</div>'; return; }
+    el.innerHTML = list.map(a => {
+      const fresh = !a.simulated && (a.status === "submitted" || a.status === "in_review");
+      return '<button type="button" class="case' + (a.simulated ? "" : " live") + (a.id === selected ? " sel" : "") + '" data-id="' + esc(a.id) + '">' +
+        '<div class="top">' + (fresh ? '<span class="new-dot" aria-label="New"></span>' : '') + '<span class="id">' + esc(a.id) + '</span><span class="status st-' + esc(a.status) + '">' + esc(STATUS_LABEL[a.status] || a.status) + '</span>' +
+        (a.risk ? '<span class="badge risk-' + esc(a.risk) + '">' + esc(a.risk) + ' risk</span>' : '') + (a.simulated ? '<span class="badge">Simulated</span>' : '') + '</div>' +
+        '<div class="prog">' + esc(a.program_name || a.program_id || "") + '</div>' +
+        '<div class="meta">' + esc([a.property_name || a.property_code, LANGS[String(a.language || "").toLowerCase()] || a.language, (TIER_LABEL[a.tier] || a.tier || "") + " " + money(a.grant_amount), relTime(a.created_at)].filter(Boolean).join(" · ")) + '</div></button>';
+    }).join("");
+    el.querySelectorAll(".case").forEach(b => b.addEventListener("click", () => {
+      selected = b.dataset.id; lastSig = "";
+      el.querySelectorAll(".case").forEach(x => x.classList.toggle("sel", x === b));
+      const a = apps.find(x => x.id === selected);
+      if (a) { lastSig = a.status + "|" + (a.payments || []).length + "|" + (a.decision ? a.decision.at : ""); renderDetail(a); }
+    }));
+  }
+
+  function checklist(a) {
+    const b = a.benefits || {};
+    const items = [
+      { key: "residence", label: "Residence confirmed by operator", detail: esc(a.property_name || a.property_code || "") },
+      { key: "waterfall", label: "Free and public sources checked first", detail: "Grant covers only the remainder" },
+      { key: "vendors", label: "All payments go to providers or vendors", detail: "No cash and no stipends to the resident" },
+      { key: "housing", label: "Housing type: " + esc(HOUSING[a.housing_type] || a.housing_type || "unknown"), detail: "Operator compliance guidance on file for this program type" }
+    ];
+    (b.items || []).forEach((it, i) => items.push({ key: "b" + i, label: esc(it.line) + (it.ok ? "" : " ⚠️"), detail: esc(it.treatment) + (it.cite ? '<span class="cite">' + esc(it.cite) + '</span>' : "") }));
+    return items;
+  }
+
+  function renderDetail(a) {
+    const el = document.getElementById("detail");
+    const p = a.profile || {}, w = a.waterfall || {}, tot = w.totals || {}, plan = a.plan || {}, b = a.benefits || {};
+    const st = checks[a.id] || (checks[a.id] = {});
+    const dr = drafts[a.id] || (drafts[a.id] = { note: "", reviewer: "Navigator" });
+    const items = checklist(a);
+    const allChecked = items.every(i => st[i.key]);
+    const pending = ["submitted", "in_review", "needs_info"].includes(a.status);
+    const approvedish = ["approved", "enrolled", "completed", "placed"].includes(a.status);
+    const MSORDER = ["enrolled", "completed", "placed"];
+    const doneMs = new Set((a.payments || []).map(x => String(x.milestone)));
+    const statusIdx = { approved: 0, enrolled: 1, completed: 2, placed: 3 }[a.status] ?? -1;
+
+    let html = '<div class="card"><div class="row"><span class="kicker">' + esc(a.id) + '</span><span class="status st-' + esc(a.status) + '">' + esc(STATUS_LABEL[a.status] || a.status) + '</span>' +
+      (a.simulated ? '<span class="badge">Simulated pilot cohort (illustrative)</span>' : '<span class="badge badge-green">Live</span>') +
+      '<span class="spacer"></span><span class="small muted">' + esc(relTime(a.created_at)) + '</span></div>' +
+      '<h2 style="margin-top:10px">' + esc(a.program_name || "") + '</h2><p class="muted">' + esc(a.provider || "") + '</p>' +
+      '<dl class="kv"><dt>Property</dt><dd>' + esc(a.property_name || a.property_code || "") + ' · ' + esc(HOUSING[a.housing_type] || a.housing_type || "") + '</dd>' +
+      '<dt>Language</dt><dd>' + esc(LANGS[String(a.language || "").toLowerCase()] || a.language || "") + '</dd>' +
+      '<dt>Goal</dt><dd>' + esc(p.goal || "") + '</dd>' +
+      '<dt>Availability</dt><dd>' + esc([p.availability, p.hours_per_week_available ? p.hours_per_week_available + " h/wk" : ""].filter(Boolean).join(" · ")) + '</dd>' +
+      '<dt>Works now</dt><dd>' + esc(p.current_work || "—") + '</dd>' +
+      '<dt>Child care</dt><dd>' + (p.needs_childcare ? "Needed" + (p.children ? " · " + esc(p.children) + " children" : "") : "Not needed") + '</dd>' +
+      '<dt>Computer</dt><dd>' + (p.has_computer ? "Has one" : "Needs one") + '</dd>' +
+      (p.summary ? '<dt>Summary</dt><dd>' + esc(p.summary) + '</dd>' : '') + '</dl>' +
+      (a.risk ? '<div class="row" style="margin-top:12px"><span class="badge risk-' + esc(a.risk) + '">' + esc(a.risk) + ' risk</span>' + (a.risk_reasons || []).map(r => '<span class="badge">' + esc(r) + '</span>').join("") + '</div>' : '') +
+      '</div>';
+
+    html += '<div class="dgrid">';
+    html += '<div class="ai-draft"><span class="badge badge-ai">✦ AI draft · staff review required</span>' +
+      (plan.navigator_note ? '<p style="margin-top:10px">' + esc(plan.navigator_note) + '</p>' : '<p class="muted" style="margin-top:10px">No draft note.</p>') +
+      (plan.steps && plan.steps.length ? '<ol>' + plan.steps.map(s => '<li>' + esc(s) + '</li>').join("") + '</ol>' : '') +
+      (plan.risks && plan.risks.length ? '<p class="small" style="margin-top:10px"><strong>Watch for:</strong> ' + esc(plan.risks.join("; ")) + '</p>' : '') +
+      '<p class="tiny muted" style="margin-top:10px">Mistral drafted this from the resident\'s own words. It does not decide eligibility or awards.</p></div>';
+
+    html += '<div class="card"><div class="row"><span class="kicker">Funding waterfall</span><span class="spacer"></span>' + (w.tier ? '<span class="badge badge-purple">' + esc(TIER_LABEL[w.tier] || w.tier) + ' · cap ' + money(w.tier_cap) + '</span>' : '') + (w.within_cap === false ? '<span class="badge badge-orange">Over cap</span>' : '') + '</div>' +
+      '<div style="margin-top:10px">' + payBar(tot) + payLegend(tot) + '</div>' +
+      '<table><thead><tr><th>Item</th><th>Payer</th><th>Paid to</th><th class="num">Amount</th></tr></thead><tbody>' +
+      (w.lines || []).map(l => '<tr><td>' + esc(l.item) + '</td><td><span class="badge ' + ((PAYER[l.payer] || {}).badge || "") + '">' + esc(l.payer_label || (PAYER[l.payer] || {}).label || l.payer) + '</span></td><td>' + esc(l.paid_to || "") + '</td><td class="num">' + money(l.amount) + '</td></tr>').join("") +
+      '</tbody><tfoot><tr><td colspan="3">Homebase grant</td><td class="num">' + money(tot.grant) + '</td></tr><tr><td colspan="3">Resident pays</td><td class="num">' + money(tot.resident) + '</td></tr></tfoot></table></div>';
+    html += '</div>';
+
+    // benefits check + decision
+    html += '<div class="dgrid"><div class="card"><div class="row"><span class="kicker">Benefits check</span><span class="spacer"></span><span class="badge ' + (b.status === "protected" ? "badge-green" : "badge-yellow") + '">' + esc(b.status === "protected" ? "Rent-safe design" : "Needs review") + '</span></div>' +
+      (b.summary ? '<p class="small" style="margin:8px 0 4px">' + esc(b.summary) + '</p>' : '') +
+      '<div id="checks">' + items.map(i => '<label class="check"><input type="checkbox" data-k="' + esc(i.key) + '"' + (st[i.key] ? " checked" : "") + (pending ? "" : " disabled") + '><span><strong>' + i.label + '</strong><span class="cite">' + i.detail + '</span></span></label>').join("") + '</div>' +
+      '<p class="tiny muted" style="margin-top:8px">24 CFR 5.609 planning guidance, not legal advice.</p></div>';
+
+    html += '<div class="card decide"><span class="kicker">Decision</span>';
+    if (pending) {
+      html += '<div class="stack" style="margin-top:10px"><label class="small" style="font-weight:700">Reviewer<input id="reviewer" value="' + esc(dr.reviewer) + '"></label>' +
+        '<label class="small" style="font-weight:700">Note to resident<textarea id="note" placeholder="e.g. Approved. Child care paid to the provider you chose.">' + esc(dr.note) + '</textarea></label>' +
+        '<div class="row"><button class="btn btn-primary" id="approve"' + (allChecked ? "" : " disabled") + '>Approve ' + money(a.grant_amount) + '</button>' +
+        '<button class="btn btn-ghost btn-sm" id="reqinfo">Request info</button><button class="btn btn-danger btn-sm" id="decline">Decline</button></div>' +
+        '<p class="small muted" id="approveHint">' + (allChecked ? "Benefits check complete." : "Complete the benefits check to approve.") + '</p><div id="decMsg"></div></div>';
+    } else {
+      const d = a.decision || {};
+      html += '<p style="margin-top:10px"><strong>' + esc(STATUS_LABEL[a.status] || a.status) + '</strong>' + (d.reviewer ? ' by ' + esc(d.reviewer) : '') + (d.at ? ' · ' + esc(relTime(d.at)) : '') + (a.decision_days != null ? ' · ' + esc(Number(a.decision_days).toFixed(1)) + ' days to decision' : '') + '</p>' +
+        (d.note ? '<p class="small muted" style="margin-top:4px">“' + esc(d.note) + '”</p>' : '');
+      if (approvedish) {
+        html += '<div class="kicker" style="margin-top:14px">Milestones · tuition 50/30/20</div><div class="ms-row">' +
+          MSORDER.map((m, i) => '<button class="btn btn-sm ' + (i === statusIdx ? "btn-dark" : "btn-ghost") + '" data-ms="' + m + '"' + (i === statusIdx ? "" : " disabled") + '>' + (i < statusIdx ? "✓ " : "") + ({ enrolled: "Enrolled", completed: "Completed", placed: "Placed / raise" })[m] + '</button>').join("") + '</div><div id="decMsg"></div>';
+      }
+      const pays = a.payments || [];
+      if (pays.length) {
+        const total = pays.reduce((s, x) => s + (Number(x.amount) || 0), 0);
+        html += '<table style="margin-top:12px"><thead><tr><th>Milestone</th><th>Paid to</th><th class="num">Amount</th></tr></thead><tbody>' +
+          pays.map(x => '<tr><td>' + esc(x.milestone) + '<div class="tiny muted">' + esc(relTime(x.at)) + '</div></td><td>' + esc(x.paid_to || "") + '</td><td class="num">' + money(x.amount) + '</td></tr>').join("") +
+          '</tbody><tfoot><tr><td colspan="2">Paid to providers and vendors</td><td class="num">' + money(total) + '</td></tr></tfoot></table>';
+      }
+    }
+    html += '</div></div>';
+    el.innerHTML = html;
+
+    // wire up
+    el.querySelectorAll("#checks input").forEach(cb => cb.addEventListener("change", () => {
+      st[cb.dataset.k] = cb.checked;
+      const ok = items.every(i => st[i.key]);
+      const ap = document.getElementById("approve"); if (ap) ap.disabled = !ok;
+      const h = document.getElementById("approveHint"); if (h) h.textContent = ok ? "Benefits check complete." : "Complete the benefits check to approve.";
+    }));
+    const note = document.getElementById("note"), rev = document.getElementById("reviewer");
+    if (note) note.addEventListener("input", () => dr.note = note.value);
+    if (rev) rev.addEventListener("input", () => dr.reviewer = rev.value);
+    const act = async (action) => {
+      const msg = document.getElementById("decMsg");
+      el.querySelectorAll(".decide button").forEach(b => b.disabled = true);
+      try {
+        const r = await api("/api/applications/" + encodeURIComponent(a.id) + "/decision", { body: { action, reviewer: (rev && rev.value.trim()) || "Navigator", note: (note && note.value.trim()) || "" } });
+        replace(r.application);
+      } catch (err) { msg.innerHTML = errorHTML(err, "Decision not saved"); el.querySelectorAll(".decide button").forEach(b => b.disabled = false); }
+    };
+    const ap = document.getElementById("approve"); if (ap) ap.addEventListener("click", () => act("approve"));
+    const ri = document.getElementById("reqinfo"); if (ri) ri.addEventListener("click", () => act("request_info"));
+    const de = document.getElementById("decline"); if (de) de.addEventListener("click", () => act("decline"));
+    el.querySelectorAll("[data-ms]").forEach(b => b.addEventListener("click", async () => {
+      b.disabled = true;
+      try {
+        const r = await api("/api/applications/" + encodeURIComponent(a.id) + "/milestone", { body: { milestone: b.dataset.ms } });
+        replace(r.application);
+      } catch (err) { document.getElementById("decMsg").innerHTML = errorHTML(err, "Milestone not saved"); b.disabled = false; }
+    }));
+  }
+
+  function replace(a) {
+    const i = apps.findIndex(x => x.id === a.id);
+    if (i >= 0) apps[i] = a; else apps.unshift(a);
+    lastSig = a.status + "|" + (a.payments || []).length + "|" + (a.decision ? a.decision.at : "");
+    renderCounts(); renderList(); renderDetail(a);
+  }
+
+  load();
+  setInterval(() => { if (!document.hidden) load(); }, 4000);
+})();
+</script>
+</body>
+</html>
