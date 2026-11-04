@@ -48,8 +48,14 @@ RATE_LIMIT_BACKOFF_S = (1.0, 2.0, 4.0)  # total wait at most 7 s before giving u
 
 
 def _is_rate_limited(exc: Exception) -> bool:
+    """Transient upstream conditions worth a short backoff: rate limits (429) and Mistral outages (502/503)."""
     text = str(exc)[:400]
-    return "429" in text or "rate limit" in text.lower() or "rate_limited" in text
+    low = text.lower()
+    return (
+        any(f"Status {code}" in text for code in (429, 502, 503))
+        or "rate limit" in low or "rate_limited" in text
+        or "service unavailable" in low or "overloaded" in low
+    )
 
 
 def _complete(**kwargs):

@@ -297,3 +297,24 @@ def test_complete_gives_up_after_backoff_and_does_not_retry_other_errors(monkeyp
     with pytest.raises(ValueError):
         ai._complete(model="m", messages=[])
     assert calls["n"] == 1
+
+
+def test_complete_retries_mistral_503_service_unavailable(monkeypatch):
+    from app import ai
+
+    calls = {"n": 0}
+
+    class Chat:
+        def complete(self, **kw):
+            calls["n"] += 1
+            if calls["n"] == 1:
+                raise RuntimeError('API error occurred: Status 503. Body: {"message":"Service unavailable."}')
+            return "ok"
+
+    class Client:
+        chat = Chat()
+
+    monkeypatch.setattr(ai, "_mistral", lambda: Client())
+    monkeypatch.setattr(ai, "RATE_LIMIT_BACKOFF_S", (0.0, 0.0, 0.0))
+    assert ai._complete(model="m", messages=[]) == "ok"
+    assert calls["n"] == 2
